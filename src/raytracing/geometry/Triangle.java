@@ -60,8 +60,8 @@ public class Triangle extends Shape {
 	}
 
 	private Vector3 normal() {
-		Vector3 v = p1.add(p2.multiply(-1));
-		Vector3 u = p1.add(p3.multiply(-1));
+		Vector3 v = p1.cpy().add(p2.cpy().multiply(-1));
+		Vector3 u = p1.cpy().add(p3.cpy().multiply(-1));
 		return v.crossProduct(u).normalize();
 	}
 

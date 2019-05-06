@@ -16,8 +16,8 @@ public class TestIntersections {
 		
 		System.out.println("sphere ip: " + ip);
 		
-		Triangle t = new Triangle(new Vector3(1, -1 , -1), new Vector3(1, -1 , 1), new Vector3(1, 1 , 0), 0);
-		ray = new Ray(new Vector3(0,0,0), new Vector3(1,0,0));
+		Triangle t = new Triangle(new Vector3(1, 0 , -1), new Vector3(2, 1 , 1), new Vector3(3, 2 , 0), 0);
+		ray = new Ray(new Vector3(0,0,0), new Vector3(1,0.3333333333334,0));
 		
 		ip = t.intersection(ray);
 		
