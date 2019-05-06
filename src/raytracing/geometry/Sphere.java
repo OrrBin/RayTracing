@@ -3,7 +3,7 @@ package raytracing.geometry;
 import raytracing.util.Ray;
 import raytracing.util.Vector3;
 
-public class Sphere implements Shape {
+public class Sphere extends Shape {
 
 	private Vector3 center;
 	private double radius;

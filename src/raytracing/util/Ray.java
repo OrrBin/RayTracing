@@ -11,22 +11,22 @@ public class Ray {
 	}
 
 	public Vector3 point(double distance) {
-		return position.add(direction.multiplyScalar(distance));
+		return position.add(direction.multiply(distance));
 	}
 	
 	public Vector3 getPosition() {
-		return position;
+		return new Vector3(position.getX(), position.getY(), position.getY());
 	}
 
 	public void setPosition(Vector3 position) {
 		this.position = position;
 	}
 
-	public Vector3 getAngle() {
-		return direction;
+	public Vector3 getDirection() {
+		return new Vector3(direction.getX(), direction.getY(), direction.getY());
 	}
 
-	public void setAngle(Vector3 angle) {
+	public void setDirection(Vector3 angle) {
 		this.direction = angle;
 	}
 

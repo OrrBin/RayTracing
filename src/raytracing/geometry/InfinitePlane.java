@@ -3,7 +3,7 @@ package raytracing.geometry;
 import raytracing.util.Ray;
 import raytracing.util.Vector3;
 
-public class InfinitePlane implements Shape {
+public class InfinitePlane extends Shape {
 
 	private Vector3 normal;
 	private double offset;

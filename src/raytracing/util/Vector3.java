@@ -1,5 +1,7 @@
 package raytracing.util;
 
+import raytracing.geometry.Shape;
+
 public class Vector3 {
 	private double x;
 	private double y;
@@ -15,8 +17,15 @@ public class Vector3 {
 		return Math.sqrt(x * x + y * y + z * z);
 	}
 
-	public double crossProduct(Vector3 other) {
-		return norm() * other.norm() * Math.sin(angle(other));
+	public Vector3 normalize() {
+		if(norm() < Constants.EPSILON) // "equals zero"
+			return this;
+		
+		return new Vector3(x,y,z).multiply(1/norm());
+	}
+	
+	public Vector3 crossProduct(Vector3 other) {
+		return new Vector3(y*other.z - other.y*z, other.x*z - z*other.x, x*other.y - y*other.x);
 	}
 
 	public Vector3 add(Vector3 other) {
@@ -27,7 +36,7 @@ public class Vector3 {
 		return this;
 	}
 
-	public Vector3 multiplyScalar(double a) {
+	public Vector3 multiply(double a) {
 		this.x *= a;
 		this.y *= a;
 		this.z *= a;
@@ -35,6 +44,10 @@ public class Vector3 {
 		return this;
 	}
 
+	public Vector3 connectingVector(Vector3 other) {
+		return new Vector3(x,y,z).add(other.multiply(-1));
+	}
+	
 	public double dotProduct(Vector3 other) {
 		return this.x * other.x + this.y * other.y + this.z * other.z;
 	}
