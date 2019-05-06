@@ -19,7 +19,6 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import raytracing.geometry.InfinitePlane;
 import raytracing.geometry.Plane;
 import raytracing.geometry.Shape;
 import raytracing.geometry.Sphere;

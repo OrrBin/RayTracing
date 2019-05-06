@@ -1,7 +1,5 @@
 package raytracing;
 
-import java.awt.Color;
-
 import raytracing.util.Vector3;
 
 public class Settings {
