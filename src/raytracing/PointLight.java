@@ -61,4 +61,5 @@ public class PointLight {
 		this.lightRadius = lightRadius;
 	}
 
+		
 }
