@@ -1,5 +1,6 @@
 package raytracing.geometry;
 
+import raytracing.util.Constants;
 import raytracing.util.Ray;
 import raytracing.util.Vector3;
 
@@ -18,14 +19,61 @@ public class Sphere extends Shape {
 
 	@Override
 	public Vector3 intersection(Ray ray) {
-		// TODO Auto-generated method stub
-		return null;
+		Vector3 centerToOrigin = center.connectingVector(ray.getPosition());
+		
+		double a = 1.0;
+		double b = 2.0 * ray.getDirection().dotProduct(centerToOrigin);
+		double c = Math.pow(centerToOrigin.norm(), 2) - Math.pow(radius, 2);
+		
+		double discriminant = Math.pow(b,  2) - 4 * a * c;
+		if(discriminant < 0)
+			return null;
+		
+		if(discriminant - Constants.EPSILON <= 0) {
+			double t = (-b)/(2 * a);
+			
+			if(t < 0)
+				return null;
+			
+			Vector3 intersectionPoint = ray.getPosition().add(ray.getDirection().multiply(t));
+			return intersectionPoint;
 	}
-
+		double t1 = (-b + Math.sqrt(discriminant))/(2 * a);
+		double t2 = (-b - Math.sqrt(discriminant))/(2 * a);
+		
+		if(t1 < 0 && t2 < 0)
+			return null;
+		
+		Vector3 intersectionPoint1 = ray.getPosition().add(ray.getDirection().multiply(t1));
+		Vector3 intersectionPoint2 = ray.getPosition().add(ray.getDirection().multiply(t2));
+		
+		Vector3 intersectionPoint = null;
+		
+		if(t2 < 0)
+			intersectionPoint = intersectionPoint1;
+		else if(t1 < 0)
+			intersectionPoint = intersectionPoint2;
+		else {
+			double length1 = ray.getPosition().connectingVector(intersectionPoint1).norm();
+			double length2 = ray.getPosition().connectingVector(intersectionPoint2).norm();
+			
+			if(length1 < length2)
+				intersectionPoint = intersectionPoint1;
+			else
+				intersectionPoint = intersectionPoint2;
+		}
+		
+		return intersectionPoint;
+	}
+		
 	@Override
 	public Vector3 normal(Vector3 point, Ray ray) {
-		// TODO Auto-generated method stub
-		return null;
+		Vector3 n = center.connectingVector(point).normalize();
+		
+		Vector3 v = ray.getDirection().multiply(-1).normalize();
+		if(n.dotProduct(v) < 0)
+			return n.multiply(-1);
+		return n;
 	}
 
 	public Vector3 getCenter() {
