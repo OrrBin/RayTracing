@@ -19,7 +19,7 @@ public class Vector3 {
 		return norm() * other.norm() * Math.sin(angle(other));
 	}
 
-	public Vector3 addition(Vector3 other) {
+	public Vector3 add(Vector3 other) {
 		this.x += other.x;
 		this.y += other.y;
 		this.z += other.z;

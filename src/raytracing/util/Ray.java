@@ -2,14 +2,18 @@ package raytracing.util;
 
 public class Ray {
 	Vector3 position;
-	double angle;
+	Vector3 direction;
 
-	public Ray(Vector3 position, double angle) {
+	public Ray(Vector3 position, Vector3 angle) {
 		super();
 		this.position = position;
-		this.angle = angle;
+		this.direction = angle;
 	}
 
+	public Vector3 point(double distance) {
+		return position.add(direction.multiplyScalar(distance));
+	}
+	
 	public Vector3 getPosition() {
 		return position;
 	}
@@ -18,12 +22,12 @@ public class Ray {
 		this.position = position;
 	}
 
-	public double getAngle() {
-		return angle;
+	public Vector3 getAngle() {
+		return direction;
 	}
 
-	public void setAngle(double angle) {
-		this.angle = angle;
+	public void setAngle(Vector3 angle) {
+		this.direction = angle;
 	}
 
 }
