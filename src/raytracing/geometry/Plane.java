@@ -9,6 +9,10 @@ public class Plane extends Shape {
 	private Vector3 normal;
 	private double offset;
 
+	public Plane() {
+		
+	}
+	
 	public Plane(Vector3 normal, double offset) {
 		super();
 		this.normal = normal;

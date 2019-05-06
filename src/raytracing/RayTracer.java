@@ -20,6 +20,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import raytracing.geometry.InfinitePlane;
+import raytracing.geometry.Plane;
 import raytracing.geometry.Shape;
 import raytracing.geometry.Sphere;
 import raytracing.geometry.Triangle;
@@ -166,7 +167,7 @@ public class RayTracer {
 				System.out.println(String.format("Parsed sphere (line %d)", lineNum));
 
 			} else if (code.equals("pln")) {
-				InfinitePlane infinitePlane = new InfinitePlane();
+				Plane infinitePlane = new Plane();
 
 				infinitePlane.setNormal(new Vector3(Double.parseDouble(params[0]), Double.parseDouble(params[1]),
 						Double.parseDouble(params[2])));
