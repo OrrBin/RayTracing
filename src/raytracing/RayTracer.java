@@ -85,6 +85,7 @@ public class RayTracer {
 		Scene scene = new Scene();
 		List<Material> materials = new ArrayList<>();
 		List<Shape> shapes = new ArrayList<>();
+		List<Light> lights = new ArrayList<>();
 
 		BufferedReader r = new BufferedReader(fr);
 		String line = null;
@@ -198,12 +199,22 @@ public class RayTracer {
 						Double.parseDouble(params[2])));
 				light.setColor(new Vector3(Double.parseDouble(params[3]), Double.parseDouble(params[4]),
 						Double.parseDouble(params[5])));
+				light.setSpecularIntensity(Double.parseDouble(params[6]));
+				light.setShadowIntensity(Double.parseDouble(params[7]));
+				light.setLightRadius(Double.parseDouble(params[8]));
+				
+				lights.add(light);
 
 				System.out.println(String.format("Parsed light (line %d)", lineNum));
+				
 			} else {
 				System.out.println(String.format("ERROR: Did not recognize object: %s (line %d)", code, lineNum));
 			}
 		}
+		
+		scene.setMaterials(materials);
+		scene.setShapes(shapes);
+		scene.setLights(lights);
 
 		// It is recommended that you check here that the scene is valid,
 		// for example camera settings and all necessary materials were defined.
