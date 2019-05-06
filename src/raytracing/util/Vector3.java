@@ -1,7 +1,5 @@
 package raytracing.util;
 
-import raytracing.geometry.Shape;
-
 public class Vector3 {
 	private double x;
 	private double y;

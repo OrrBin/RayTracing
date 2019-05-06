@@ -207,7 +207,8 @@ public class RayTracer {
 
 		// It is recommended that you check here that the scene is valid,
 		// for example camera settings and all necessary materials were defined.
-
+		
+		r.close();
 		System.out.println("Finished parsing scene file " + sceneFileName);
 
 	}
@@ -280,6 +281,9 @@ public class RayTracer {
 	}
 
 	public static class RayTracerException extends Exception {
+
+		private static final long serialVersionUID = -835524526290457389L;
+
 		public RayTracerException(String msg) {
 			super(msg);
 		}
