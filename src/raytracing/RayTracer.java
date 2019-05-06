@@ -154,6 +154,8 @@ public class RayTracer {
 					Sphere sphere = new Sphere();
 					
 					sphere.setCenter(new Vector3(Double.parseDouble(params[0]), Double.parseDouble(params[1]), Double.parseDouble(params[2])));
+					sphere.setRadius(Double.parseDouble(params[3]));
+					
 					
 
 					System.out.println(String.format("Parsed sphere (line %d)", lineNum));
