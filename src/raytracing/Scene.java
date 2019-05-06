@@ -5,13 +5,18 @@ import java.util.List;
 import raytracing.geometry.Shape;
 
 public class Scene {
+	
+	private int width, height;
+	
 	private Settings settings;
 	private Camera camera;
 	private List<Light> lights;
 	private List<Shape> shapes;
 	private List<Material> materials;
 	
-	public Scene() {
+	public Scene(int width, int height) {
+		this.height = width;
+		this.height = height;
 	}
 
 	public Settings getSettings() {

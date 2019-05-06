@@ -65,11 +65,7 @@ public class RayTracer {
 			// Render scene:
 			tracer.renderScene(outputFileName);
 
-			// } catch (IOException e) {
-			// System.out.println(e.getMessage());
-		} catch (RayTracerException e) {
-			System.out.println(e.getMessage());
-		} catch (Exception e) {
+		} catch (IOException | RayTracerException e) {
 			System.out.println(e.getMessage());
 		}
 
@@ -82,7 +78,7 @@ public class RayTracer {
 	public void parseScene(String sceneFileName) throws IOException, RayTracerException {
 		FileReader fr = new FileReader(sceneFileName);
 
-		Scene scene = new Scene();
+		Scene scene = new Scene(imageWidth, imageWidth);
 		List<Material> materials = new ArrayList<>();
 		List<Shape> shapes = new ArrayList<>();
 		List<Light> lights = new ArrayList<>();
