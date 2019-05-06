@@ -1,19 +1,19 @@
 package raytracing;
 
-import java.awt.Color;
-
 import raytracing.util.Vector3;
 
-public class PointLight {
+public class Light {
 	private Vector3 position;
-	private Color color;
+	private Vector3 color;
 	private double specularIntensity;
 	private double shadowIntensity;
 	private double lightRadius;
 
-	public PointLight(Vector3 position, Color color, double specularIntensity, double shadowIntensity,
+	public Light() {
+	}
+	
+	public Light(Vector3 position, Vector3 color, double specularIntensity, double shadowIntensity,
 			double lightRadius) {
-		super();
 		this.position = position;
 		this.color = color;
 		this.specularIntensity = specularIntensity;
@@ -29,11 +29,11 @@ public class PointLight {
 		this.position = position;
 	}
 
-	public Color getColor() {
+	public Vector3 getColor() {
 		return color;
 	}
 
-	public void setColor(Color color) {
+	public void setColor(Vector3 color) {
 		this.color = color;
 	}
 

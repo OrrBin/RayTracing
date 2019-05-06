@@ -1,6 +1,5 @@
 package raytracing;
 
-import java.awt.Color;
 import java.awt.Transparency;
 import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
@@ -20,8 +19,10 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import raytracing.geometry.InfinitePlane;
 import raytracing.geometry.Shape;
 import raytracing.geometry.Sphere;
+import raytracing.geometry.Triangle;
 import raytracing.util.Vector3;
 
 /**
@@ -84,7 +85,7 @@ public class RayTracer {
 		Scene scene = new Scene();
 		List<Material> materials = new ArrayList<>();
 		List<Shape> shapes = new ArrayList<>();
-		
+
 		BufferedReader r = new BufferedReader(fr);
 		String line = null;
 		int lineNum = 0;
@@ -96,80 +97,111 @@ public class RayTracer {
 
 			if (line.isEmpty() || (line.charAt(0) == '#')) { // This line in the scene file is a comment
 				continue;
+			}
+			String code = line.substring(0, 3).toLowerCase();
+			// Split according to white space characters:
+			String[] params = line.substring(3).trim().toLowerCase().split("\\s+");
+
+			if (code.equals("cam")) {
+				Camera camera = new Camera();
+
+				Vector3 position = new Vector3(Double.parseDouble(params[0]), Double.parseDouble(params[2]),
+						Double.parseDouble(params[2]));
+				camera.setPosition(position);
+
+				Vector3 lookAtPoint = new Vector3(Double.parseDouble(params[3]), Double.parseDouble(params[4]),
+						Double.parseDouble(params[5]));
+				camera.setLookAtPoint(lookAtPoint);
+
+				Vector3 up = new Vector3(Double.parseDouble(params[6]), Double.parseDouble(params[7]),
+						Double.parseDouble(params[8]));
+				camera.setUpVector(up);
+				camera.setScreenDistance(Integer.parseInt(params[9]));
+				camera.setScreenWidth(Integer.parseInt(params[10]));
+
+				scene.setCamera(camera);
+
+				System.out.println(String.format("Parsed camera parameters (line %d)", lineNum));
+
+			} else if (code.equals("set")) {
+				Settings settings = new Settings();
+
+				settings.setBackgroundColor(new Vector3(Double.parseDouble(params[0]), Double.parseDouble(params[1]),
+						Double.parseDouble(params[2])));
+				settings.setNumOfShadowRays(Integer.parseInt(params[3]));
+				settings.setMaxRecursionLevel(Integer.parseInt(params[4]));
+				settings.setSuperSamplingLevel(Integer.parseInt(params[5]));
+
+				scene.setSettings(settings);
+
+				System.out.println(String.format("Parsed general settings (line %d)", lineNum));
+
+			} else if (code.equals("mtl")) {
+				Material material = new Material();
+
+				material.setDiffuseColor(new Vector3(Double.parseDouble(params[0]), Double.parseDouble(params[1]),
+						Double.parseDouble(params[2])));
+				material.setSpecularColor(new Vector3(Double.parseDouble(params[3]), Double.parseDouble(params[4]),
+						Double.parseDouble(params[5])));
+				material.setReflectionColor(new Vector3(Double.parseDouble(params[6]), Double.parseDouble(params[7]),
+						Double.parseDouble(params[8])));
+				material.setPhongSpecularityCoefficient(Double.parseDouble(params[9]));
+				material.setTransparency(Double.parseDouble(params[10]));
+
+				materials.add(material);
+
+				System.out.println(String.format("Parsed material (line %d)", lineNum));
+
+			} else if (code.equals("sph")) {
+				Sphere sphere = new Sphere();
+
+				sphere.setCenter(new Vector3(Double.parseDouble(params[0]), Double.parseDouble(params[1]),
+						Double.parseDouble(params[2])));
+				sphere.setRadius(Double.parseDouble(params[3]));
+				sphere.setMaterialIndex(Integer.parseInt(params[4]));
+
+				shapes.add(sphere);
+
+				System.out.println(String.format("Parsed sphere (line %d)", lineNum));
+
+			} else if (code.equals("pln")) {
+				InfinitePlane infinitePlane = new InfinitePlane();
+
+				infinitePlane.setNormal(new Vector3(Double.parseDouble(params[0]), Double.parseDouble(params[1]),
+						Double.parseDouble(params[2])));
+				infinitePlane.setOffset(Double.parseDouble(params[3]));
+				infinitePlane.setMaterialIndex(Integer.parseInt(params[4]));
+
+				shapes.add(infinitePlane);
+
+				System.out.println(String.format("Parsed plane (line %d)", lineNum));
+
+			} else if (code.equals("trg")) {
+				Triangle triangle = new Triangle();
+
+				triangle.setVertex1(new Vector3(Double.parseDouble(params[0]), Double.parseDouble(params[1]),
+						Double.parseDouble(params[2])));
+				triangle.setVertex2(new Vector3(Double.parseDouble(params[3]), Double.parseDouble(params[4]),
+						Double.parseDouble(params[5])));
+				triangle.setVertex3(new Vector3(Double.parseDouble(params[6]), Double.parseDouble(params[7]),
+						Double.parseDouble(params[8])));
+				triangle.setMaterialIndex(Integer.parseInt(params[10]));
+
+				shapes.add(triangle);
+
+				System.out.println(String.format("Parsed triangle (line %d)", lineNum));
+
+			} else if (code.equals("lgt")) {
+				Light light = new Light();
+
+				light.setPosition(new Vector3(Double.parseDouble(params[0]), Double.parseDouble(params[1]),
+						Double.parseDouble(params[2])));
+				light.setColor(new Vector3(Double.parseDouble(params[3]), Double.parseDouble(params[4]),
+						Double.parseDouble(params[5])));
+
+				System.out.println(String.format("Parsed light (line %d)", lineNum));
 			} else {
-				String code = line.substring(0, 3).toLowerCase();
-				// Split according to white space characters:
-				String[] params = line.substring(3).trim().toLowerCase().split("\\s+");
-
-				if (code.equals("cam")) {
-					Camera camera = new Camera();
-					
-					Vector3 position = new Vector3(Double.parseDouble(params[0]), Double.parseDouble(params[2]),
-							Double.parseDouble(params[2]));
-					camera.setPosition(position);
-
-					Vector3 lookAtPoint = new Vector3(Double.parseDouble(params[3]), Double.parseDouble(params[4]),
-							Double.parseDouble(params[5]));
-					camera.setLookAtPoint(lookAtPoint);
-
-					Vector3 up = new Vector3(Double.parseDouble(params[6]), Double.parseDouble(params[7]),
-							Double.parseDouble(params[8]));
-					camera.setUpVector(up);
-					camera.setScreenDistance(Integer.parseInt(params[9]));
-					camera.setScreenWidth(Integer.parseInt(params[10]));
-					
-					scene.setCamera(camera);
-					
-					System.out.println(String.format("Parsed camera parameters (line %d)", lineNum));
-
-				} else if (code.equals("set")) {
-					Settings settings = new Settings();
-					
-					settings.setBackgroundColor(new Color(Integer.parseInt(params[0]), Integer.parseInt(params[1]),
-							Integer.parseInt(params[2])));
-					settings.setNumOfShadowRays( Integer.parseInt(params[3]));
-					settings.setMaxRecursionLevel( Integer.parseInt(params[4]));
-					settings.setSuperSamplingLevel(Integer.parseInt(params[5]));
-					
-					scene.setSettings(settings);
-					
-					System.out.println(String.format("Parsed general settings (line %d)", lineNum));
-
-				} else if (code.equals("mtl")) {
-					Material material = new Material();
-					
-					material.setDiffuseColor(new Color(Integer.parseInt(params[0]), Integer.parseInt(params[1]),
-							Integer.parseInt(params[2])));
-					material.setSpecularColor(new Color(Integer.parseInt(params[3]), Integer.parseInt(params[4]),
-							Integer.parseInt(params[5])));
-					material.setReflectionColor(new Color(Integer.parseInt(params[6]), Integer.parseInt(params[7]),
-							Integer.parseInt(params[8])));
-					material.setPhongSpecularityCoefficient(Double.parseDouble(params[9]));
-					material.setTransparency(Double.parseDouble(params[10]));
-
-					materials.add(material);
-
-					System.out.println(String.format("Parsed material (line %d)", lineNum));
-				} else if (code.equals("sph")) {
-					Sphere sphere = new Sphere();
-					
-					sphere.setCenter(new Vector3(Double.parseDouble(params[0]), Double.parseDouble(params[1]), Double.parseDouble(params[2])));
-					sphere.setRadius(Double.parseDouble(params[3]));
-					
-					
-
-					System.out.println(String.format("Parsed sphere (line %d)", lineNum));
-				} else if (code.equals("pln")) {
-					// Add code here to parse plane parameters
-
-					System.out.println(String.format("Parsed plane (line %d)", lineNum));
-				} else if (code.equals("lgt")) {
-					// Add code here to parse light parameters
-
-					System.out.println(String.format("Parsed light (line %d)", lineNum));
-				} else {
-					System.out.println(String.format("ERROR: Did not recognize object: %s (line %d)", code, lineNum));
-				}
+				System.out.println(String.format("ERROR: Did not recognize object: %s (line %d)", code, lineNum));
 			}
 		}
 

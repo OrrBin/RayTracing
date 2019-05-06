@@ -7,9 +7,11 @@ public class InfinitePlane extends Shape {
 
 	private Vector3 normal;
 	private double offset;
-
+	
+	public InfinitePlane() {
+	}
+	
 	public InfinitePlane(Vector3 normal, double offset) {
-		super();
 		this.normal = normal;
 		this.offset = offset;
 	}

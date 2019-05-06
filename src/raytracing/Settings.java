@@ -2,9 +2,11 @@ package raytracing;
 
 import java.awt.Color;
 
+import raytracing.util.Vector3;
+
 public class Settings {
 
-	private Color backgroundColor;
+	private Vector3 backgroundColor;
 	private int numOfShadowRays;
 	private int maxRecursionLevel;
 	private int superSamplingLevel;
@@ -12,18 +14,18 @@ public class Settings {
 	public Settings(){
 	}
 	
-	public Settings(Color backgroundColor, int numOfShadowRays, int maxRecursionLevel, int superSamplingLevel) {
+	public Settings(Vector3 backgroundColor, int numOfShadowRays, int maxRecursionLevel, int superSamplingLevel) {
 		this.backgroundColor = backgroundColor;
 		this.numOfShadowRays = numOfShadowRays;
 		this.maxRecursionLevel = maxRecursionLevel;
 		this.superSamplingLevel = superSamplingLevel;
 	}
 
-	public Color getBackgroundColor() {
+	public Vector3 getBackgroundColor() {
 		return backgroundColor;
 	}
 
-	public void setBackgroundColor(Color backgroundColor) {
+	public void setBackgroundColor(Vector3 backgroundColor) {
 		this.backgroundColor = backgroundColor;
 	}
 
