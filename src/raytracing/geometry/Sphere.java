@@ -12,25 +12,25 @@ public class Sphere extends Shape {
 	public Sphere() {
 	}
 	
-	public Sphere(Vector3 center, double radius) {
+	public Sphere(Vector3 center, double radius, int material) {
 		this.center = center;
 		this.radius = radius;
+		this.material = material;
 	}
 
 	@Override
 	public Vector3 intersection(Ray ray) {
 		Vector3 centerToOrigin = center.connectingVector(ray.getPosition());
 		
-		double a = 1.0;
 		double b = 2.0 * ray.getDirection().dotProduct(centerToOrigin);
 		double c = Math.pow(centerToOrigin.norm(), 2) - Math.pow(radius, 2);
 		
-		double discriminant = Math.pow(b,  2) - 4 * a * c;
+		double discriminant = Math.pow(b,  2) - 4 * c;
 		if(discriminant < 0)
 			return null;
 		
 		if(discriminant - Constants.EPSILON <= 0) {
-			double t = (-b)/(2 * a);
+			double t = (-b)/(2);
 			
 			if(t < 0)
 				return null;
@@ -38,8 +38,8 @@ public class Sphere extends Shape {
 			Vector3 intersectionPoint = ray.getPosition().add(ray.getDirection().multiply(t));
 			return intersectionPoint;
 	}
-		double t1 = (-b + Math.sqrt(discriminant))/(2 * a);
-		double t2 = (-b - Math.sqrt(discriminant))/(2 * a);
+		double t1 = (-b + Math.sqrt(discriminant))/(2);
+		double t2 = (-b - Math.sqrt(discriminant))/(2);
 		
 		if(t1 < 0 && t2 < 0)
 			return null;

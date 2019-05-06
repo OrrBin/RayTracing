@@ -15,7 +15,7 @@ public class Ray {
 	}
 	
 	public Vector3 getPosition() {
-		return new Vector3(position.getX(), position.getY(), position.getY());
+		return position.cpy();
 	}
 
 	public void setPosition(Vector3 position) {
@@ -23,7 +23,7 @@ public class Ray {
 	}
 
 	public Vector3 getDirection() {
-		return new Vector3(direction.getX(), direction.getY(), direction.getY());
+		return direction.cpy();
 	}
 
 	public void setDirection(Vector3 angle) {

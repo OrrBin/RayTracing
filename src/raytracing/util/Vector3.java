@@ -5,25 +5,40 @@ public class Vector3 {
 	private double y;
 	private double z;
 
+	
+	
 	public Vector3(double x, double y, double z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
 
+	public Vector3(Vector3 other) {
+		this.x = other.x;
+		this.y = other.y;
+		this.z = other.z;
+	}
+	
+	public Vector3 cpy() {
+		return new Vector3(this);
+	}
+	
 	public double norm() {
 		return Math.sqrt(x * x + y * y + z * z);
 	}
 
 	public Vector3 normalize() {
-		if(norm() < Constants.EPSILON) // "equals zero"
+		if(norm() < Constants.EPSILON)
 			return this;
 		
-		return new Vector3(x,y,z).multiply(1/norm());
+		return cpy().multiply(1/norm());
 	}
 	
 	public Vector3 crossProduct(Vector3 other) {
-		return new Vector3(y*other.z - other.y*z, other.x*z - z*other.x, x*other.y - y*other.x);
+		double a = y*other.z - z*other.y;
+		double b = z*other.x - x*other.z;
+		double c = x*other.y - y*other.x;
+		return new Vector3(a,b,c);
 	}
 
 	public Vector3 add(Vector3 other) {
@@ -43,7 +58,7 @@ public class Vector3 {
 	}
 
 	public Vector3 connectingVector(Vector3 other) {
-		return new Vector3(x,y,z).add(other.multiply(-1));
+		return other.cpy().add(cpy().multiply(-1));
 	}
 	
 	public double dotProduct(Vector3 other) {
@@ -77,5 +92,30 @@ public class Vector3 {
 	public void setZ(double z) {
 		this.z = z;
 	}
+
+	@Override
+	public String toString() {
+		return String.format("(%s, %s, %s)", x, y, z);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Vector3 other = (Vector3) obj;
+		if (Double.doubleToLongBits(x) != Double.doubleToLongBits(other.x))
+			return false;
+		if (Double.doubleToLongBits(y) != Double.doubleToLongBits(other.y))
+			return false;
+		if (Double.doubleToLongBits(z) != Double.doubleToLongBits(other.z))
+			return false;
+		return true;
+	}
+	
+	
 
 }

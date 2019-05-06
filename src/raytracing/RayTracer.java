@@ -159,7 +159,7 @@ public class RayTracer {
 				sphere.setCenter(new Vector3(Double.parseDouble(params[0]), Double.parseDouble(params[1]),
 						Double.parseDouble(params[2])));
 				sphere.setRadius(Double.parseDouble(params[3]));
-				sphere.setMaterialIndex(Integer.parseInt(params[4]));
+				sphere.setMaterial(Integer.parseInt(params[4]));
 
 				shapes.add(sphere);
 
@@ -171,7 +171,7 @@ public class RayTracer {
 				infinitePlane.setNormal(new Vector3(Double.parseDouble(params[0]), Double.parseDouble(params[1]),
 						Double.parseDouble(params[2])));
 				infinitePlane.setOffset(Double.parseDouble(params[3]));
-				infinitePlane.setMaterialIndex(Integer.parseInt(params[4]));
+				infinitePlane.setMaterial(Integer.parseInt(params[4]));
 
 				shapes.add(infinitePlane);
 
@@ -186,7 +186,7 @@ public class RayTracer {
 						Double.parseDouble(params[5])));
 				triangle.setVertex3(new Vector3(Double.parseDouble(params[6]), Double.parseDouble(params[7]),
 						Double.parseDouble(params[8])));
-				triangle.setMaterialIndex(Integer.parseInt(params[10]));
+				triangle.setMaterial(Integer.parseInt(params[10]));
 
 				shapes.add(triangle);
 

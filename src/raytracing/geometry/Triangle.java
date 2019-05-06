@@ -11,13 +11,13 @@ public class Triangle extends Shape {
 	private Vector3 p3;
 
 	public Triangle() {
-
 	}
 	
-	public Triangle(Vector3 vertex1, Vector3 vertex2, Vector3 vertex3) {
+	public Triangle(Vector3 vertex1, Vector3 vertex2, Vector3 vertex3 ,int material) {
 		this.p1 = vertex1;
 		this.p2 = vertex2;
 		this.p3 = vertex3;
+		this.material = material;
 	}
 
 	@Override

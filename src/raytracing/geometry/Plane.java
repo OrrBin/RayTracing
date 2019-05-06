@@ -13,10 +13,10 @@ public class Plane extends Shape {
 		
 	}
 	
-	public Plane(Vector3 normal, double offset) {
-		super();
+	public Plane(Vector3 normal, double offset, int material) {
 		this.normal = normal;
 		this.offset = offset;
+		this.material = material;
 	}
 
 	@Override
