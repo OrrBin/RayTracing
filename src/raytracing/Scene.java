@@ -10,15 +10,8 @@ public class Scene {
 	private List<PointLight> lights;
 	private List<Shape> shapes;
 	private List<Material> materials;
-
-	public Scene(Settings settings, Camera camera, List<PointLight> lights, List<Shape> shapes,
-			List<Material> materials) {
-		super();
-		this.settings = settings;
-		this.camera = camera;
-		this.lights = lights;
-		this.shapes = shapes;
-		this.materials = materials;
+	
+	public Scene() {
 	}
 
 	public Settings getSettings() {

@@ -9,6 +9,9 @@ public class Material {
 	private double phongSpecularityCoefficient;
 	private double transparency;
 
+	public Material() {
+	}
+	
 	public Material(Color diffuseColor, Color specularColor, Color reflectionColor, double phongSpecularityCoefficient,
 			double transparency) {
 		super();

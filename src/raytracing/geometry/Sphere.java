@@ -8,8 +8,10 @@ public class Sphere extends Shape {
 	private Vector3 center;
 	private double radius;
 	
+	public Sphere() {
+	}
+	
 	public Sphere(Vector3 center, double radius) {
-		super();
 		this.center = center;
 		this.radius = radius;
 	}

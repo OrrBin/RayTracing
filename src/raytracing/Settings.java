@@ -8,9 +8,11 @@ public class Settings {
 	private int numOfShadowRays;
 	private int maxRecursionLevel;
 	private int superSamplingLevel;
-
+	
+	public Settings(){
+	}
+	
 	public Settings(Color backgroundColor, int numOfShadowRays, int maxRecursionLevel, int superSamplingLevel) {
-		super();
 		this.backgroundColor = backgroundColor;
 		this.numOfShadowRays = numOfShadowRays;
 		this.maxRecursionLevel = maxRecursionLevel;
