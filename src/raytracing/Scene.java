@@ -7,6 +7,7 @@ import raytracing.geometry.Shape;
 public class Scene {
 	private Settings settings;
 	private Camera camera;
+	private List<PointLight> lights;
 	private List<Shape> shapes;
 	private List<Material> materials;
 	
@@ -27,6 +28,14 @@ public class Scene {
 
 	public void setCamera(Camera camera) {
 		this.camera = camera;
+	}
+
+	public List<PointLight> getLights() {
+		return lights;
+	}
+
+	public void setLights(List<PointLight> lights) {
+		this.lights = lights;
 	}
 
 	public List<Shape> getShapes() {
