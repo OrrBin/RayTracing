@@ -11,8 +11,7 @@ public class Camera {
 	private double screenWidth;
 
 	public Camera() {
-		
-	};
+	}
 
 	public Camera(Vector3 position, Vector3 lookAtPoint, Vector3 upVector, double screenDistance, double screenWidth) {
 		super();

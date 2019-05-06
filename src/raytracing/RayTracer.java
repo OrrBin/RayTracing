@@ -1,8 +1,16 @@
 package raytracing;
 
+import java.awt.Color;
 import java.awt.Transparency;
-import java.awt.color.*;
-import java.awt.image.*;
+import java.awt.color.ColorSpace;
+import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.ComponentColorModel;
+import java.awt.image.DataBuffer;
+import java.awt.image.DataBufferByte;
+import java.awt.image.Raster;
+import java.awt.image.SampleModel;
+import java.awt.image.WritableRaster;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -12,6 +20,8 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import raytracing.geometry.Shape;
+import raytracing.geometry.Sphere;
 import raytracing.util.Vector3;
 
 /**
@@ -21,12 +31,7 @@ public class RayTracer {
 
 	public int imageWidth;
 	public int imageHeight;
-	public Camera cam;
-	
-	public RayTracer() {
-		cam = new Camera();
-	}
-	
+
 	/**
 	 * Runs the ray tracer. Takes scene file, output image file and image size as
 	 * input.
@@ -59,8 +64,8 @@ public class RayTracer {
 			// Render scene:
 			tracer.renderScene(outputFileName);
 
-//		} catch (IOException e) {
-//			System.out.println(e.getMessage());
+			// } catch (IOException e) {
+			// System.out.println(e.getMessage());
 		} catch (RayTracerException e) {
 			System.out.println(e.getMessage());
 		} catch (Exception e) {
@@ -76,6 +81,10 @@ public class RayTracer {
 	public void parseScene(String sceneFileName) throws IOException, RayTracerException {
 		FileReader fr = new FileReader(sceneFileName);
 
+		Scene scene = new Scene();
+		List<Material> materials = new ArrayList<>();
+		List<Shape> shapes = new ArrayList<>();
+		
 		BufferedReader r = new BufferedReader(fr);
 		String line = null;
 		int lineNum = 0;
@@ -93,33 +102,59 @@ public class RayTracer {
 				String[] params = line.substring(3).trim().toLowerCase().split("\\s+");
 
 				if (code.equals("cam")) {
+					Camera camera = new Camera();
+					
 					Vector3 position = new Vector3(Double.parseDouble(params[0]), Double.parseDouble(params[2]),
 							Double.parseDouble(params[2]));
-					cam.setPosition(position);
-					
+					camera.setPosition(position);
+
 					Vector3 lookAtPoint = new Vector3(Double.parseDouble(params[3]), Double.parseDouble(params[4]),
 							Double.parseDouble(params[5]));
-					cam.setLookAtPoint(lookAtPoint);
+					camera.setLookAtPoint(lookAtPoint);
+
+					Vector3 up = new Vector3(Double.parseDouble(params[6]), Double.parseDouble(params[7]),
+							Double.parseDouble(params[8]));
+					camera.setUpVector(up);
+					camera.setScreenDistance(Integer.parseInt(params[9]));
+					camera.setScreenWidth(Integer.parseInt(params[10]));
 					
-					
+					scene.setCamera(camera);
 					
 					System.out.println(String.format("Parsed camera parameters (line %d)", lineNum));
-				} else if (code.equals("set")) {
-					// Add code here to parse general settings parameters
 
+				} else if (code.equals("set")) {
+					Settings settings = new Settings();
+					
+					settings.setBackgroundColor(new Color(Integer.parseInt(params[0]), Integer.parseInt(params[1]),
+							Integer.parseInt(params[2])));
+					settings.setNumOfShadowRays( Integer.parseInt(params[3]));
+					settings.setMaxRecursionLevel( Integer.parseInt(params[4]));
+					settings.setSuperSamplingLevel(Integer.parseInt(params[5]));
+					
+					scene.setSettings(settings);
+					
 					System.out.println(String.format("Parsed general settings (line %d)", lineNum));
+
 				} else if (code.equals("mtl")) {
-					// Add code here to parse material parameters
+					Material material = new Material();
+					
+					material.setDiffuseColor(new Color(Integer.parseInt(params[0]), Integer.parseInt(params[1]),
+							Integer.parseInt(params[2])));
+					material.setSpecularColor(new Color(Integer.parseInt(params[3]), Integer.parseInt(params[4]),
+							Integer.parseInt(params[5])));
+					material.setReflectionColor(new Color(Integer.parseInt(params[6]), Integer.parseInt(params[7]),
+							Integer.parseInt(params[8])));
+					material.setPhongSpecularityCoefficient(Double.parseDouble(params[9]));
+					material.setTransparency(Double.parseDouble(params[10]));
+
+					materials.add(material);
 
 					System.out.println(String.format("Parsed material (line %d)", lineNum));
 				} else if (code.equals("sph")) {
-					// Add code here to parse sphere parameters
-
-					// Example (you can implement this in many different ways!):
-					// Sphere sphere = new Sphere();
-					// sphere.setCenter(params[0], params[1], params[2]);
-					// sphere.setRadius(params[3]);
-					// sphere.setMaterial(params[4]);
+					Sphere sphere = new Sphere();
+					
+					sphere.setCenter(new Vector3(Double.parseDouble(params[0]), Double.parseDouble(params[1]), Double.parseDouble(params[2])));
+					
 
 					System.out.println(String.format("Parsed sphere (line %d)", lineNum));
 				} else if (code.equals("pln")) {
