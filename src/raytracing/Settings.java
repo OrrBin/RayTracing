@@ -20,7 +20,7 @@ public class Settings {
 	}
 
 	public Vector3 getBackgroundColor() {
-		return backgroundColor;
+		return backgroundColor.cpy();
 	}
 
 	public void setBackgroundColor(Vector3 backgroundColor) {

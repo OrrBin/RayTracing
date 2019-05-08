@@ -49,6 +49,14 @@ public class Vector3 {
 		return this;
 	}
 
+	public Vector3 multiply(Vector3 other) {
+		this.x *= other.x;
+		this.y *= other.y;
+		this.z *= other.z;
+
+		return this;
+	}
+	
 	public Vector3 multiply(double a) {
 		this.x *= a;
 		this.y *= a;
@@ -61,6 +69,11 @@ public class Vector3 {
 		return other.cpy().add(cpy().multiply(-1));
 	}
 	
+	public double distance(Vector3 other) {
+		return connectingVector(other).norm();
+	}
+	
+	
 	public double dotProduct(Vector3 other) {
 		return this.x * other.x + this.y * other.y + this.z * other.z;
 	}
@@ -69,6 +82,28 @@ public class Vector3 {
 		return Math.acos(dotProduct(other) / (norm() * other.norm()));
 	}
 
+	/**
+	 * Bounds the values of x,y,z from above
+	 */
+	public Vector3 boundFromAbove(int i, int j, int k) {
+		x = Math.min(x, i);
+		y = Math.min(y, j);
+		z = Math.min(z, k);
+		
+		return this;
+	}
+	
+	/**
+	 * Bounds the values of x,y,z from below
+	 */
+	public Vector3 boundFromBelow(int i, int j, int k) {
+		x = Math.max(x, i);
+		y = Math.max(y, j);
+		z = Math.max(z, k);
+		
+		return this;
+	}
+	
 	public double getX() {
 		return x;
 	}
@@ -97,7 +132,21 @@ public class Vector3 {
 	public String toString() {
 		return String.format("(%s, %s, %s)", x, y, z);
 	}
-	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		long temp;
+		temp = Double.doubleToLongBits(x);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(y);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(z);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -116,6 +165,4 @@ public class Vector3 {
 		return true;
 	}
 	
-	
-
 }

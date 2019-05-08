@@ -10,8 +10,8 @@ public class Camera {
 	private double screenDistance;
 	private double screenWidth;
 
-	public Camera() {
-	}
+	private Vector3 normal;
+	private Vector3 right, top, forward;
 
 	public Camera(Vector3 position, Vector3 lookAtPoint, Vector3 upVector, double screenDistance, double screenWidth) {
 		super();
@@ -20,10 +20,19 @@ public class Camera {
 		this.upVector = upVector;
 		this.screenDistance = screenDistance;
 		this.screenWidth = screenWidth;
+
+		createCoordSystem();
+	}
+
+	private void createCoordSystem() {
+		this.normal = this.position.connectingVector(this.lookAtPoint);
+		this.forward = this.normal.normalize();
+		this.right = this.upVector.crossProduct(this.normal).normalize();
+		this.top = this.forward.crossProduct(this.right);
 	}
 
 	public Vector3 getPosition() {
-		return position;
+		return position.cpy();
 	}
 
 	public void setPosition(Vector3 position) {
@@ -31,7 +40,7 @@ public class Camera {
 	}
 
 	public Vector3 getLookAtPoint() {
-		return lookAtPoint;
+		return lookAtPoint.cpy();
 	}
 
 	public void setLookAtPoint(Vector3 lookAtPoint) {
@@ -39,7 +48,7 @@ public class Camera {
 	}
 
 	public Vector3 getUpVector() {
-		return upVector;
+		return upVector.cpy();
 	}
 
 	public void setUpVector(Vector3 upVector) {
@@ -62,4 +71,37 @@ public class Camera {
 		this.screenWidth = screenWidth;
 	}
 
+	public Vector3 getNormal() {
+		return normal.cpy();
+	}
+
+	public void setNormal(Vector3 normal) {
+		this.normal = normal;
+	}
+
+	public Vector3 getRight() {
+		return right.cpy();
+	}
+
+	public void setRight(Vector3 right) {
+		this.right = right;
+	}
+
+	public Vector3 getTop() {
+		return top.cpy();
+	}
+
+	public void setTop(Vector3 top) {
+		this.top = top;
+	}
+
+	public Vector3 getForward() {
+		return forward.cpy();
+	}
+
+	public void setForward(Vector3 forward) {
+		this.forward = forward;
+	}
+
+	
 }

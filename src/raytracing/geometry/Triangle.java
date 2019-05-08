@@ -14,10 +14,10 @@ public class Triangle extends Shape {
 	}
 	
 	public Triangle(Vector3 vertex1, Vector3 vertex2, Vector3 vertex3 ,int material) {
+		super(material);
 		this.p1 = vertex1;
 		this.p2 = vertex2;
 		this.p3 = vertex3;
-		this.material = material;
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public class Triangle extends Shape {
 	}
 
 	public Vector3 getVertex1() {
-		return p1;
+		return p1.cpy();
 	}
 
 	public void setVertex1(Vector3 vertex1) {
@@ -74,7 +74,7 @@ public class Triangle extends Shape {
 	}
 
 	public Vector3 getVertex2() {
-		return p2;
+		return p2.cpy();
 	}
 
 	public void setVertex2(Vector3 vertex2) {
@@ -82,11 +82,50 @@ public class Triangle extends Shape {
 	}
 
 	public Vector3 getVertex3() {
-		return p3;
+		return p3.cpy();
 	}
 
 	public void setVertex3(Vector3 vertex3) {
 		this.p3 = vertex3;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((p1 == null) ? 0 : p1.hashCode());
+		result = prime * result + ((p2 == null) ? 0 : p2.hashCode());
+		result = prime * result + ((p3 == null) ? 0 : p3.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Triangle other = (Triangle) obj;
+		if (p1 == null) {
+			if (other.p1 != null)
+				return false;
+		} else if (!p1.equals(other.p1))
+			return false;
+		if (p2 == null) {
+			if (other.p2 != null)
+				return false;
+		} else if (!p2.equals(other.p2))
+			return false;
+		if (p3 == null) {
+			if (other.p3 != null)
+				return false;
+		} else if (!p3.equals(other.p3))
+			return false;
+		return true;
+	}
+
+	
+	
 }

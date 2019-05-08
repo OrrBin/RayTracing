@@ -23,7 +23,7 @@ public class Material {
 	}
 
 	public Vector3 getDiffuseColor() {
-		return diffuseVector3;
+		return diffuseVector3.cpy();
 	}
 
 	public void setDiffuseColor(Vector3 diffuseVector3) {
@@ -31,7 +31,7 @@ public class Material {
 	}
 
 	public Vector3 getSpecularColor() {
-		return specularVector3;
+		return specularVector3.cpy();
 	}
 
 	public void setSpecularColor(Vector3 specularVector3) {
@@ -39,7 +39,7 @@ public class Material {
 	}
 
 	public Vector3 getReflectionColor() {
-		return reflectionVector3;
+		return reflectionVector3.cpy();
 	}
 
 	public void setReflectionColor(Vector3 reflectionVector3) {

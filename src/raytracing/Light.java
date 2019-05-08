@@ -1,5 +1,8 @@
 package raytracing;
 
+import java.util.Random;
+
+import raytracing.util.Ray;
 import raytracing.util.Vector3;
 
 public class Light {
@@ -21,8 +24,36 @@ public class Light {
 		this.lightRadius = lightRadius;
 	}
 
+
+	public Ray[] getRays(Vector3 intersectionPoint, int numOfShadowRays) {
+		Ray[] rays = new Ray[numOfShadowRays*numOfShadowRays];
+		
+		Vector3 normal = this.position.connectingVector(intersectionPoint).normalize();
+		Vector3 up = new Vector3(0, 1, 0);
+		Vector3 right = up.crossProduct(normal).normalize();
+		Vector3 top = normal.crossProduct(right);
+		
+		Random rnd = new Random();
+		
+		double rectWidth = this.lightRadius / numOfShadowRays;
+		for(int i = 0; i < numOfShadowRays; i++) {
+			double yMin = rectWidth * i - this.lightRadius / 2;
+			for(int j = 0; j < numOfShadowRays; j++) {
+				double xMin = rectWidth * j - this.lightRadius / 2;
+				double xOffset = xMin + rnd.nextDouble() * rectWidth;
+				double yOffset = yMin + rnd.nextDouble() * rectWidth;
+				
+				Vector3 light = this.position.cpy().add(top.cpy().multiply(yOffset)).add(right.cpy().multiply(xOffset));
+				rays[i*numOfShadowRays + j] = new Ray(light, light.connectingVector(intersectionPoint).normalize());
+			}
+		}
+		
+		return rays;
+	}
+
+	
 	public Vector3 getPosition() {
-		return position;
+		return position.cpy();
 	}
 
 	public void setPosition(Vector3 position) {
@@ -30,7 +61,7 @@ public class Light {
 	}
 
 	public Vector3 getColor() {
-		return color;
+		return color.cpy();
 	}
 
 	public void setColor(Vector3 color) {

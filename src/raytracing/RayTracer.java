@@ -23,6 +23,7 @@ import raytracing.geometry.Plane;
 import raytracing.geometry.Shape;
 import raytracing.geometry.Sphere;
 import raytracing.geometry.Triangle;
+import raytracing.util.Ray;
 import raytracing.util.Vector3;
 
 /**
@@ -32,6 +33,7 @@ public class RayTracer {
 
 	public int imageWidth;
 	public int imageHeight;
+	public Scene scene;
 
 	/**
 	 * Runs the ray tracer. Takes scene file, output image file and image size as
@@ -59,6 +61,8 @@ public class RayTracer {
 				tracer.imageHeight = Integer.parseInt(args[3]);
 			}
 
+			tracer.scene = new Scene(tracer.imageWidth, tracer.imageWidth);
+		
 			// Parse scene file:
 			tracer.parseScene(sceneFileName);
 
@@ -78,16 +82,12 @@ public class RayTracer {
 	public void parseScene(String sceneFileName) throws IOException, RayTracerException {
 		FileReader fr = new FileReader(sceneFileName);
 
-		Scene scene = new Scene(imageWidth, imageWidth);
-		List<Material> materials = new ArrayList<>();
-		List<Shape> shapes = new ArrayList<>();
-		List<Light> lights = new ArrayList<>();
-
 		BufferedReader r = new BufferedReader(fr);
 		String line = null;
 		int lineNum = 0;
 		System.out.println("Started parsing scene file " + sceneFileName);
 
+		int max_mat = 0;
 		while ((line = r.readLine()) != null) {
 			line = line.trim();
 			++lineNum;
@@ -100,122 +100,82 @@ public class RayTracer {
 			String[] params = line.substring(3).trim().toLowerCase().split("\\s+");
 
 			if (code.equals("cam")) {
-				Camera camera = new Camera();
-
-				Vector3 position = new Vector3(Double.parseDouble(params[0]), Double.parseDouble(params[2]),
-						Double.parseDouble(params[2]));
-				camera.setPosition(position);
-
-				Vector3 lookAtPoint = new Vector3(Double.parseDouble(params[3]), Double.parseDouble(params[4]),
-						Double.parseDouble(params[5]));
-				camera.setLookAtPoint(lookAtPoint);
-
-				Vector3 up = new Vector3(Double.parseDouble(params[6]), Double.parseDouble(params[7]),
-						Double.parseDouble(params[8]));
-				camera.setUpVector(up);
-				camera.setScreenDistance(Integer.parseInt(params[9]));
-				camera.setScreenWidth(Integer.parseInt(params[10]));
-
-				scene.setCamera(camera);
-
+				Vector3 pos = new Vector3(Double.parseDouble(params[0]), Double.parseDouble(params[1]), Double.parseDouble(params[2]));
+				Vector3 lap = new Vector3(Double.parseDouble(params[3]), Double.parseDouble(params[4]), Double.parseDouble(params[5]));
+				Vector3 up = new Vector3(Double.parseDouble(params[6]), Double.parseDouble(params[7]), Double.parseDouble(params[8]));
+				double screen_dist = Double.parseDouble(params[9]), screen_width = Double.parseDouble(params[10]);
+				scene.setCamera((new Camera(pos, lap, up, screen_dist, screen_width)));
 				System.out.println(String.format("Parsed camera parameters (line %d)", lineNum));
-
-			} else if (code.equals("set")) {
-				Settings settings = new Settings();
-
-				settings.setBackgroundColor(new Vector3(Double.parseDouble(params[0]), Double.parseDouble(params[1]),
-						Double.parseDouble(params[2])));
-				settings.setNumOfShadowRays(Integer.parseInt(params[3]));
-				settings.setMaxRecursionLevel(Integer.parseInt(params[4]));
-				settings.setSuperSamplingLevel(Integer.parseInt(params[5]));
-
-				scene.setSettings(settings);
-
-				System.out.println(String.format("Parsed general settings (line %d)", lineNum));
-
-			} else if (code.equals("mtl")) {
-				Material material = new Material();
-
-				material.setDiffuseColor(new Vector3(Double.parseDouble(params[0]), Double.parseDouble(params[1]),
-						Double.parseDouble(params[2])));
-				material.setSpecularColor(new Vector3(Double.parseDouble(params[3]), Double.parseDouble(params[4]),
-						Double.parseDouble(params[5])));
-				material.setReflectionColor(new Vector3(Double.parseDouble(params[6]), Double.parseDouble(params[7]),
-						Double.parseDouble(params[8])));
-				material.setPhongSpecularityCoefficient(Double.parseDouble(params[9]));
-				material.setTransparency(Double.parseDouble(params[10]));
-
-				materials.add(material);
-
+			}
+			else if (code.equals("set")) {
+				scene.getSettings().setBackgroundColor(new Vector3(Double.parseDouble(params[0]), Double.parseDouble(params[1]), Double.parseDouble(params[2])));
+				scene.getSettings().setNumOfShadowRays(Integer.parseInt(params[3]));
+				scene.getSettings().setMaxRecursionLevel(Integer.parseInt(params[4]));
+                System.out.println(String.format("Parsed general settings (line %d)", lineNum));
+			}
+			else if (code.equals("mtl"))
+			{
+				Vector3 diffuse = new Vector3(Double.parseDouble(params[0]), Double.parseDouble(params[1]), Double.parseDouble(params[2]));
+				Vector3 specular = new Vector3(Double.parseDouble(params[3]), Double.parseDouble(params[4]), Double.parseDouble(params[5]));
+				Vector3 reflection = new Vector3(Double.parseDouble(params[6]), Double.parseDouble(params[7]), Double.parseDouble(params[8]));
+				Double phong = Double.parseDouble(params[9]);
+				Double trans = Double.parseDouble(params[10]);
+				scene.getMaterials().add(new Material(diffuse, specular, reflection, phong, trans));
 				System.out.println(String.format("Parsed material (line %d)", lineNum));
-
-			} else if (code.equals("sph")) {
-				Sphere sphere = new Sphere();
-
-				sphere.setCenter(new Vector3(Double.parseDouble(params[0]), Double.parseDouble(params[1]),
-						Double.parseDouble(params[2])));
-				sphere.setRadius(Double.parseDouble(params[3]));
-				sphere.setMaterial(Integer.parseInt(params[4]));
-
-				shapes.add(sphere);
-
+			}
+			else if (code.equals("sph"))
+			{
+				Vector3 center = new Vector3(Double.parseDouble(params[0]), Double.parseDouble(params[1]), Double.parseDouble(params[2]));
+				double radius = Double.parseDouble(params[3]);
+				int mat_idx = Integer.parseInt(params[4]) - 1;
+				max_mat = Math.max(max_mat, mat_idx);
+				scene.getShapes().add(new Sphere(center, radius, mat_idx));
 				System.out.println(String.format("Parsed sphere (line %d)", lineNum));
-
-			} else if (code.equals("pln")) {
-				Plane infinitePlane = new Plane();
-
-				infinitePlane.setNormal(new Vector3(Double.parseDouble(params[0]), Double.parseDouble(params[1]),
-						Double.parseDouble(params[2])));
-				infinitePlane.setOffset(Double.parseDouble(params[3]));
-				infinitePlane.setMaterial(Integer.parseInt(params[4]));
-
-				shapes.add(infinitePlane);
-
+			}
+			else if (code.equals("pln"))
+			{
+				Vector3 normal = new Vector3(Double.parseDouble(params[0]), Double.parseDouble(params[1]), Double.parseDouble(params[2]));
+				double offset = Double.parseDouble(params[3]);
+				int mat_idx = Integer.parseInt(params[4]) - 1;
+				max_mat = Math.max(max_mat, mat_idx);
+				scene.getShapes().add(new Plane(normal, offset, mat_idx));
 				System.out.println(String.format("Parsed plane (line %d)", lineNum));
-
-			} else if (code.equals("trg")) {
-				Triangle triangle = new Triangle();
-
-				triangle.setVertex1(new Vector3(Double.parseDouble(params[0]), Double.parseDouble(params[1]),
-						Double.parseDouble(params[2])));
-				triangle.setVertex2(new Vector3(Double.parseDouble(params[3]), Double.parseDouble(params[4]),
-						Double.parseDouble(params[5])));
-				triangle.setVertex3(new Vector3(Double.parseDouble(params[6]), Double.parseDouble(params[7]),
-						Double.parseDouble(params[8])));
-				triangle.setMaterial(Integer.parseInt(params[10]));
-
-				shapes.add(triangle);
-
-				System.out.println(String.format("Parsed triangle (line %d)", lineNum));
-
-			} else if (code.equals("lgt")) {
-				Light light = new Light();
-
-				light.setPosition(new Vector3(Double.parseDouble(params[0]), Double.parseDouble(params[1]),
-						Double.parseDouble(params[2])));
-				light.setColor(new Vector3(Double.parseDouble(params[3]), Double.parseDouble(params[4]),
-						Double.parseDouble(params[5])));
-				light.setSpecularIntensity(Double.parseDouble(params[6]));
-				light.setShadowIntensity(Double.parseDouble(params[7]));
-				light.setLightRadius(Double.parseDouble(params[8]));
-				
-				lights.add(light);
-
+			}
+			else if (code.equals("trg"))
+            {
+                Vector3 p1 = new Vector3(Double.parseDouble(params[0]), Double.parseDouble(params[1]), Double.parseDouble(params[2]));
+                Vector3 p2 = new Vector3(Double.parseDouble(params[3]), Double.parseDouble(params[4]), Double.parseDouble(params[5]));
+                Vector3 p3 = new Vector3(Double.parseDouble(params[6]), Double.parseDouble(params[7]), Double.parseDouble(params[8]));
+                int mat_idx = Integer.parseInt(params[9]) - 1;
+                max_mat = Math.max(max_mat, mat_idx);
+                scene.getShapes().add(new Triangle(p1, p2, p3, mat_idx));
+                System.out.println(String.format("Parsed triangle (line %d)", lineNum));
+            }
+			else if (code.equals("lgt"))
+			{
+				Vector3 center = new Vector3(Double.parseDouble(params[0]), Double.parseDouble(params[1]), Double.parseDouble(params[2]));
+				Vector3 color = new Vector3(Double.parseDouble(params[3]), Double.parseDouble(params[4]), Double.parseDouble(params[5]));
+				double specularIntensity = Double.parseDouble(params[6]);
+				double shadowIntensity = Double.parseDouble(params[7]);
+				double lightRadius = Double.parseDouble(params[8]);
+				scene.getLights().add(new Light(center, color, specularIntensity, shadowIntensity, lightRadius));
 				System.out.println(String.format("Parsed light (line %d)", lineNum));
-				
-			} else {
+			}
+			else
+			{
 				System.out.println(String.format("ERROR: Did not recognize object: %s (line %d)", code, lineNum));
 			}
 		}
-		
-		scene.setMaterials(materials);
-		scene.setShapes(shapes);
-		scene.setLights(lights);
 
 		// It is recommended that you check here that the scene is valid,
 		// for example camera settings and all necessary materials were defined.
-		
+
 		r.close();
+		
+		if(max_mat >= scene.getMaterials().size()) {
+			System.out.println("ERROR: There is a shape that uses an undefined material");
+			System.exit(1);
+		}
 		System.out.println("Finished parsing scene file " + sceneFileName);
 
 	}
@@ -229,14 +189,16 @@ public class RayTracer {
 		// Create a byte array to hold the pixel data:
 		byte[] rgbData = new byte[this.imageWidth * this.imageHeight * 3];
 
-		// Put your ray tracing code here!
-		//
-		// Write pixel color values in RGB format to rgbData:
-		// Pixel [x, y] red component is in rgbData[(y * this.imageWidth + x) * 3]
-		// green component is in rgbData[(y * this.imageWidth + x) * 3 + 1]
-		// blue component is in rgbData[(y * this.imageWidth + x) * 3 + 2]
-		//
-		// Each of the red, green and blue components should be a byte, i.e. 0-255
+		for (int top = 0; top < scene.imageHeight; top++) {
+			for (int left = 0; left < scene.imageWidth; left++) {
+				Ray ray = scene.constructRay(top, left);
+				Vector3 color = scene.calculateColor(ray);
+//				System.out.println(top + ", " + left + " : " + ray + " , color: " + color);
+				rgbData[(top * scene.imageWidth + left) * 3] = (byte) ((int) (color.getX() * 255));
+				rgbData[(top * scene.imageWidth + left) * 3 + 1] = (byte) ((int) (color.getY() * 255));
+				rgbData[(top * scene.imageWidth + left) * 3 + 2] = (byte) ((int) (color.getZ() * 255));
+			}
+		}
 
 		long endTime = System.currentTimeMillis();
 		Long renderTime = endTime - startTime;

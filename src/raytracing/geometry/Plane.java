@@ -14,9 +14,9 @@ public class Plane extends Shape {
 	}
 	
 	public Plane(Vector3 normal, double offset, int material) {
+		super(material);
 		this.normal = normal;
 		this.offset = offset;
-		this.material = material;
 	}
 
 	@Override
@@ -46,7 +46,7 @@ public class Plane extends Shape {
 	}
 
 	public Vector3 getNormal() {
-		return normal;
+		return normal.cpy();
 	}
 
 	public void setNormal(Vector3 normal) {
@@ -60,5 +60,37 @@ public class Plane extends Shape {
 	public void setOffset(double offset) {
 		this.offset = offset;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((normal == null) ? 0 : normal.hashCode());
+		long temp;
+		temp = Double.doubleToLongBits(offset);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Plane other = (Plane) obj;
+		if (normal == null) {
+			if (other.normal != null)
+				return false;
+		} else if (!normal.equals(other.normal))
+			return false;
+		if (Double.doubleToLongBits(offset) != Double.doubleToLongBits(other.offset))
+			return false;
+		return true;
+	}
+	
+	
 
 }
