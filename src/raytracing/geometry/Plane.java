@@ -10,9 +10,9 @@ public class Plane extends Shape {
 	private double offset;
 
 	public Plane() {
-		
+
 	}
-	
+
 	public Plane(Vector3 normal, double offset, int material) {
 		super(material);
 		this.normal = normal;
@@ -22,25 +22,25 @@ public class Plane extends Shape {
 	@Override
 	public Vector3 intersection(Ray ray) {
 		double angle = ray.getDirection().dotProduct(normal);
-		
-		if(Math.abs(angle) < Constants.EPSILON)
+
+		if (Math.abs(angle) < Constants.EPSILON)
 			return null;
-		
-		double t = (this.offset - ray.getPosition().dotProduct(normal)) / angle;
-		if(t < 0)
+
+		double t = (this.offset - ray.getOriginPoint().dotProduct(normal)) / angle;
+		if (t < 0)
 			return null;
-		
-		Vector3 intersectionPoint = ray.getPosition().add(ray.getDirection().multiply(t));	
-		
+
+		Vector3 intersectionPoint = ray.getOriginPoint().add(ray.getDirection().multiply(t));
+
 		return intersectionPoint;
 	}
 
 	@Override
 	public Vector3 normal(Vector3 point, Ray ray) {
 		Vector3 n = normal.normalize();
-		
+
 		Vector3 v = ray.getDirection().multiply(-1).normalize();
-		if(n.dotProduct(v) < 0)
+		if (n.dotProduct(v) < 0)
 			return n.multiply(-1);
 		return n;
 	}
@@ -90,7 +90,5 @@ public class Plane extends Shape {
 			return false;
 		return true;
 	}
-	
-	
 
 }

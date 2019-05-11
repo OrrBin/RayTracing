@@ -8,10 +8,10 @@ public class Sphere extends Shape {
 
 	private Vector3 center;
 	private double radius;
-	
+
 	public Sphere() {
 	}
-	
+
 	public Sphere(Vector3 center, double radius, int material) {
 		super(material);
 		this.center = center;
@@ -20,58 +20,58 @@ public class Sphere extends Shape {
 
 	@Override
 	public Vector3 intersection(Ray ray) {
-		Vector3 centerToOrigin = center.connectingVector(ray.getPosition());
-		
+		Vector3 centerToOrigin = center.connectingVector(ray.getOriginPoint());
+
 		double b = 2.0 * ray.getDirection().dotProduct(centerToOrigin);
 		double c = Math.pow(centerToOrigin.norm(), 2) - Math.pow(radius, 2);
-		
-		double discriminant = Math.pow(b,  2) - 4 * c;
-		if(discriminant < 0)
+
+		double discriminant = Math.pow(b, 2) - 4 * c;
+		if (discriminant < 0)
 			return null;
-		
-		if(discriminant - Constants.EPSILON <= 0) {
-			double t = (-b)/(2);
-			
-			if(t < 0)
+
+		if (discriminant - Constants.EPSILON <= 0) {
+			double t = (-b) / (2);
+
+			if (t < 0)
 				return null;
-			
-			Vector3 intersectionPoint = ray.getPosition().add(ray.getDirection().multiply(t));
+
+			Vector3 intersectionPoint = ray.getOriginPoint().add(ray.getDirection().multiply(t));
 			return intersectionPoint;
-	}
-		double t1 = (-b + Math.sqrt(discriminant))/(2);
-		double t2 = (-b - Math.sqrt(discriminant))/(2);
-		
-		if(t1 < 0 && t2 < 0)
+		}
+		double t1 = (-b + Math.sqrt(discriminant)) / (2);
+		double t2 = (-b - Math.sqrt(discriminant)) / (2);
+
+		if (t1 < 0 && t2 < 0)
 			return null;
-		
-		Vector3 intersectionPoint1 = ray.getPosition().add(ray.getDirection().multiply(t1));
-		Vector3 intersectionPoint2 = ray.getPosition().add(ray.getDirection().multiply(t2));
-		
+
+		Vector3 intersectionPoint1 = ray.getOriginPoint().add(ray.getDirection().multiply(t1));
+		Vector3 intersectionPoint2 = ray.getOriginPoint().add(ray.getDirection().multiply(t2));
+
 		Vector3 intersectionPoint = null;
-		
-		if(t2 < 0)
+
+		if (t2 < 0)
 			intersectionPoint = intersectionPoint1;
-		else if(t1 < 0)
+		else if (t1 < 0)
 			intersectionPoint = intersectionPoint2;
 		else {
-			double length1 = ray.getPosition().connectingVector(intersectionPoint1).norm();
-			double length2 = ray.getPosition().connectingVector(intersectionPoint2).norm();
-			
-			if(length1 < length2)
+			double length1 = ray.getOriginPoint().connectingVector(intersectionPoint1).norm();
+			double length2 = ray.getOriginPoint().connectingVector(intersectionPoint2).norm();
+
+			if (length1 < length2)
 				intersectionPoint = intersectionPoint1;
 			else
 				intersectionPoint = intersectionPoint2;
 		}
-		
+
 		return intersectionPoint;
 	}
-		
+
 	@Override
 	public Vector3 normal(Vector3 point, Ray ray) {
 		Vector3 n = center.connectingVector(point).normalize();
-		
+
 		Vector3 v = ray.getDirection().multiply(-1).normalize();
-		if(n.dotProduct(v) < 0)
+		if (n.dotProduct(v) < 0)
 			return n.multiply(-1);
 		return n;
 	}
@@ -121,8 +121,5 @@ public class Sphere extends Shape {
 			return false;
 		return true;
 	}
-	
-	
-	
 
 }

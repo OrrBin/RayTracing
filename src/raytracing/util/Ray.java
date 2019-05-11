@@ -1,25 +1,25 @@
 package raytracing.util;
 
 public class Ray {
-	Vector3 position;
+	Vector3 originPoint;
 	Vector3 direction;
 
 	public Ray(Vector3 position, Vector3 angle) {
 		super();
-		this.position = position;
+		this.originPoint = position;
 		this.direction = angle;
 	}
 
 	public Vector3 point(double distance) {
-		return position.add(direction.multiply(distance));
-	}
-	
-	public Vector3 getPosition() {
-		return position.cpy();
+		return originPoint.add(direction.multiply(distance));
 	}
 
-	public void setPosition(Vector3 position) {
-		this.position = position;
+	public Vector3 getOriginPoint() {
+		return originPoint.cpy();
+	}
+
+	public void setOriginPoint(Vector3 position) {
+		this.originPoint = position;
 	}
 
 	public Vector3 getDirection() {
@@ -29,10 +29,10 @@ public class Ray {
 	public void setDirection(Vector3 angle) {
 		this.direction = angle;
 	}
-	
+
 	@Override
 	public String toString() {
-		return String.format("position: %s, direction: %s", position, direction);
+		return String.format("position: %s, direction: %s", originPoint, direction);
 	}
 
 	@Override
@@ -40,7 +40,7 @@ public class Ray {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((direction == null) ? 0 : direction.hashCode());
-		result = prime * result + ((position == null) ? 0 : position.hashCode());
+		result = prime * result + ((originPoint == null) ? 0 : originPoint.hashCode());
 		return result;
 	}
 
@@ -58,14 +58,12 @@ public class Ray {
 				return false;
 		} else if (!direction.equals(other.direction))
 			return false;
-		if (position == null) {
-			if (other.position != null)
+		if (originPoint == null) {
+			if (other.originPoint != null)
 				return false;
-		} else if (!position.equals(other.position))
+		} else if (!originPoint.equals(other.originPoint))
 			return false;
 		return true;
 	}
 
-	
-	
 }

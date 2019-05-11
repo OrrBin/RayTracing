@@ -3,47 +3,46 @@ package raytracing;
 import raytracing.util.Vector3;
 
 public class Material {
-	private Vector3 diffuseVector3;
-	private Vector3 specularVector3;
-	private Vector3 reflectionVector3;
+	private Vector3 diffuseColor;
+	private Vector3 specularColor;
+	private Vector3 reflectionColor;
 	private double phongSpecularityCoefficient;
 	private double transparency;
 
 	public Material() {
 	}
-	
-	public Material(Vector3 diffuseVector3, Vector3 specularVector3, Vector3 reflectionVector3, double phongSpecularityCoefficient,
-			double transparency) {
-		super();
-		this.diffuseVector3 = diffuseVector3;
-		this.specularVector3 = specularVector3;
-		this.reflectionVector3 = reflectionVector3;
+
+	public Material(Vector3 diffuseColor, Vector3 specularColor, Vector3 reflectionColor,
+			double phongSpecularityCoefficient, double transparency) {
+		this.diffuseColor = diffuseColor;
+		this.specularColor = specularColor;
+		this.reflectionColor = reflectionColor;
 		this.phongSpecularityCoefficient = phongSpecularityCoefficient;
 		this.transparency = transparency;
 	}
 
 	public Vector3 getDiffuseColor() {
-		return diffuseVector3.cpy();
+		return diffuseColor.cpy();
 	}
 
-	public void setDiffuseColor(Vector3 diffuseVector3) {
-		this.diffuseVector3 = diffuseVector3;
+	public void setDiffuseColor(Vector3 diffuseColor) {
+		this.diffuseColor = diffuseColor;
 	}
 
 	public Vector3 getSpecularColor() {
-		return specularVector3.cpy();
+		return specularColor.cpy();
 	}
 
-	public void setSpecularColor(Vector3 specularVector3) {
-		this.specularVector3 = specularVector3;
+	public void setSpecularColor(Vector3 specularColor) {
+		this.specularColor = specularColor;
 	}
 
 	public Vector3 getReflectionColor() {
-		return reflectionVector3.cpy();
+		return reflectionColor.cpy();
 	}
 
-	public void setReflectionColor(Vector3 reflectionVector3) {
-		this.reflectionVector3 = reflectionVector3;
+	public void setReflectionColor(Vector3 reflectionColor) {
+		this.reflectionColor = reflectionColor;
 	}
 
 	public double getPhongSpecularityCoefficient() {

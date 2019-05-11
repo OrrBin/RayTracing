@@ -5,8 +5,6 @@ public class Vector3 {
 	private double y;
 	private double z;
 
-	
-	
 	public Vector3(double x, double y, double z) {
 		this.x = x;
 		this.y = y;
@@ -18,27 +16,27 @@ public class Vector3 {
 		this.y = other.y;
 		this.z = other.z;
 	}
-	
+
 	public Vector3 cpy() {
 		return new Vector3(this);
 	}
-	
+
 	public double norm() {
 		return Math.sqrt(x * x + y * y + z * z);
 	}
 
 	public Vector3 normalize() {
-		if(norm() < Constants.EPSILON)
+		if (norm() < Constants.EPSILON)
 			return this;
-		
-		return cpy().multiply(1/norm());
+
+		return cpy().multiply(1 / norm());
 	}
-	
+
 	public Vector3 crossProduct(Vector3 other) {
-		double a = y*other.z - z*other.y;
-		double b = z*other.x - x*other.z;
-		double c = x*other.y - y*other.x;
-		return new Vector3(a,b,c);
+		double a = y * other.z - z * other.y;
+		double b = z * other.x - x * other.z;
+		double c = x * other.y - y * other.x;
+		return new Vector3(a, b, c);
 	}
 
 	public Vector3 add(Vector3 other) {
@@ -56,7 +54,7 @@ public class Vector3 {
 
 		return this;
 	}
-	
+
 	public Vector3 multiply(double a) {
 		this.x *= a;
 		this.y *= a;
@@ -68,12 +66,11 @@ public class Vector3 {
 	public Vector3 connectingVector(Vector3 other) {
 		return other.cpy().add(cpy().multiply(-1));
 	}
-	
+
 	public double distance(Vector3 other) {
 		return connectingVector(other).norm();
 	}
-	
-	
+
 	public double dotProduct(Vector3 other) {
 		return this.x * other.x + this.y * other.y + this.z * other.z;
 	}
@@ -89,10 +86,10 @@ public class Vector3 {
 		x = Math.min(x, i);
 		y = Math.min(y, j);
 		z = Math.min(z, k);
-		
+
 		return this;
 	}
-	
+
 	/**
 	 * Bounds the values of x,y,z from below
 	 */
@@ -100,10 +97,10 @@ public class Vector3 {
 		x = Math.max(x, i);
 		y = Math.max(y, j);
 		z = Math.max(z, k);
-		
+
 		return this;
 	}
-	
+
 	public double getX() {
 		return x;
 	}
@@ -164,5 +161,5 @@ public class Vector3 {
 			return false;
 		return true;
 	}
-	
+
 }

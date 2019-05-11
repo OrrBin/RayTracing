@@ -8,10 +8,10 @@ public class Settings {
 	private int numOfShadowRays;
 	private int maxRecursionLevel;
 	private int superSamplingLevel;
-	
-	public Settings(){
+
+	public Settings() {
 	}
-	
+
 	public Settings(Vector3 backgroundColor, int numOfShadowRays, int maxRecursionLevel, int superSamplingLevel) {
 		this.backgroundColor = backgroundColor;
 		this.numOfShadowRays = numOfShadowRays;

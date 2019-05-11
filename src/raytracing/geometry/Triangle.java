@@ -12,8 +12,8 @@ public class Triangle extends Shape {
 
 	public Triangle() {
 	}
-	
-	public Triangle(Vector3 vertex1, Vector3 vertex2, Vector3 vertex3 ,int material) {
+
+	public Triangle(Vector3 vertex1, Vector3 vertex2, Vector3 vertex3, int material) {
 		super(material);
 		this.p1 = vertex1;
 		this.p2 = vertex2;
@@ -29,11 +29,11 @@ public class Triangle extends Shape {
 		if (Math.abs(angle) < Constants.EPSILON)
 			return null;
 
-		double t = (offset - ray.getPosition().dotProduct(normal)) / angle;
+		double t = (offset - ray.getOriginPoint().dotProduct(normal)) / angle;
 		if (t < 0)
 			return null;
 
-		Vector3 pointOfContact = ray.getPosition().add(ray.getDirection().multiply(t));
+		Vector3 pointOfContact = ray.getOriginPoint().add(ray.getDirection().multiply(t));
 
 		Vector3 u = p1.connectingVector(p2);
 		Vector3 v = p1.connectingVector(p3);
@@ -126,6 +126,4 @@ public class Triangle extends Shape {
 		return true;
 	}
 
-	
-	
 }

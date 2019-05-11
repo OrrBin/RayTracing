@@ -72,12 +72,13 @@ public class Scene {
 	 * calculates diffuse and sepcular colors
 	 */
 	Vector3 diffuseAndSpecColor(IntersectionData inter, Ray ray, Material mat) {
-		Vector3 v = ray.getDirection().cpy().multiply(-1).normalize();
-		Vector3 normal = inter.getShape().normal(inter.getIntersectionPoint(), ray);
-
 		Vector3 diffLight = new Vector3(0, 0, 0);
 		Vector3 specLight = new Vector3(0, 0, 0);
 
+		Vector3 v = ray.getDirection().cpy().multiply(-1).normalize();
+		Vector3 normal = inter.getShape().normal(inter.getIntersectionPoint(), ray);
+
+		// Calculate each of the scenes light diffuse and specular color and sum up
 		for (Light light : this.lights) {
 			Vector3 lightDirection = light.getPosition().connectingVector(inter.getIntersectionPoint()).normalize();
 			Vector3 reveresedLightDirection = lightDirection.cpy().multiply(-1);
@@ -167,7 +168,7 @@ public class Scene {
 			if (intersectionPoint == null)
 				continue;
 
-			if ((tmpDistance = ray.getPosition().distance(intersectionPoint)) < minDistance) {
+			if ((tmpDistance = ray.getOriginPoint().distance(intersectionPoint)) < minDistance) {
 				minDistance = tmpDistance;
 				intersection = new IntersectionData(shape, intersectionPoint);
 			}
@@ -193,7 +194,7 @@ public class Scene {
 
 			if (interPoint != null) {
 				IntersectionData inter = new IntersectionData(shape, interPoint);
-				double distance = ray.getPosition().connectingVector(inter.getIntersectionPoint()).norm();
+				double distance = ray.getOriginPoint().connectingVector(inter.getIntersectionPoint()).norm();
 
 				if (targetShape == shape) {
 					maxDistance = distance;

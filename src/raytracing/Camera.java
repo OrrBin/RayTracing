@@ -10,6 +10,7 @@ public class Camera {
 	private double screenDistance;
 	private double screenWidth;
 
+	//Coordinate system attributes
 	private Vector3 normal;
 	private Vector3 right, top, forward;
 
@@ -103,5 +104,4 @@ public class Camera {
 		this.forward = forward;
 	}
 
-	
 }
