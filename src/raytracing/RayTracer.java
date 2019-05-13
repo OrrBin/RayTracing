@@ -19,6 +19,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import raytracing.geometry.CosPlusSin;
 import raytracing.geometry.Plane;
 import raytracing.geometry.Shape;
 import raytracing.geometry.Sphere;
@@ -153,6 +154,12 @@ public class RayTracer {
 				max_mat = Math.max(max_mat, mat_idx);
 				scene.getShapes().add(new Triangle(p1, p2, p3, mat_idx));
 				System.out.println(String.format("Parsed triangle (line %d)", lineNum));
+			} else if (code.equals("cps")) {
+				double zOffset = Integer.parseInt(params[0]);
+				int mat_idx = Integer.parseInt(params[1]) - 1;
+				max_mat = Math.max(max_mat, mat_idx);
+				scene.getShapes().add(new CosPlusSin(zOffset, mat_idx));
+				System.out.println(String.format("Parsed cossin (line %d)", lineNum));
 			} else if (code.equals("lgt")) {
 				Vector3 center = new Vector3(Double.parseDouble(params[0]), Double.parseDouble(params[1]),
 						Double.parseDouble(params[2]));
@@ -197,7 +204,9 @@ public class RayTracer {
 				rgbData[(top * scene.imageWidth + left) * 3] = (byte) ((int) (color.getX() * 255));
 				rgbData[(top * scene.imageWidth + left) * 3 + 1] = (byte) ((int) (color.getY() * 255));
 				rgbData[(top * scene.imageWidth + left) * 3 + 2] = (byte) ((int) (color.getZ() * 255));
+//				System.out.println(color);
 			}
+			System.out.println("finished line " + top);
 		}
 
 		long endTime = System.currentTimeMillis();
