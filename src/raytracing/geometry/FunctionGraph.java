@@ -4,22 +4,17 @@ package raytracing.geometry;
 import raytracing.util.Ray;
 import raytracing.util.Vector3;
 
-public class CosPlusSin extends Shape {
+public abstract class FunctionGraph extends Shape {
 
-	public CosPlusSin(double zOffset, int material) {
+	public FunctionGraph(int material) {
 		super(material);
-		this.zOffset = zOffset;
-	}
-
-	private double zOffset;
-	
-	double func(Vector3 point) {
-		return  Math.cos(point.getX()) + Math.sin(point.getY()) + zOffset - point.getZ();
 	}
 	
-	boolean isOutOfBounds(Vector3 point, Vector3 dir) {
-		return ( (point.getZ() > (2 + zOffset) && dir.getZ() > 0) ) || ( (point.getZ() < (-2 + zOffset) && dir.getZ() < 0) );
-	}
+	abstract protected int maxIterations();
+	
+	public abstract double func(Vector3 point);
+	
+	public abstract boolean isOutOfBounds(Vector3 point, Vector3 dir);
 
 	@Override
 	public Vector3 intersection(Ray ray) {
@@ -27,9 +22,14 @@ public class CosPlusSin extends Shape {
 		Vector3 dir = ray.getDirection();
 		double result = func(point);
 		boolean isLastPhasePositive = result > 0;
-		double epsilon = 0.8;
+		double z = point.getZ();
+		int iterationIdx = 0;
+		double epsilon = 1;
 		
-		while(Math.abs(result) > 0.1) {
+		while(Math.abs(result) > 0.01) {
+			if(iterationIdx++ > maxIterations()) {
+				return null;
+			}
 			if(isOutOfBounds(point, dir))
 				return null;
 			
@@ -58,9 +58,9 @@ public class CosPlusSin extends Shape {
 
 		Vector3 normal = new Vector3(x, y, z);
 
-//		Vector3 v = ray.getDirection().multiply(-1).normalize();
-//		if (normal.dotProduct(v) < 0)
-//			return normal.multiply(-1);
+		Vector3 v = ray.getDirection().multiply(-1).normalize();
+		if (normal.dotProduct(v) < 0)
+			return normal.multiply(-1);
 		return normal;
 	}
 

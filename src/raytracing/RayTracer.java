@@ -16,10 +16,15 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import javax.imageio.ImageIO;
 
-import raytracing.geometry.CosPlusSin;
+import raytracing.geometry.FuncCosPlusSin;
+import raytracing.geometry.FuncCosSin;
 import raytracing.geometry.Plane;
 import raytracing.geometry.Shape;
 import raytracing.geometry.Sphere;
@@ -39,8 +44,9 @@ public class RayTracer {
 	/**
 	 * Runs the ray tracer. Takes scene file, output image file and image size as
 	 * input.
+	 * @throws InterruptedException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 
 		try {
 
@@ -158,7 +164,14 @@ public class RayTracer {
 				double zOffset = Integer.parseInt(params[0]);
 				int mat_idx = Integer.parseInt(params[1]) - 1;
 				max_mat = Math.max(max_mat, mat_idx);
-				scene.getShapes().add(new CosPlusSin(zOffset, mat_idx));
+				scene.getShapes().add(new FuncCosPlusSin(zOffset, mat_idx));
+				System.out.println(String.format("Parsed cossin (line %d)", lineNum));
+			} else if (code.equals("fcs")) {
+				double cosCoeff = Integer.parseInt(params[0]);
+				double sinCoeff = Integer.parseInt(params[1]);
+				int mat_idx = Integer.parseInt(params[2]) - 1;
+				max_mat = Math.max(max_mat, mat_idx);
+				scene.getShapes().add(new FuncCosSin(cosCoeff, sinCoeff, mat_idx));
 				System.out.println(String.format("Parsed cossin (line %d)", lineNum));
 			} else if (code.equals("lgt")) {
 				Vector3 center = new Vector3(Double.parseDouble(params[0]), Double.parseDouble(params[1]),
@@ -190,25 +203,30 @@ public class RayTracer {
 
 	/**
 	 * Renders the loaded scene and saves it to the specified file location.
+	 * @throws InterruptedException 
 	 */
-	public void renderScene(String outputFileName) {
+	public void renderScene(String outputFileName) throws InterruptedException {
 		long startTime = System.currentTimeMillis();
 
 		// Create a byte array to hold the pixel data:
 		byte[] rgbData = new byte[this.imageWidth * this.imageHeight * 3];
-
+		
+		ExecutorService executor = Executors.newFixedThreadPool(8);
+		List<Callable<Boolean>> rowTasks = new ArrayList<>();
+//		
 		for (int top = 0; top < scene.imageHeight; top++) {
-			for (int left = 0; left < scene.imageWidth; left++) {
-				Ray ray = scene.constructRay(top, left);
-				Vector3 color = scene.calculateColor(ray);
-				rgbData[(top * scene.imageWidth + left) * 3] = (byte) ((int) (color.getX() * 255));
-				rgbData[(top * scene.imageWidth + left) * 3 + 1] = (byte) ((int) (color.getY() * 255));
-				rgbData[(top * scene.imageWidth + left) * 3 + 2] = (byte) ((int) (color.getZ() * 255));
-//				System.out.println(color);
-			}
-			System.out.println("finished line " + top);
+			rowTasks.add(new RowTask(scene, rgbData, top));
+//						for (int left = 0; left < scene.imageWidth; left++) {
+//				Ray ray = scene.constructRay(top, left);
+//				Vector3 color = scene.calculateColor(ray);
+//				rgbData[(top * scene.imageWidth + left) * 3] = (byte) ((int) (color.getX() * 255));
+//				rgbData[(top * scene.imageWidth + left) * 3 + 1] = (byte) ((int) (color.getY() * 255));
+//				rgbData[(top * scene.imageWidth + left) * 3 + 2] = (byte) ((int) (color.getZ() * 255));
+//			}
+//			System.out.println("finished line " + top);
 		}
-
+		List<Future<Boolean>> results = executor.invokeAll(rowTasks);
+		executor.shutdown();
 		long endTime = System.currentTimeMillis();
 		Long renderTime = endTime - startTime;
 
