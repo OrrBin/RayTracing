@@ -21,8 +21,9 @@ And then claculate the color.
 
 note 1:
 The calculation is far from ideal and takes time. we used multi threading in order to accelerate the process.
-It took us between 30 seconds to 1 minute to render each scene we attached in the "creative_results" folder.
-You might want to create smaller images to reduce time (300x400 for example)
+It took us few minutes to render each scene we attached in the "creative_results" folder.
+You might want to create smaller images to reduce time (300x400 for example), and the Super Sampling level low (maybe even 1
+for between 30 seconds to 1 minute render)
 
 improvements suggestions:
 1. In order to implement graphs of more functions all that is required is to extend the abstract class "FunctionGraph" which has the next abstract functions:

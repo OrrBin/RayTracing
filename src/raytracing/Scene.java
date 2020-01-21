@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import raytracing.geometry.Shape;
 import raytracing.util.Constants;
@@ -34,7 +35,29 @@ public class Scene {
 		this.settings = new Settings();
 	}
 
-	public Ray constructRay(int i, int j) {
+	public Ray[] getSuperSamplingRays(int top, int left)
+	{
+		int N = Math.max(1, settings.getSuperSamplingLevel());
+		Ray[] rays = new Ray[N*N];
+		
+		Random rnd = new Random();
+		
+		double mult = 1.0;
+		double subRectWidth = mult / N;
+		for(int i = 0; i < N; i++) {
+			double yMin = (subRectWidth * i)+left;
+			for(int j = 0; j < N; j++) {
+				double xMin = (subRectWidth * j)+top;
+				
+				double xOffset = xMin + rnd.nextDouble() * subRectWidth;
+				double yOffset = yMin + rnd.nextDouble() * subRectWidth;
+				rays[i*N + j] = getRay(xOffset, yOffset);
+			}
+		}
+		return rays;
+	}
+	
+	public Ray getRay(double i, double j) {
 		Vector3 forward = this.camera.getForward();
 		Vector3 right = this.camera.getRight();
 		Vector3 top = this.camera.getTop();
@@ -44,13 +67,9 @@ public class Scene {
 
 		Vector3 p0 = this.camera.getPosition();
 
-		// P1 = P0 + d*towards - d*tan(theta)*right
 		Vector3 p1 = p0.cpy().add(forward.cpy().multiply(d)).add(right.cpy().multiply(-screenWidth / 2))
 				.add(top.cpy().multiply(screenHeight / 2));
 
-		// TODO : is needed?
-		// P2 = P0 + d*towards + d*tan(theta)*right
-//		Vector3 p2 = p0.cpy().add(forward.cpy().multiply(d)).add(right.cpy().multiply(screenWidth / 2));
 
 		double leftOff = j - this.imageWidth / 2.0;
 		double topOff = i - this.imageHeight / 2.0;

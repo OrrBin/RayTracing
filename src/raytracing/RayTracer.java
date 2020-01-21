@@ -118,6 +118,7 @@ public class RayTracer {
 						Double.parseDouble(params[1]), Double.parseDouble(params[2])));
 				scene.getSettings().setNumOfShadowRays(Integer.parseInt(params[3]));
 				scene.getSettings().setMaxRecursionLevel(Integer.parseInt(params[4]));
+				scene.getSettings().setSuperSamplingLevel(Integer.parseInt(params[5]));
 				System.out.println(String.format("Parsed general settings (line %d)", lineNum));
 			} else if (code.equals("mtl")) {
 				Vector3 diffuse = new Vector3(Double.parseDouble(params[0]), Double.parseDouble(params[1]),
@@ -174,7 +175,7 @@ public class RayTracer {
 				scene.getLights().add(new Light(center, color, specularIntensity, shadowIntensity, lightRadius));
 				System.out.println(String.format("Parsed light (line %d)", lineNum));
 			} else {
-				System.out.println(String.format("ERROR: Did not recognize object: %s (line %d)", code, lineNum));
+				System.out.println(String.format("Undefined object: %s (line %d)", code, lineNum));
 			}
 		}
 
