@@ -1,7 +1,7 @@
 # Camera: 	px py  pz 	lx  	ly  	lz 	ux  	uy  	uz 	sc_dist	sc_width
 cam 	  	180  20  15 	0   	-15   	0  	0   	1   	0  	1.4	    1
 # Settings: bgr     bgg     bgb	    sh_rays	rec_max SS
-set 		0  	0  	0   	2 	    4       2
+set 		0  	0  	0   	2 	    4       1
 
 # Material:	dr      dg  db	    sr    sg    sb 	    rr    rg  rb	    phong trans
 mtl		    0.3     0.3	0.3	    1     1  	1	    0.1     0.1	0.1	            0	  0
@@ -25,11 +25,17 @@ pln		0	1	0	120	    2
 
 
 # Torus:	sweptRadius   	tubeRadius   rotation_x rotation_y rotation_z   translation_x   translation_y   translation_z   mat_idx
-trs         50.0             3           0          0         0             0               0.2               0               2
-trs         45.0             3           0          0         0             0               0.3               0               3
-trs         40.0             3           0          0         0             0               0.4               0               4
-trs         35.0             3           0          0         0             0               0.5               0               5
-trs         30.0             3           0          0         0             0               0.6               0               6
+#trs         50.0             3           0          0         0             0               0               0               2
+#trs         45.0             3           0          0         0             0               15               0               3
+#trs         40.0             3           0          0         0             0               30               0               4
+#trs         35.0             3           0          0         0             0               45               0               5
+#trs         30.0             3           0          0         0             0               60               0               6
+
+trs         50.0             3           0          0         0             0               0               0               2
+trs         45.0             3           15          0         0             0               25               0               3
+trs         40.0             3           30          0         0             0               50               0               4
+trs         35.0             3           45          0         0             0               75               0               5
+trs         30.0             3           60          0         0             0               100               0               6
 
 
 

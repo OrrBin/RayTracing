@@ -10,7 +10,6 @@ import raytracing.rendering.SceneRenderer;
 import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
-import java.util.Scanner;
 
 public class Orchestrator {
 
@@ -60,8 +59,8 @@ public class Orchestrator {
         Injector injector = Guice.createInjector(module);
         injector.injectMembers(orchestrator); //injects the implementation of the service
 
-        Scanner scanner = new Scanner(System.in);
-        scanner.nextLine();
+//        Scanner scanner = new Scanner(System.in);
+//        scanner.nextLine();
 
         orchestrator.execute(new OrchestrationParams(sceneFileName, outputFileName, imageWidth, imageHeight));
     }

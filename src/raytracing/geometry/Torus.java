@@ -39,7 +39,39 @@ public class Torus extends Shape {
         if (t == null)
             return null;
 
-        return tfRay.pointAtDistance(t);
+        return ray.pointAtDistance(t); // Changed from the code in github
+//        return tfRay.pointAtDistance(t);
+    }
+
+    @Override
+    public Vector3 normal(final Vector3 point, final Ray ray) {
+        Ray tfRay = this.transformation.transformRay(ray);
+
+        Double t = this.findIntersection(tfRay);
+        if (t == null)
+            return null;
+
+        Vector3 localHitPoint = tfRay.pointAtDistance(t);
+        Vector3 localNormal = this.computeNormalAtPoint(localHitPoint);
+
+        return this.transformation.transformNormal(localNormal);
+
+    }
+
+    private Vector3 computeNormalAtPoint(final Vector3 localHitPoint) {
+        double paramSquared = this.sweptRadius * this.sweptRadius + this.tubeRadius * this.tubeRadius;
+
+        double x = localHitPoint.x;
+        double y = localHitPoint.y;
+        double z = localHitPoint.z;
+        double sumSquared = x * x + y * y + z * z;
+
+        Vector3 tmp = new Vector3(
+                4.0 * x * (sumSquared - paramSquared),
+                4.0 * y * (sumSquared - paramSquared + 2.0 * this.sweptRadius * this.sweptRadius),
+                4.0 * z * (sumSquared - paramSquared));
+
+        return tmp.normalize();
     }
 
     private Double findIntersection(final Ray ray) {
@@ -85,29 +117,12 @@ public class Torus extends Shape {
     }
 
 
-    @Override
-    public Vector3 normal(final Vector3 point, final Ray ray) {
-        double paramSquared = this.sweptRadius * this.sweptRadius + this.tubeRadius * this.tubeRadius;
-
-        double x = point.x;
-        double y = point.y;
-        double z = point.z;
-        double sumSquared = x * x + y * y + z * z;
-
-        Vector3 tmp = new Vector3(
-                4.0 * x * (sumSquared - paramSquared),
-                4.0 * y * (sumSquared - paramSquared + 2.0 * this.sweptRadius * this.sweptRadius),
-                4.0 * z * (sumSquared - paramSquared));
-
-        return tmp.normalize();
-    }
-
     /**
      * Solves equation:
      * <p>
      * c[0] + c[1]*x + c[2]*x^2 + c[3]*x^3 + c[4]*x^4 = 0
      */
-    ArrayList<Double> solve4(double[] coeffs) {
+    private ArrayList<Double> solve4(final double[] coeffs) {
         /* normal form: x^4 + Ax^3 + Bx^2 + Cx + D = 0 */
 
         double A = coeffs[3] / coeffs[4];
@@ -127,22 +142,22 @@ public class Torus extends Shape {
         if (isZero(r)) {
             /* no absolute term: y(y^3 + py + q) = 0 */
 
-            coeffs = new double[]{q, p, 0d, 1d};
+            double[] coeffs2 = new double[]{q, p, 0d, 1d};
 
-            s = solve3(coeffs);
+            s = solve3(coeffs2);
 
             s.add(0d);
 
         } else {
             /* solve the resolvent cubic ... */
-            coeffs = new double[]{
+            double[] coeffs2 = new double[]{
                     1.0 / 2 * r * p - 1.0 / 8 * q * q,
                     -r,
                     -1.0 / 2 * p,
                     1d
             };
 
-            s = solve3(coeffs);
+            s = solve3(coeffs2);
 
             /* ... and take the one real solution ... */
 
@@ -167,22 +182,22 @@ public class Torus extends Shape {
             else
                 return null;
 
-            coeffs = new double[]{
+            coeffs2 = new double[]{
                     z - u,
                     q < 0d ? -v : v,
                     1d
             };
 
-            s = solve2(coeffs);
+            s = solve2(coeffs2);
 
 
-            coeffs = new double[]{
+            coeffs2 = new double[]{
                     z + u,
                     q < 0d ? v : -v,
                     1d
             };
 
-            s.addAll(solve2(coeffs));
+            s.addAll(solve2(coeffs2));
         }
 
         /* resubstitute */
@@ -195,7 +210,7 @@ public class Torus extends Shape {
         return s;
     }
 
-    ArrayList<Double> solve3(double[] coeffs) {
+    private ArrayList<Double> solve3(double[] coeffs) {
 
         /* normal form: x^3 + Ax^2 + Bx + C = 0 */
 
@@ -212,8 +227,8 @@ public class Torus extends Shape {
 
         /* use Cardano's formula */
 
-        double cb_p = p * p * p;
-        double D = q * q + cb_p;
+        double cbP = p * p * p;
+        double D = q * q + cbP;
 
         ArrayList<Double> s;
 
@@ -231,7 +246,7 @@ public class Torus extends Shape {
                 }};
             }
         } else if (D < 0) /* Casus irreducibilis: three real solutions */ {
-            double phi = 1.0 / 3 * Math.acos(-q / Math.sqrt(-cb_p));
+            double phi = 1.0 / 3 * Math.acos(-q / Math.sqrt(-cbP));
             double t = 2 * Math.sqrt(-p);
 
             s = new ArrayList<Double>() {{
@@ -241,9 +256,9 @@ public class Torus extends Shape {
             }};
 
         } else /* one real solution */ {
-            double sqrt_D = Math.sqrt(D);
-            double u = Math.cbrt(sqrt_D - q);
-            double v = -Math.cbrt(sqrt_D + q);
+            double sqrtD = Math.sqrt(D);
+            double u = Math.cbrt(sqrtD - q);
+            double v = -Math.cbrt(sqrtD + q);
 
             s = new ArrayList<>();
             s.add(u + v);
@@ -262,7 +277,7 @@ public class Torus extends Shape {
 
     private static final double EQN_EPS = 1e-9;
 
-    boolean isZero(double x) {
+    private boolean isZero(double x) {
         return ((x) > -EQN_EPS && (x) < EQN_EPS);
     }
 
@@ -279,11 +294,11 @@ public class Torus extends Shape {
         } else if (D < 0) {
             return new ArrayList<>();
         } else /* if (D > 0) */ {
-            double sqrt_D = Math.sqrt(D);
+            double sqrtD = Math.sqrt(D);
 
             return new ArrayList<Double>() {{
-                add(sqrt_D - p);
-                add(-sqrt_D - p);
+                add(sqrtD - p);
+                add(-sqrtD - p);
             }};
         }
     }

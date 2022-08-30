@@ -61,10 +61,18 @@ public class Matrix4 {
 
     public Vector3 transformPoint(Vector3 point) {
         return new Vector3(
-                m[0] * point.x + m[1] * point.y + m[2] * point.z + m[3],
-                m[4] * point.x + m[5] * point.y + m[6] * point.z + m[7],
-                m[8] * point.x + m[9] * point.y + m[10] * point.z + m[11]);
+                this.get(0,0)*point.x + this.get(0,1)*point.y + this.get(0,2)*point.z + this.get(0,3),
+                this.get(1,0)*point.x + this.get(1,1)*point.y + this.get(1,2)*point.z + this.get(1,3),
+                this.get(2,0)*point.x + this.get(2,1)*point.y + this.get(2,2)*point.z + this.get(2,3));
     }
+
+    public Vector3 transformVector(Vector3 vec) {
+        return new Vector3(
+                this.get(0,0)*vec.x + this.get(0,1)*vec.y + this.get(0,2)*vec.z,
+                this.get(1,0)*vec.x + this.get(1,1)*vec.y + this.get(1,2)*vec.z,
+                this.get(2,0)*vec.x + this.get(2,1)*vec.y + this.get(2,2)*vec.z);
+    }
+
 
     /**
      * We use equality {@code (transposed matrix)*normal = transformed_normal}.

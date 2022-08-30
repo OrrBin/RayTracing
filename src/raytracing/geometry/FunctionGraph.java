@@ -22,7 +22,6 @@ public abstract class FunctionGraph extends Shape {
 		Vector3 dir = ray.direction.cpy();
 		double result = func(point);
 		boolean isLastPhasePositive = result > 0;
-		double z = point.getZ();
 		int iterationIdx = 0;
 		double epsilon = 1;
 		
@@ -37,12 +36,12 @@ public abstract class FunctionGraph extends Shape {
 			result = func(point);
 			if(isLastPhasePositive && result < 0) {				
 				isLastPhasePositive = false;
-				dir.multiply(-1);
+				dir = dir.multiply(-1);
 				epsilon *= 0.5;
 			}
 			else if(!isLastPhasePositive && result > 0) {				
 				isLastPhasePositive = true;
-				dir.multiply(-1);
+				dir = dir.multiply(-1);
 				epsilon *= 0.5;
 			}
 				

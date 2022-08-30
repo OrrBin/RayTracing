@@ -11,8 +11,6 @@ public class Vector3 {
 	public double y;
 	public double z;
 
-//	final static Vector3Pool vector3Pool = new Vector3Pool(100, 1000000);
-
 	public Vector3() {
 
 	}
@@ -31,17 +29,7 @@ public class Vector3 {
 
 	public Vector3 cpy() {
 		return new Vector3(this);
-//		final Vector3 cpy = vector3Pool.get();
-//		cpy.setX(this.x);
-//		cpy.setY(this.y);
-//		cpy.setZ(this.z);
-//
-//		return cpy;
 	}
-
-//	public void release() {
-//		vector3Pool.returnToPool(this);
-//	}
 
 	public double norm() {
 		return Math.sqrt(x * x + y * y + z * z);
@@ -51,7 +39,7 @@ public class Vector3 {
 		if (norm() < Constants.EPSILON)
 			return cpy();
 
-		return cpy().multiply(1 / norm());
+		return multiply(1 / norm());
 	}
 
 	public Vector3 crossProduct(Vector3 other) {

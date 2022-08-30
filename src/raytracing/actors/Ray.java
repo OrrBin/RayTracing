@@ -16,14 +16,6 @@ public class Ray {
 		return originPoint.cpy();
 	}
 
-	public void setOriginPoint(Vector3 position) {
-		this.originPoint = position;
-	}
-
-	public void setDirection(Vector3 angle) {
-		this.direction = angle;
-	}
-
 	public Vector3 pointAtDistance(double t) {
 		return this.originPoint.cpy().add(
 				this.direction.multiply(t));
@@ -33,36 +25,5 @@ public class Ray {
 	public String toString() {
 		return String.format("position: %s, direction: %s", originPoint, direction);
 	}
-
-//	@Override
-//	public int hashCode() {
-//		final int prime = 31;
-//		int result = 1;
-//		result = prime * result + ((direction == null) ? 0 : direction.hashCode());
-//		result = prime * result + ((originPoint == null) ? 0 : originPoint.hashCode());
-//		return result;
-//	}
-//
-//	@Override
-//	public boolean equals(Object obj) {
-//		if (this == obj)
-//			return true;
-//		if (obj == null)
-//			return false;
-//		if (getClass() != obj.getClass())
-//			return false;
-//		Ray other = (Ray) obj;
-//		if (direction == null) {
-//			if (other.direction != null)
-//				return false;
-//		} else if (!direction.equals(other.direction))
-//			return false;
-//		if (originPoint == null) {
-//			if (other.originPoint != null)
-//				return false;
-//		} else if (!originPoint.equals(other.originPoint))
-//			return false;
-//		return true;
-//	}
 
 }

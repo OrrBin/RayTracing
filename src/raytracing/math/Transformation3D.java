@@ -42,12 +42,12 @@ public class Transformation3D {
 
     public Ray transformRay(Ray ray) {
         Vector3 tfOrigin = this.invMatrix.transformPoint(ray.originPoint);
-        Vector3 tfDirection = this.invMatrix.transformPoint(ray.direction);
+        Vector3 tfDirection = this.invMatrix.transformVector(ray.direction);
 
         return new Ray(tfOrigin, tfDirection);
     }
 
-    Vector3 transformNormal(Vector3 n) {
+    public Vector3 transformNormal(Vector3 n) {
         return this.invMatrix.transformNormal(n);
     }
 }
