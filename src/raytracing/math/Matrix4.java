@@ -126,7 +126,7 @@ public class Matrix4 {
         });
     }
 
-    public static Matrix4  rotateY(double angleDeg) {
+    public static Matrix4 rotateY(double angleDeg) {
         double sin = Math.sin(deg2rad(angleDeg));
         double cos = Math.cos(deg2rad(angleDeg));
 
