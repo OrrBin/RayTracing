@@ -1,0 +1,89 @@
+# Camera: 	px py  pz 	lx  	ly  	lz 	ux  	uy  	uz 	sc_dist	sc_width
+cam 	  	180  20  15 	0   	-15   	0  	0   	1   	0  	1.4	    1
+# Settings: bgr     bgg     bgb	    sh_rays	rec_max SS
+set 		0  	0  	0   	2 	    4       2
+
+# Material:	dr      dg  db	    sr    sg    sb 	    rr    rg  rb	    phong trans
+mtl		    0.3     0.3	0.3	    1     1  	1	    0.1     0.1	0.1	            0	  0
+mtl		    0.95    0.07	    0.95  	1	1	    1	0.1	0.2	0.1	    30	0
+mtl		    0.07    0.07	    0.95  	1	1	    1	0.1	0.1	0.2	    30	0
+
+mtl		    0.9	    0.9	0.9	    0.5	  0.5	0.5	    0.05  	0.05	    0.05	30	0
+mtl		    0.1	    0.1	0.1	    1	  1	1	0.1	    0.1	0.1	30	0
+mtl		    0.95    0.95	    0.07  	1	1	    1	0.2	0.2	0	    30	0
+mtl		    0.3	    0.8	0	    0	  0	0	0	    0	0	1	0
+mtl		    0.4     0.07	    0.85  	1	1	    1	0.2	0.2	0	    30	0
+mtl		    0.0     0.5	0.2	    1	  1	1	0.2	    0.2	0	30	0
+mtl		    0.0     0.4	1	    1	  1	1	0.2	    0.2	0	30	0
+mtl		    1 	    0.2	0	    1	  1	1	0.2	    0.2	0	30	0
+# Mirror Mat: 	dr   	dg       	db   	sr   	sg   	sb   	rr   	rg   	rb   	phong 	trans
+mtl		0	0	0	1	1	1	0.9	0.9	0.9	100	0
+
+# Plane:	nx	ny	nz	offset	mat_idx
+pln		0	1	0	-120	3
+pln		0	1	0	120	    2
+
+
+# Torus:	sweptRadius   	tubeRadius   rotation_x rotation_y rotation_z   translation_x   translation_y   translation_z   mat_idx
+trs         50.0             3           0          0         0             0               0.2               0               2
+trs         45.0             3           0          0         0             0               0.3               0               3
+trs         40.0             3           0          0         0             0               0.4               0               4
+trs         35.0             3           0          0         0             0               0.5               0               5
+trs         30.0             3           0          0         0             0               0.6               0               6
+
+
+
+
+#sph		0	0  0	5	12
+sph		0	-40  0	10	7
+
+#trg	    9 0 4    -9 0 4      0 9 4    12
+
+# Main Light:	px	py	pz	r	g	b	spec	shadow	width
+lgt		        60	-50	0	1	1	1	1	    0.85	1
+lgt		        60	50	0	1	1	1	1	    0.85	1
+lgt		        -60	-50	0	1	1	1	1	    0.85	1
+lgt		        -60	50	0	1	1	1	1	    0.85	1
+lgt		        0	-50	60	1	1	1	1	    0.85	1
+lgt		        0	50	-60	1	1	1	1	    0.85	1
+
+#lgt		-4	7	-2	1	1	1	1	0.85	1
+
+# Rim Light:	px	py	pz	r	g	b	spec	shadow	width
+lgt		-4	-1	-0.5	0.6	0.7	0.8	0.1	0.9	4
+
+# Fill Light:	px	py	pz	r	g	b	spec	shadow	width
+lgt		0.1	-0.4	-1	0.3	0.3	0.35	0.1	0.8	4
+
+# Lights:	px	    py	   pz	   r	  g	    b	    spec	shadow	width
+# Main Light:	px	py	pz	r	g	b	spec	shadow	width
+#lgt		    0	70	0	1	1	1	1	0.85	1
+
+#lgt		        300	0	0	1	1	1	1	0.85	1
+#lgt		15	300	15	0.4	0.4	0.4	1	0.85	1
+#lgt		0	0	300	1	1	1	1	0.85	1
+#lgt		-300	0	0	1	1	1	1	0.85	1
+#lgt		0	-300	0	1	1	1	1	0.85	1
+#lgt		0	0	-300	1	1	1	1	0.85	1
+
+# Rim Light:	px	py	pz	r	g	b	spec	shadow	width
+#lgt		-4	-1	-0.5	0.6	0.7	0.8	0.1	0.9	4
+
+# Fill Light:	px	py	pz	r	g	b	spec	shadow	width
+lgt		0.1	-0.4	-1	0.3	0.3	0.35	0.1	0.8	4
+
+#lgt		    150	    0	   0	   0	  0	    1	    0.1	    0.6	    1
+#lgt		    0	    150	   0	   1	  0	    0	    0.1	    0.6	    1
+#lgt		    0	    0	   150	   0	  1	    0  	    0.1	    0.6	    1
+#lgt		    -150    	   0	   0	  1 	0  	    1	    0.1	    0.6	    1
+#lgt		    0	    -150   	0	   0	  0 	1  	    0.1	    0.6	    1
+#lgt		    0	    0	   -150	   1	  0	    0  	    0.1	    0.6	    1
+#
+#lgt		    150	    150	   150	    0.6   0     0        0.6	    0.1	    0.1	    1
+#lgt		    -150	-150  -150	    0     0.6   0        0.6	    0.1	    0.1	    1
+#lgt		    -150	 150   150	    0     0     0.6       0.6	    0.1	    0.1	    1
+#lgt		    150	    -150   150	    0.6	  0     0        0.6	    0.1	    0.1	    1
+#lgt		    150	    150	   -150     0     0.6   0  	    0.1	    0.1	    1
+#lgt		    -150    -150	150	    0     0     0.6 	    0.1	    0.1	    1
+#lgt		    -150    150	   -150	    0     0.6   0 	    0.1	    0.1	    1
+#lgt		    150	    -150	-150    0.6   0     0 	    0.1	    0.1	    1

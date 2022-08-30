@@ -1,0 +1,45 @@
+# Camera: 	px   	py   	pz 	lx  	ly  	lz 	ux  	uy  	uz 	sc_dist	sc_width
+cam 	  	0.01   	15	-20 	0   	0   	-4  	0   	1   	0  	1.4	1
+# Settings: 	bgr  	bgg  	bgb	sh_rays	rec_max SS
+set 		1  	1  	1   	5 	10           3
+
+# Material:	dr    	dg    	db	sr   	sg   	sb 	rr   	rg  	rb	phong 	trans
+mtl		0.95	0.07	0.07	1	1	1	0.2	0.1	0.1	30	0
+mtl		0.95	0.07	0.95	1	1	1	0.1	0.2	0.1	30	0
+mtl		0.07	0.07	0.95	1	1	1	0.1	0.1	0.2	30	0
+mtl		0.9	0.9	0.9	0.5	0.5	0.5	0.05	0.05	0.05	30	0
+mtl		0.1	0.1	0.1	1	1	1	0.1	0.1	0.1	30	0
+mtl		0.95	0.95	0.07	1	1	1	0.2	0.2	0	30	0
+mtl		0.3	0.8	0	0	0	0	0	0	0	1	0
+mtl		0.4 	0.07	0.85	1	1	1	0.2	0.2	0	30	0
+mtl		0.0 	0.5	0.2	1	1	1	0.2	0.2	0	30	0
+mtl		0.0 	0.4	1	1	1	1	0.2	0.2	0	30	0
+mtl		1 	0.2	0	1	1	1	0.2	0.2	0	30	0
+# Mirror Mat: 	dr   	dg   	db   	sr   	sg   	sb   	rr   	rg   	rb   	phong 	trans
+mtl		0	0	0	1	1	1	0.9	0.9	0.9	100	0
+
+# Plane:	nx	ny	nz	offset	mat_idx
+pln		0	1	0	-1	7
+
+# Spheres:	cx   	cy   	cz  	radius 	mat_idx
+sph		3	0	2	1	11
+sph		1	0	2	1	10
+sph		-1	0	2	1	9
+sph		-3	0	2	1	8
+sph		-2	0	0	1	1
+sph		0	0	0	1	2
+sph		2	0	0	1	3
+sph		-1	0	-2	1	4
+sph		1	0	-2	1	5
+sph		0	0	-4	1	6
+
+#sph		6	-1  -2	2	12
+
+trg	    9 0 4    -9 0 4      0 9 4    12
+
+# Lights:	px	py	pz	r	g	b	spec	shadow	width
+lgt		0	3	0	0.5	0.5	0.3	1	0.9	1
+lgt		-3	3	-3	0.5	0.5	0.3	1	0.9	1
+lgt		-3	3	3	0.5	0.5	0.3	1	0.9	1
+lgt		3	3	-3	0.5	0.5	0.3	1	0.9	1
+lgt		3	3	3	0.5	0.5	0.3	1	0.9	1

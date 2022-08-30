@@ -1,4 +1,9 @@
-package raytracing;
+package raytracing.actors;
+
+import lombok.Getter;
+import lombok.Setter;
+import raytracing.geometry.Shape;
+import raytracing.math.Vector3;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,15 +11,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import raytracing.geometry.Shape;
-import raytracing.util.Constants;
-import raytracing.util.IntersectionData;
-import raytracing.util.Ray;
-import raytracing.util.Vector3;
-
+@Getter
+@Setter
 public class Scene {
 
-	public int imageWidth, imageHeight;
+	private int imageWidth, imageHeight;
 
 	private double aspectRatio;
 
@@ -170,9 +171,7 @@ public class Scene {
 	/**
 	 * Calculates closest shape that intersects with given ray. returns null if no
 	 * shape intersects the ray.
-	 * 
-	 * @param ray
-	 * @return
+	 *
 	 */
 	public IntersectionData calcIntersection(Ray ray, Shape excludeShape) {
 
@@ -181,7 +180,7 @@ public class Scene {
 		IntersectionData intersection = null;
 
 		for (Shape shape : this.shapes) {
-			if (excludeShape != null && shape.equals(excludeShape))
+			if (shape.equals(excludeShape))
 				continue;
 			Vector3 intersectionPoint = shape.intersection(ray);
 			if (intersectionPoint == null)
@@ -198,10 +197,7 @@ public class Scene {
 
 	/**
 	 * Returns list of shapes that block this ray before hitting the target shape
-	 * 
-	 * @param ray
-	 * @param targetShape
-	 * @return
+	 *
 	 */
 	public List<Shape> blockingShapes(Ray ray, Shape targetShape) {
 		Map<Shape, Double> shapesMap = new HashMap<>();
@@ -271,46 +267,6 @@ public class Scene {
 		result.add(reflectionColor);
 
 		return result.boundFromAbove(1, 1, 1);
-	}
-
-	public Settings getSettings() {
-		return settings;
-	}
-
-	public void setSettings(Settings settings) {
-		this.settings = settings;
-	}
-
-	public Camera getCamera() {
-		return camera;
-	}
-
-	public void setCamera(Camera camera) {
-		this.camera = camera;
-	}
-
-	public List<Light> getLights() {
-		return lights;
-	}
-
-	public void setLights(List<Light> lights) {
-		this.lights = lights;
-	}
-
-	public List<Shape> getShapes() {
-		return shapes;
-	}
-
-	public void setShapes(List<Shape> shapes) {
-		this.shapes = shapes;
-	}
-
-	public List<Material> getMaterials() {
-		return materials;
-	}
-
-	public void setMaterials(List<Material> materials) {
-		this.materials = materials;
 	}
 
 }

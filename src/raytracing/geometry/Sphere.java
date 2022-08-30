@@ -1,8 +1,8 @@
 package raytracing.geometry;
 
+import raytracing.actors.Ray;
+import raytracing.math.Vector3;
 import raytracing.util.Constants;
-import raytracing.util.Ray;
-import raytracing.util.Vector3;
 
 public class Sphere extends Shape {
 
@@ -35,8 +35,7 @@ public class Sphere extends Shape {
 			if (t < 0)
 				return null;
 
-			Vector3 intersectionPoint = ray.getOriginPoint().add(ray.getDirection().multiply(t));
-			return intersectionPoint;
+			return ray.getOriginPoint().add(ray.getDirection().multiply(t));
 		}
 		double t1 = (-b + Math.sqrt(discriminant)) / (2);
 		double t2 = (-b - Math.sqrt(discriminant)) / (2);
@@ -47,7 +46,7 @@ public class Sphere extends Shape {
 		Vector3 intersectionPoint1 = ray.getOriginPoint().add(ray.getDirection().multiply(t1));
 		Vector3 intersectionPoint2 = ray.getOriginPoint().add(ray.getDirection().multiply(t2));
 
-		Vector3 intersectionPoint = null;
+		Vector3 intersectionPoint;
 
 		if (t2 < 0)
 			intersectionPoint = intersectionPoint1;
@@ -90,36 +89,6 @@ public class Sphere extends Shape {
 
 	public void setRadius(double radius) {
 		this.radius = radius;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((center == null) ? 0 : center.hashCode());
-		long temp;
-		temp = Double.doubleToLongBits(radius);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Sphere other = (Sphere) obj;
-		if (center == null) {
-			if (other.center != null)
-				return false;
-		} else if (!center.equals(other.center))
-			return false;
-		if (Double.doubleToLongBits(radius) != Double.doubleToLongBits(other.radius))
-			return false;
-		return true;
 	}
 
 }

@@ -1,7 +1,7 @@
 package raytracing.geometry;
 
-import raytracing.util.Ray;
-import raytracing.util.Vector3;
+import raytracing.actors.Ray;
+import raytracing.math.Vector3;
 
 public abstract class Shape {
 

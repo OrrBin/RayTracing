@@ -1,9 +1,21 @@
-package raytracing.util;
+package raytracing.math;
 
+import lombok.Getter;
+import lombok.Setter;
+import raytracing.util.Constants;
+
+@Getter
+@Setter
 public class Vector3 {
-	private double x;
-	private double y;
-	private double z;
+	public double x;
+	public double y;
+	public double z;
+
+//	final static Vector3Pool vector3Pool = new Vector3Pool(100, 1000000);
+
+	public Vector3() {
+
+	}
 
 	public Vector3(double x, double y, double z) {
 		this.x = x;
@@ -19,7 +31,17 @@ public class Vector3 {
 
 	public Vector3 cpy() {
 		return new Vector3(this);
+//		final Vector3 cpy = vector3Pool.get();
+//		cpy.setX(this.x);
+//		cpy.setY(this.y);
+//		cpy.setZ(this.z);
+//
+//		return cpy;
 	}
+
+//	public void release() {
+//		vector3Pool.returnToPool(this);
+//	}
 
 	public double norm() {
 		return Math.sqrt(x * x + y * y + z * z);
@@ -101,65 +123,8 @@ public class Vector3 {
 		return this;
 	}
 
-	public double getX() {
-		return x;
-	}
-
-	public void setX(double x) {
-		this.x = x;
-	}
-
-	public double getY() {
-		return y;
-	}
-
-	public void setY(double y) {
-		this.y = y;
-	}
-
-	public double getZ() {
-		return z;
-	}
-
-	public void setZ(double z) {
-		this.z = z;
-	}
-
 	@Override
 	public String toString() {
 		return String.format("(%s, %s, %s)", x, y, z);
 	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		long temp;
-		temp = Double.doubleToLongBits(x);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		temp = Double.doubleToLongBits(y);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		temp = Double.doubleToLongBits(z);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Vector3 other = (Vector3) obj;
-		if (Double.doubleToLongBits(x) != Double.doubleToLongBits(other.x))
-			return false;
-		if (Double.doubleToLongBits(y) != Double.doubleToLongBits(other.y))
-			return false;
-		if (Double.doubleToLongBits(z) != Double.doubleToLongBits(other.z))
-			return false;
-		return true;
-	}
-
 }

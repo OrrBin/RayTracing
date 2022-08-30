@@ -1,9 +1,10 @@
-package raytracing;
+package raytracing.orchestration;
+
+import raytracing.actors.Ray;
+import raytracing.actors.Scene;
+import raytracing.math.Vector3;
 
 import java.util.concurrent.Callable;
-
-import raytracing.util.Ray;
-import raytracing.util.Vector3;
 
 public class PixelTask implements Callable<Boolean> {
 
@@ -20,22 +21,20 @@ public class PixelTask implements Callable<Boolean> {
 	private int col;
 	
 	@Override
-	public Boolean call() throws Exception {
+	public Boolean call() {
 			int N = scene.getSettings().getSuperSamplingLevel();
 			int size = Math.max(1, N*N);
 			Ray[] rays = scene.getSuperSamplingRays(row, col);
-			Vector3[] colors = new Vector3[size];
-			for(int i = 0; i < size; i++)
-				colors[i] = scene.calculateColor(rays[i]);
-			
+
 			Vector3 sum = new Vector3(0,0,0);
 			for(int i = 0; i < size; i++)
-				sum.add(colors[i]);
+				sum.add(scene.calculateColor(rays[i]));
+
 			
 			Vector3 color = sum.multiply(1/((double)(size)));
-			rgbData[(row* scene.imageWidth + col) * 3] = (byte) ((int) (color.getX() * 255));
-			rgbData[(row * scene.imageWidth + col) * 3 + 1] = (byte) ((int) (color.getY() * 255));
-			rgbData[(row * scene.imageWidth + col) * 3 + 2] = (byte) ((int) (color.getZ() * 255));
+			rgbData[(row* scene.getImageWidth() + col) * 3] = (byte) ((int) (color.getX() * 255));
+			rgbData[(row * scene.getImageWidth() + col) * 3 + 1] = (byte) ((int) (color.getY() * 255));
+			rgbData[(row * scene.getImageWidth() + col) * 3 + 2] = (byte) ((int) (color.getZ() * 255));
 		
 		return true;
 	}

@@ -1,9 +1,8 @@
-package raytracing;
+package raytracing.actors;
+
+import raytracing.math.Vector3;
 
 import java.util.Random;
-
-import raytracing.util.Ray;
-import raytracing.util.Vector3;
 
 public class Light {
 	private Vector3 position;

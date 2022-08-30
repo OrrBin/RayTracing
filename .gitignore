@@ -1,0 +1,9 @@
+bin
+.gradle/
+.idea/
+gradle
+logs
+output
+gradlew
+gradlew.bat
+*.png

@@ -1,8 +1,8 @@
 package raytracing.geometry;
 
 
-import raytracing.util.Ray;
-import raytracing.util.Vector3;
+import raytracing.actors.Ray;
+import raytracing.math.Vector3;
 
 public abstract class FunctionGraph extends Shape {
 
@@ -50,18 +50,6 @@ public abstract class FunctionGraph extends Shape {
 		return point;
 	}
 
-	@Override
-	public Vector3 normal(Vector3 point, Ray ray) {
-		double x = Math.sin(point.getX());
-		double y = -2*Math.cos(point.getY());
-		double z = -1;
 
-		Vector3 normal = new Vector3(x, y, z);
-
-		Vector3 v = ray.getDirection().multiply(-1).normalize();
-		if (normal.dotProduct(v) < 0)
-			return normal.multiply(-1);
-		return normal;
-	}
 
 }

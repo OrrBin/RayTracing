@@ -1,6 +1,6 @@
-package raytracing;
+package raytracing.actors;
 
-import raytracing.util.Vector3;
+import raytracing.math.Vector3;
 
 public class Settings {
 

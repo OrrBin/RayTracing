@@ -1,8 +1,8 @@
 package raytracing.geometry;
 
+import raytracing.actors.Ray;
+import raytracing.math.Vector3;
 import raytracing.util.Constants;
-import raytracing.util.Ray;
-import raytracing.util.Vector3;
 
 public class Plane extends Shape {
 
@@ -30,9 +30,7 @@ public class Plane extends Shape {
 		if (t < 0)
 			return null;
 
-		Vector3 intersectionPoint = ray.getOriginPoint().add(ray.getDirection().multiply(t));
-
-		return intersectionPoint;
+		return ray.getOriginPoint().add(ray.getDirection().multiply(t));
 	}
 
 	@Override
@@ -59,36 +57,6 @@ public class Plane extends Shape {
 
 	public void setOffset(double offset) {
 		this.offset = offset;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((normal == null) ? 0 : normal.hashCode());
-		long temp;
-		temp = Double.doubleToLongBits(offset);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Plane other = (Plane) obj;
-		if (normal == null) {
-			if (other.normal != null)
-				return false;
-		} else if (!normal.equals(other.normal))
-			return false;
-		if (Double.doubleToLongBits(offset) != Double.doubleToLongBits(other.offset))
-			return false;
-		return true;
 	}
 
 }
