@@ -18,8 +18,8 @@ public abstract class FunctionGraph extends Shape {
 
 	@Override
 	public Vector3 intersection(Ray ray) {
-		Vector3 point = ray.getOriginPoint();
-		Vector3 dir = ray.getDirection();
+		Vector3 point = ray.getOriginPointCpy();
+		Vector3 dir = ray.direction.cpy();
 		double result = func(point);
 		boolean isLastPhasePositive = result > 0;
 		double z = point.getZ();
@@ -33,7 +33,7 @@ public abstract class FunctionGraph extends Shape {
 			if(isOutOfBounds(point, dir))
 				return null;
 			
-			point.add(dir.cpy().multiply(epsilon));
+			point.add(dir.multiply(epsilon));
 			result = func(point);
 			if(isLastPhasePositive && result < 0) {				
 				isLastPhasePositive = false;

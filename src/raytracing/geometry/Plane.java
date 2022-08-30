@@ -15,32 +15,31 @@ public class Plane extends Shape {
 
 	public Plane(Vector3 normal, double offset, int material) {
 		super(material);
-		this.normal = normal;
+		this.normal = normal.normalize();
 		this.offset = offset;
 	}
 
 	@Override
 	public Vector3 intersection(Ray ray) {
-		double angle = ray.getDirection().dotProduct(normal);
+		double angle = ray.direction.dotProduct(normal);
 
 		if (Math.abs(angle) < Constants.EPSILON)
 			return null;
 
-		double t = (this.offset - ray.getOriginPoint().dotProduct(normal)) / angle;
+		double t = (this.offset - ray.originPoint.dotProduct(normal)) / angle;
 		if (t < 0)
 			return null;
 
-		return ray.getOriginPoint().add(ray.getDirection().multiply(t));
+		return ray.getOriginPointCpy().add(ray.direction.multiply(t));
 	}
 
 	@Override
 	public Vector3 normal(Vector3 point, Ray ray) {
-		Vector3 n = normal.normalize();
 
-		Vector3 v = ray.getDirection().multiply(-1).normalize();
-		if (n.dotProduct(v) < 0)
-			return n.multiply(-1);
-		return n;
+		Vector3 v = ray.direction.multiply(-1).normalize();
+		if (normal.dotProduct(v) < 0)
+			return normal.cpy().multiply(-1);
+		return normal.cpy();
 	}
 
 	public Vector3 getNormal() {

@@ -68,8 +68,8 @@ public class Scene {
 
 		Vector3 p0 = this.camera.getPosition();
 
-		Vector3 p1 = p0.cpy().add(forward.cpy().multiply(d)).add(right.cpy().multiply(-screenWidth / 2))
-				.add(top.cpy().multiply(screenHeight / 2));
+		Vector3 p1 = p0.cpy().add(forward.multiply(d)).add(right.multiply(-screenWidth / 2))
+				.add(top.multiply(screenHeight / 2));
 
 
 		double leftOff = j - this.imageWidth / 2.0;
@@ -78,8 +78,8 @@ public class Scene {
 		double leftPixel = (leftOff / this.imageWidth + 0.5) * screenWidth;
 		double topPixel = (topOff / this.imageHeight + 0.5) * screenHeight;
 
-		Vector3 rightScreenVec = right.cpy().multiply(leftPixel);
-		Vector3 topScreenVec = top.cpy().multiply(-topPixel);
+		Vector3 rightScreenVec = right.multiply(leftPixel);
+		Vector3 topScreenVec = top.multiply(-topPixel);
 
 		Vector3 p = p1.cpy().add(rightScreenVec).add(topScreenVec);
 
@@ -95,18 +95,18 @@ public class Scene {
 		Vector3 diffLight = new Vector3(0, 0, 0);
 		Vector3 specLight = new Vector3(0, 0, 0);
 
-		Vector3 v = ray.getDirection().cpy().multiply(-1).normalize();
-		Vector3 normal = inter.getShape().normal(inter.getIntersectionPoint(), ray);
+		Vector3 v = ray.direction.multiply(-1).normalize();
+		Vector3 normal = inter.getShape().normal(inter.getIntersectionPointCpy(), ray);
 
 		// Calculate each of the scenes light diffuse and specular color and sum up
 		for (Light light : this.lights) {
-			Vector3 lightDirection = light.getPosition().connectingVector(inter.getIntersectionPoint()).normalize();
-			Vector3 reveresedLightDirection = lightDirection.cpy().multiply(-1);
+			Vector3 lightDirection = light.getPosition().connectingVector(inter.getIntersectionPointCpy()).normalize();
+			Vector3 reveresedLightDirection = lightDirection.multiply(-1);
 
 			if (normal.dotProduct(reveresedLightDirection) < 0)
 				continue;
 
-			Ray[] rays = light.getRays(inter.getIntersectionPoint(), this.settings.getNumOfShadowRays());
+			Ray[] rays = light.getRays(inter.getIntersectionPointCpy(), this.settings.getNumOfShadowRays());
 			double shadow = 0;
 			for (Ray subRay : rays) {
 				List<Shape> intersections = blockingShapes(subRay, inter.getShape());
@@ -118,16 +118,16 @@ public class Scene {
 			}
 
 			double factor = normal.dotProduct(reveresedLightDirection) * shadow / rays.length;
-			Vector3 added = light.getColor().cpy().multiply(factor);
-			diffLight.add(added);
+			Vector3 added = light.getColor().multiply(factor);
+			diffLight = diffLight.cpy().add(added);
 
 			Vector3 reflectedLight = lightDirection.cpy()
-					.add(normal.cpy().multiply(-2 * lightDirection.dotProduct(normal))).normalize();
+					.add(normal.multiply(-2 * lightDirection.dotProduct(normal))).normalize();
 
 			double angleWithLightReflection = reflectedLight.dotProduct(v);
 
 			if (angleWithLightReflection > 0) {
-				specLight.add(light.getColor().cpy()
+				specLight = specLight.cpy().add(light.getColor()
 						.multiply(Math.pow(angleWithLightReflection, mat.getPhongSpecularityCoefficient()) * shadow
 								* light.getSpecularIntensity() / rays.length));
 			}
@@ -146,8 +146,8 @@ public class Scene {
 	Vector3 transparencyColor(IntersectionData inter, Ray ray, Material mat, int nextRecDepth) {
 		Vector3 transColor = new Vector3(0, 0, 0);
 		if (mat.getTransparency() > 0) {
-			Vector3 delta = ray.getDirection().cpy().multiply(0.0001);
-			Ray trasRay = new Ray(inter.getIntersectionPoint().cpy().add(delta), ray.getDirection());
+			Vector3 delta = ray.direction.multiply(0.0001);
+			Ray trasRay = new Ray(inter.intersectionPoint.cpy().add(delta), ray.direction.cpy());
 			transColor = calculateColor(trasRay, nextRecDepth, inter.getShape());
 		}
 
@@ -158,12 +158,12 @@ public class Scene {
 	 * calculates reflection colors
 	 */
 	Vector3 reflectionColor(IntersectionData inter, Ray ray, Material mat, int nextRecDepth) {
-		Vector3 normal = inter.getShape().normal(inter.getIntersectionPoint(), ray);
-		Vector3 dir = ray.getDirection().normalize();
+		Vector3 normal = inter.getShape().normal(inter.getIntersectionPointCpy(), ray);
+		Vector3 dir = ray.direction.normalize();
 		double dot = dir.dotProduct(normal);
 
-		Vector3 reflectionVector = dir.cpy().add(normal.cpy().multiply(-2 * dot)).normalize();
-		Ray reflectionRay = new Ray(inter.getIntersectionPoint(), reflectionVector);
+		Vector3 reflectionVector = dir.cpy().add(normal.multiply(-2 * dot)).normalize();
+		Ray reflectionRay = new Ray(inter.getIntersectionPointCpy(), reflectionVector);
 
 		return calculateColor(reflectionRay, nextRecDepth, inter.getShape()).multiply(mat.getReflectionColor());
 	}
@@ -186,7 +186,7 @@ public class Scene {
 			if (intersectionPoint == null)
 				continue;
 
-			if ((tmpDistance = ray.getOriginPoint().distance(intersectionPoint)) < minDistance) {
+			if ((tmpDistance = ray.originPoint.distance(intersectionPoint)) < minDistance) {
 				minDistance = tmpDistance;
 				intersection = new IntersectionData(shape, intersectionPoint);
 			}
@@ -209,7 +209,7 @@ public class Scene {
 
 			if (interPoint != null) {
 				IntersectionData inter = new IntersectionData(shape, interPoint);
-				double distance = ray.getOriginPoint().connectingVector(inter.getIntersectionPoint()).norm();
+				double distance = ray.originPoint.connectingVector(inter.getIntersectionPointCpy()).norm();
 
 				if (targetShape == shape) {
 					maxDistance = distance;
@@ -262,7 +262,7 @@ public class Scene {
 		Vector3 reflectionColor = reflectionColor(inter, ray, mat, recursionDepth);
 
 		Vector3 result = new Vector3(0, 0, 0);
-		result.add(transColor.cpy().multiply(mat.getTransparency()));
+		result.add(transColor.multiply(mat.getTransparency()));
 		result.add(diffuseAndSpecColor.cpy().multiply(1 - mat.getTransparency()));
 		result.add(reflectionColor);
 

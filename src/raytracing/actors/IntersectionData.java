@@ -4,8 +4,8 @@ import raytracing.geometry.Shape;
 import raytracing.math.Vector3;
 
 public class IntersectionData {
-	private Shape shape;
-	private Vector3 intersectionPoint;
+	public Shape shape;
+	public Vector3 intersectionPoint;
 
 	public IntersectionData(Shape shape, Vector3 intersectionPoint) {
 		super();
@@ -21,7 +21,7 @@ public class IntersectionData {
 		this.shape = shape;
 	}
 
-	public Vector3 getIntersectionPoint() {
+	public Vector3 getIntersectionPointCpy() {
 		return intersectionPoint.cpy();
 	}
 

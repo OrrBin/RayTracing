@@ -49,7 +49,7 @@ public class Vector3 {
 
 	public Vector3 normalize() {
 		if (norm() < Constants.EPSILON)
-			return this;
+			return cpy();
 
 		return cpy().multiply(1 / norm());
 	}
@@ -78,11 +78,7 @@ public class Vector3 {
 	}
 
 	public Vector3 multiply(double a) {
-		this.x *= a;
-		this.y *= a;
-		this.z *= a;
-
-		return this;
+		return new Vector3(this.x * a, this.y * a, this.z * a);
 	}
 
 	public Vector3 connectingVector(Vector3 other) {

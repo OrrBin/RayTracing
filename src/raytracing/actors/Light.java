@@ -45,7 +45,7 @@ public class Light {
 				double xOffset = xMin + rnd.nextDouble() * rectWidth;
 				double yOffset = yMin + rnd.nextDouble() * rectWidth;
 
-				Vector3 light = this.position.cpy().add(top.cpy().multiply(yOffset)).add(right.cpy().multiply(xOffset));
+				Vector3 light = this.position.cpy().add(top.multiply(yOffset)).add(right.multiply(xOffset));
 				rays[i * numOfShadowRays + j] = new Ray(light, light.connectingVector(intersectionPoint).normalize());
 			}
 		}

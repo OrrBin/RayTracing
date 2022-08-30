@@ -20,9 +20,9 @@ public class Sphere extends Shape {
 
 	@Override
 	public Vector3 intersection(Ray ray) {
-		Vector3 centerToOrigin = center.connectingVector(ray.getOriginPoint());
+		Vector3 centerToOrigin = center.connectingVector(ray.originPoint);
 
-		double b = 2.0 * ray.getDirection().dotProduct(centerToOrigin);
+		double b = 2.0 * ray.direction.dotProduct(centerToOrigin);
 		double c = Math.pow(centerToOrigin.norm(), 2) - Math.pow(radius, 2);
 
 		double discriminant = Math.pow(b, 2) - 4 * c;
@@ -35,7 +35,7 @@ public class Sphere extends Shape {
 			if (t < 0)
 				return null;
 
-			return ray.getOriginPoint().add(ray.getDirection().multiply(t));
+			return ray.getOriginPointCpy().add(ray.direction.multiply(t));
 		}
 		double t1 = (-b + Math.sqrt(discriminant)) / (2);
 		double t2 = (-b - Math.sqrt(discriminant)) / (2);
@@ -43,8 +43,8 @@ public class Sphere extends Shape {
 		if (t1 < 0 && t2 < 0)
 			return null;
 
-		Vector3 intersectionPoint1 = ray.getOriginPoint().add(ray.getDirection().multiply(t1));
-		Vector3 intersectionPoint2 = ray.getOriginPoint().add(ray.getDirection().multiply(t2));
+		Vector3 intersectionPoint1 = ray.getOriginPointCpy().add(ray.direction.multiply(t1));
+		Vector3 intersectionPoint2 = ray.getOriginPointCpy().add(ray.direction.multiply(t2));
 
 		Vector3 intersectionPoint;
 
@@ -53,8 +53,8 @@ public class Sphere extends Shape {
 		else if (t1 < 0)
 			intersectionPoint = intersectionPoint2;
 		else {
-			double length1 = ray.getOriginPoint().connectingVector(intersectionPoint1).norm();
-			double length2 = ray.getOriginPoint().connectingVector(intersectionPoint2).norm();
+			double length1 = ray.originPoint.connectingVector(intersectionPoint1).norm();
+			double length2 = ray.originPoint.connectingVector(intersectionPoint2).norm();
 
 			if (length1 < length2)
 				intersectionPoint = intersectionPoint1;
@@ -69,7 +69,7 @@ public class Sphere extends Shape {
 	public Vector3 normal(Vector3 point, Ray ray) {
 		Vector3 n = center.connectingVector(point).normalize();
 
-		Vector3 v = ray.getDirection().multiply(-1).normalize();
+		Vector3 v = ray.direction.multiply(-1).normalize();
 		if (n.dotProduct(v) < 0)
 			return n.multiply(-1);
 		return n;

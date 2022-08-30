@@ -22,8 +22,8 @@ public class Triangle extends Shape {
 		this.p2 = vertex2;
 		this.p3 = vertex3;
 
-		Vector3 v = p1.cpy().add(p2.cpy().multiply(-1));
-		Vector3 u = p1.cpy().add(p3.cpy().multiply(-1));
+		Vector3 v = p1.cpy().add(p2.multiply(-1));
+		Vector3 u = p1.cpy().add(p3.multiply(-1));
 
 		normal = v.crossProduct(u).normalize();
 		offset = normal.cpy().dotProduct(p1);
@@ -34,18 +34,16 @@ public class Triangle extends Shape {
 
 	@Override
 	public Vector3 intersection(Ray ray) {
-		Vector3 normalCpy = normal.cpy();
-
-		double angle = ray.getDirection().dotProduct(normalCpy);
+		double angle = ray.direction.dotProduct(normal);
 
 		if (Math.abs(angle) < Constants.EPSILON)
 			return null;
 
-		double t = (offset - ray.getOriginPoint().dotProduct(normalCpy)) / angle;
+		double t = (offset - ray.originPoint.dotProduct(normal)) / angle;
 		if (t < 0)
 			return null;
 
-		Vector3 pointOfContact = ray.getOriginPoint().add(ray.getDirection().multiply(t));
+		Vector3 pointOfContact = ray.getOriginPointCpy().add(ray.direction.multiply(t));
 		Vector3 w = p1.connectingVector(pointOfContact);
 
 		double a = (p1ConnectingVectorTop2.dotProduct(p1ConnectingVectorTop3) * w.dotProduct(p1ConnectingVectorTop3) - p1ConnectingVectorTop3.dotProduct(p1ConnectingVectorTop3) * w.dotProduct(p1ConnectingVectorTop2))
@@ -63,7 +61,7 @@ public class Triangle extends Shape {
 	public Vector3 normal(Vector3 point, Ray ray) {
 		Vector3 normalCpy = normal.cpy();
 
-		Vector3 v = ray.getDirection().multiply(-1).normalize();
+		Vector3 v = ray.direction.multiply(-1).normalize();
 		if (normalCpy.dotProduct(v) < 0)
 			return normalCpy.multiply(-1);
 		return normalCpy;

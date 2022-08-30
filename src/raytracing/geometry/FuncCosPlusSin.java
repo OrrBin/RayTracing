@@ -38,7 +38,7 @@ public class FuncCosPlusSin extends FunctionGraph {
 
 		Vector3 normal = new Vector3(x, y, z).normalize();
 
-		Vector3 v = ray.getDirection().multiply(-1).normalize();
+		Vector3 v = ray.direction.multiply(-1).normalize();
 		if (normal.dotProduct(v) < 0)
 			return normal.multiply(-1);
 		return normal;

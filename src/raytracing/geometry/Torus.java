@@ -5,7 +5,6 @@ import raytracing.math.Transformation3D;
 import raytracing.math.Vector3;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 public class Torus extends Shape {
@@ -44,13 +43,13 @@ public class Torus extends Shape {
     }
 
     private Double findIntersection(final Ray ray) {
-        double ox = ray.getOriginPoint().getX();
-        double oy = ray.getOriginPoint().getY();
-        double oz = ray.getOriginPoint().getZ();
+        double ox = ray.originPoint.x;
+        double oy = ray.originPoint.y;
+        double oz = ray.originPoint.z;
 
-        double dx = ray.getDirection().getX();
-        double dy = ray.getDirection().getY();
-        double dz = ray.getDirection().getZ();
+        double dx = ray.direction.x;
+        double dy = ray.direction.y;
+        double dz = ray.direction.z;
 
         // define the coefficients of the quartic equation
         double sumDSqrd = dx * dx + dy * dy + dz * dz;
@@ -59,13 +58,13 @@ public class Torus extends Shape {
         double f = ox * dx + oy * dy + oz * dz;
         double fourASqrd = 4.0 * this.sweptRadius * this.sweptRadius;
 
-        ArrayList<Double> coeffs = new ArrayList<>();
-
-        coeffs.add(e * e - fourASqrd * (this.tubeRadius * this.tubeRadius - oy * oy));
-        coeffs.add(4.0 * f * e + 2.0 * fourASqrd * oy * dy);
-        coeffs.add(2.0 * sumDSqrd * e + 4.0 * f * f + fourASqrd * dy * dy);
-        coeffs.add(4.0 * sumDSqrd * f);
-        coeffs.add(sumDSqrd * sumDSqrd);
+        double[] coeffs = new double[]{
+                e * e - fourASqrd * (this.tubeRadius * this.tubeRadius - oy * oy),
+                4.0 * f * e + 2.0 * fourASqrd * oy * dy,
+                2.0 * sumDSqrd * e + 4.0 * f * f + fourASqrd * dy * dy,
+                4.0 * sumDSqrd * f,
+                sumDSqrd * sumDSqrd
+        };
 
         ArrayList<Double> solution = solve4(coeffs);
 
@@ -90,9 +89,9 @@ public class Torus extends Shape {
     public Vector3 normal(final Vector3 point, final Ray ray) {
         double paramSquared = this.sweptRadius * this.sweptRadius + this.tubeRadius * this.tubeRadius;
 
-        double x = point.getX();
-        double y = point.getY();
-        double z = point.getZ();
+        double x = point.x;
+        double y = point.y;
+        double z = point.z;
         double sumSquared = x * x + y * y + z * z;
 
         Vector3 tmp = new Vector3(
@@ -108,13 +107,13 @@ public class Torus extends Shape {
      * <p>
      * c[0] + c[1]*x + c[2]*x^2 + c[3]*x^3 + c[4]*x^4 = 0
      */
-    ArrayList<Double> solve4(ArrayList<Double> c) {
+    ArrayList<Double> solve4(double[] coeffs) {
         /* normal form: x^4 + Ax^3 + Bx^2 + Cx + D = 0 */
 
-        double A = c.get(3) / c.get(4);
-        double B = c.get(2) / c.get(4);
-        double C = c.get(1) / c.get(4);
-        double D = c.get(0) / c.get(4);
+        double A = coeffs[3] / coeffs[4];
+        double B = coeffs[2] / coeffs[4];
+        double C = coeffs[1] / coeffs[4];
+        double D = coeffs[0] / coeffs[4];
 
     /*  substitute x = y - A/4 to eliminate cubic term:
 	x^4 + px^2 + qx + r = 0 */
@@ -128,13 +127,7 @@ public class Torus extends Shape {
         if (isZero(r)) {
             /* no absolute term: y(y^3 + py + q) = 0 */
 
-            ArrayList<Double> coeffs = new ArrayList<Double>() {{
-                add(q);
-                add(p);
-                add(0d);
-                add(1d);
-            }};
-//            [q, p, 0, 1];
+            coeffs = new double[]{q, p, 0d, 1d};
 
             s = solve3(coeffs);
 
@@ -142,12 +135,12 @@ public class Torus extends Shape {
 
         } else {
             /* solve the resolvent cubic ... */
-            ArrayList<Double> coeffs = new ArrayList<Double>() {{
-                add(1.0 / 2 * r * p - 1.0 / 8 * q * q);
-                add(-r);
-                add(-1.0 / 2 * p);
-                add(1d);
-            }};
+            coeffs = new double[]{
+                    1.0 / 2 * r * p - 1.0 / 8 * q * q,
+                    -r,
+                    -1.0 / 2 * p,
+                    1d
+            };
 
             s = solve3(coeffs);
 
@@ -174,18 +167,20 @@ public class Torus extends Shape {
             else
                 return null;
 
-            coeffs = new ArrayList<>(Arrays.asList(
+            coeffs = new double[]{
                     z - u,
                     q < 0d ? -v : v,
-                    1d));
+                    1d
+            };
 
             s = solve2(coeffs);
 
 
-            coeffs = new ArrayList<>(Arrays.asList(
+            coeffs = new double[]{
                     z + u,
                     q < 0d ? v : -v,
-                    1d));
+                    1d
+            };
 
             s.addAll(solve2(coeffs));
         }
@@ -200,13 +195,13 @@ public class Torus extends Shape {
         return s;
     }
 
-    ArrayList<Double> solve3(ArrayList<Double> c) {
+    ArrayList<Double> solve3(double[] coeffs) {
 
         /* normal form: x^3 + Ax^2 + Bx + C = 0 */
 
-        double A = c.get(2) / c.get(3);
-        double B = c.get(1) / c.get(3);
-        double C = c.get(0) / c.get(3);
+        double A = coeffs[2] / coeffs[3];
+        double B = coeffs[1] / coeffs[3];
+        double C = coeffs[0] / coeffs[3];
 
     /*  substitute x = y - A/3 to eliminate quadric term:
 	x^3 +px + q = 0 */
@@ -271,11 +266,11 @@ public class Torus extends Shape {
         return ((x) > -EQN_EPS && (x) < EQN_EPS);
     }
 
-    private ArrayList<Double> solve2(ArrayList<Double> c) {
+    private ArrayList<Double> solve2(double[] coeffs) {
         /* normal form: x^2 + px + q = 0 */
 
-        double p = c.get(1) / (2 * c.get(2));
-        double q = c.get(0) / c.get(2);
+        double p = coeffs[1] / (2 * coeffs[2]);
+        double q = coeffs[0] / coeffs[2];
 
         double D = p * p - q;
 

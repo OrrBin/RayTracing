@@ -41,8 +41,8 @@ public class Transformation3D {
     }
 
     public Ray transformRay(Ray ray) {
-        Vector3 tfOrigin = this.invMatrix.transformPoint(ray.getOriginPoint());
-        Vector3 tfDirection = this.invMatrix.transformPoint(ray.getDirection());
+        Vector3 tfOrigin = this.invMatrix.transformPoint(ray.originPoint);
+        Vector3 tfDirection = this.invMatrix.transformPoint(ray.direction);
 
         return new Ray(tfOrigin, tfDirection);
     }

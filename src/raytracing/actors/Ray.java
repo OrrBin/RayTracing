@@ -12,20 +12,12 @@ public class Ray {
 		this.direction = angle;
 	}
 
-	public Vector3 point(double distance) {
-		return originPoint.add(direction.multiply(distance));
-	}
-
-	public Vector3 getOriginPoint() {
+	public Vector3 getOriginPointCpy() {
 		return originPoint.cpy();
 	}
 
 	public void setOriginPoint(Vector3 position) {
 		this.originPoint = position;
-	}
-
-	public Vector3 getDirection() {
-		return direction.cpy();
 	}
 
 	public void setDirection(Vector3 angle) {
@@ -34,7 +26,7 @@ public class Ray {
 
 	public Vector3 pointAtDistance(double t) {
 		return this.originPoint.cpy().add(
-				this.direction.cpy().multiply(t));
+				this.direction.multiply(t));
 	}
 
 	@Override
