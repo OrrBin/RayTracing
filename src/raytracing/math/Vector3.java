@@ -70,7 +70,7 @@ public class Vector3 {
 	}
 
 	public Vector3 connectingVector(Vector3 other) {
-		return other.cpy().add(cpy().multiply(-1));
+		return other.cpy().add(this.multiply(-1));
 	}
 
 	public double distance(Vector3 other) {

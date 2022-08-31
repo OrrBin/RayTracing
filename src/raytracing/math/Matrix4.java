@@ -61,16 +61,16 @@ public class Matrix4 {
 
     public Vector3 transformPoint(Vector3 point) {
         return new Vector3(
-                this.get(0,0)*point.x + this.get(0,1)*point.y + this.get(0,2)*point.z + this.get(0,3),
-                this.get(1,0)*point.x + this.get(1,1)*point.y + this.get(1,2)*point.z + this.get(1,3),
-                this.get(2,0)*point.x + this.get(2,1)*point.y + this.get(2,2)*point.z + this.get(2,3));
+                m[0]*point.x + m[1]*point.y + m[2]*point.z + m[3],
+                m[4]*point.x + m[5]*point.y + m[6]*point.z + m[7],
+                m[8]*point.x + m[9]*point.y + m[10]*point.z + m[11]);
     }
 
     public Vector3 transformVector(Vector3 vec) {
         return new Vector3(
-                this.get(0,0)*vec.x + this.get(0,1)*vec.y + this.get(0,2)*vec.z,
-                this.get(1,0)*vec.x + this.get(1,1)*vec.y + this.get(1,2)*vec.z,
-                this.get(2,0)*vec.x + this.get(2,1)*vec.y + this.get(2,2)*vec.z);
+                m[0]*vec.x + m[1]*vec.y + m[2]*vec.z,
+                m[4]*vec.x + m[5]*vec.y + m[6]*vec.z,
+                m[8]*vec.x + m[9]*vec.y + m[10]*vec.z);
     }
 
 
@@ -79,9 +79,9 @@ public class Matrix4 {
      */
     public Vector3 transformNormal(Vector3 n)  {
         return new Vector3(
-                this.get(0, 0) * n.getX() + this.get(1, 0) * n.getY() + this.get(2, 0) * n.getZ(),
-                this.get(0, 1) * n.getX() + this.get(1, 1) * n.getY() + this.get(2, 1) * n.getZ(),
-                this.get(0, 2) * n.getX() + this.get(1, 2) * n.getY() + this.get(2, 2) * n.getZ());
+                m[0] * n.x + m[4] * n.y + m[8] * n.z,
+                m[1] * n.x + m[5] * n.y + m[9] * n.z,
+                m[2] * n.x + m[6] * n.y + m[10] * n.z);
     }
 
     public static Matrix4 translate(double dx, double dy, double dz) {
