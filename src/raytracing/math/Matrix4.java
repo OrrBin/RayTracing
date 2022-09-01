@@ -1,5 +1,7 @@
 package raytracing.math;
 
+import com.aparapi.Kernel;
+
 import java.util.Arrays;
 
 public class Matrix4 {
@@ -13,11 +15,13 @@ public class Matrix4 {
         this.m = elements.clone();
     }
 
-    double get(int row, int col)  {
+    double get(int row, int col) {
         return this.m[row * 4 + col];
     }
 
     public Matrix4 times(Matrix4 otherMatrix) {
+//        double[] result = mult(this.m, otherMatrix.m, 4);
+//        return new Matrix4(result);
         double[] copy = new double[16];
 
         for (int row = 0; row < 4; row++) {
@@ -35,12 +39,30 @@ public class Matrix4 {
         return new Matrix4(copy);
     }
 
+    public static double[] mult(final double[] A, final double[] B, final int N) {
+        final double[] C = new double[N*N];
+        Kernel kernel = new Kernel() {
+            /** {@inheritDoc} */
+            @Override public void run() {
+                int id = getGlobalId();
+                int i = id / N;
+                int j = id % N;
+                for (int k = 0; k < N; k++) {
+                    C[i * N + j] += A[i * N + k] * B[k * N + j];
+                }
+            }
+        };
+        kernel.setExecutionMode(Kernel.EXECUTION_MODE.GPU);
+        kernel.execute(C.length);
+        return C;
+    }
+
     public Matrix4 add(Matrix4 otherMatrix) {
         double[] copy = new double[16];
 
         for (int row = 0; row < 4; row++) {
             for (int col = 0; col < 4; col++) {
-                copy[row * 4 + col] = this.get(row, col) + otherMatrix.get(row,col);
+                copy[row * 4 + col] = this.get(row, col) + otherMatrix.get(row, col);
             }
         }
 
@@ -61,23 +83,23 @@ public class Matrix4 {
 
     public Vector3 transformPoint(Vector3 point) {
         return new Vector3(
-                m[0]*point.x + m[1]*point.y + m[2]*point.z + m[3],
-                m[4]*point.x + m[5]*point.y + m[6]*point.z + m[7],
-                m[8]*point.x + m[9]*point.y + m[10]*point.z + m[11]);
+                m[0] * point.x + m[1] * point.y + m[2] * point.z + m[3],
+                m[4] * point.x + m[5] * point.y + m[6] * point.z + m[7],
+                m[8] * point.x + m[9] * point.y + m[10] * point.z + m[11]);
     }
 
     public Vector3 transformVector(Vector3 vec) {
         return new Vector3(
-                m[0]*vec.x + m[1]*vec.y + m[2]*vec.z,
-                m[4]*vec.x + m[5]*vec.y + m[6]*vec.z,
-                m[8]*vec.x + m[9]*vec.y + m[10]*vec.z);
+                m[0] * vec.x + m[1] * vec.y + m[2] * vec.z,
+                m[4] * vec.x + m[5] * vec.y + m[6] * vec.z,
+                m[8] * vec.x + m[9] * vec.y + m[10] * vec.z);
     }
 
 
     /**
      * We use equality {@code (transposed matrix)*normal = transformed_normal}.
      */
-    public Vector3 transformNormal(Vector3 n)  {
+    public Vector3 transformNormal(Vector3 n) {
         return new Vector3(
                 m[0] * n.x + m[4] * n.y + m[8] * n.z,
                 m[1] * n.x + m[5] * n.y + m[9] * n.z,
@@ -106,15 +128,15 @@ public class Matrix4 {
         double sin = Math.sin(deg2rad(angleDeg));
         double cos = Math.cos(deg2rad(angleDeg));
 
-        return new Matrix4(new double[] {
-                1.0,0.0, 0.0, 0.0,
+        return new Matrix4(new double[]{
+                1.0, 0.0, 0.0, 0.0,
                 0.0, cos, -sin, 0.0,
                 0.0, sin, cos, 0.0,
                 0.0, 0.0, 0.0, 1.0
-                });
+        });
     }
 
-    public static Matrix4  rotateXInverse(double angleDeg) {
+    public static Matrix4 rotateXInverse(double angleDeg) {
         double sin = Math.sin(deg2rad(angleDeg));
         double cos = Math.cos(deg2rad(angleDeg));
 

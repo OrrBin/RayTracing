@@ -15,6 +15,8 @@ public class Torus extends Shape {
     private final double tubeRadius;
     private final Vector3 rotation;
     private final Transformation3D transformation;
+    private final Vector3 min;
+    private final Vector3 max;
 
     public Torus(double sweptRadius, double tubeRadius, Vector3 rotation, Vector3 translation, int material) {
         super(material);
@@ -28,6 +30,10 @@ public class Torus extends Shape {
         transformation.rotateY(rotation.getY());
         transformation.rotateZ(rotation.getZ());
         transformation.translate(translation);
+
+        this.min = new Vector3( -sweptRadius - tubeRadius, -tubeRadius, -sweptRadius - tubeRadius );
+        this.max = new Vector3( sweptRadius + tubeRadius, tubeRadius, sweptRadius + tubeRadius );
+
     }
 
 
@@ -35,13 +41,58 @@ public class Torus extends Shape {
     public Vector3 intersection(final Ray ray) {
         Ray tfRay = this.transformation.transformRay(ray);
 
+        if (!intersectionWithBoundingBox(tfRay)) {
+            return null;
+        }
+
         Double t = this.findIntersection(tfRay);
         if (t == null)
             return null;
 
         return ray.pointAtDistance(t); // Changed from the code in github
-//        return tfRay.pointAtDistance(t);
     }
+
+    private boolean intersectionWithBoundingBox(final Ray r) {
+        double tmin = (min.x - r.originPoint.x) / r.direction.x;
+        double tmax = (max.x - r.originPoint.x) / r.direction.x;
+
+        if (tmin > tmax) {
+            double tmp = tmin;
+            tmin = tmax;
+            tmax = tmp;
+        }
+
+        double tymin = (min.y - r.originPoint.y) / r.direction.y;
+        double tymax = (max.y - r.originPoint.y) / r.direction.y;
+
+        if (tymin > tymax) {
+            double tmp = tymin;
+            tymin = tymax;
+            tymax = tmp;
+        }
+
+        if ((tmin > tymax) || (tymin > tmax))
+            return false;
+
+        if (tymin > tmin)
+            tmin = tymin;
+
+        if (tymax < tmax)
+            tmax = tymax;
+
+        double tzmin = (min.z - r.originPoint.z) / r.direction.z;
+        double tzmax = (max.z - r.originPoint.z) / r.direction.z;
+
+        if (tzmin > tzmax) {
+            double tmp = tzmin;
+            tzmin = tzmax;
+            tzmax = tmp;
+        }
+
+        return (!(tmin > tzmax)) && (!(tzmin > tmax));
+    }
+
+
 
     @Override
     public Vector3 normal(final Vector3 point, final Ray ray) {

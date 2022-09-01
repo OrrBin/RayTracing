@@ -2,6 +2,7 @@ package raytracing.orchestration;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import lombok.extern.slf4j.Slf4j;
 import raytracing.actors.Scene;
 import raytracing.modules.RayTracingModule;
 import raytracing.parsing.SceneParser;
@@ -11,6 +12,7 @@ import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
 
+@Slf4j
 public class Orchestrator {
 
     private static final int DEFAULT_IMAGE_WIDTH = 500;
@@ -30,8 +32,27 @@ public class Orchestrator {
                 new File(orchestrationParams.getSceneFileName()),
                 orchestrationParams.getImageWidth(),orchestrationParams.getImageHeight());
 
+        int numOfIterations = 5;
+        long sumTime = 0;
+        long maxTime = 0;
+        long minTime = Long.MAX_VALUE;
+
         // Render scene:
-        sceneRenderer.renderScene(scene, new File(orchestrationParams.getOutputFileName()));
+
+        for(int i = 0; i < numOfIterations; i++) {
+            log.info("Starting rendering iteration: {}", i + 1);
+            long startTime = System.currentTimeMillis();
+            sceneRenderer.renderScene(scene, new File(orchestrationParams.getOutputFileName()));
+            long totalTime = System.currentTimeMillis() - startTime;
+            sumTime += totalTime;
+            maxTime = Math.max(totalTime, maxTime);
+            minTime = Math.min(totalTime, minTime);
+            log.info("Finished rendering iteration: {} in {} millis", i + 1, totalTime);
+
+        }
+
+        log.info("Number of iterations: {}, average time: {}, max time: {}, min time: {}",
+                numOfIterations, sumTime / numOfIterations, maxTime, minTime);
     }
 
     /**

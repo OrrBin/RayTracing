@@ -91,12 +91,11 @@ public class Scene {
 	/**
 	 * calculates diffuse and sepcular colors
 	 */
-	Vector3 diffuseAndSpecColor(IntersectionData inter, Ray ray, Material mat) {
+	Vector3 diffuseAndSpecColor(IntersectionData inter, final Vector3 normal, Ray ray, Material mat) {
 		Vector3 diffLight = new Vector3(0, 0, 0);
 		Vector3 specLight = new Vector3(0, 0, 0);
 
 		Vector3 v = ray.direction.multiply(-1).normalize();
-		Vector3 normal = inter.getShape().normal(inter.getIntersectionPointCpy(), ray);
 
 		// Calculate each of the scenes light diffuse and specular color and sum up
 		for (Light light : this.lights) {
@@ -157,8 +156,7 @@ public class Scene {
 	/**
 	 * calculates reflection colors
 	 */
-	Vector3 reflectionColor(IntersectionData inter, Ray ray, Material mat, int nextRecDepth) {
-		Vector3 normal = inter.getShape().normal(inter.getIntersectionPointCpy(), ray);
+	Vector3 reflectionColor(IntersectionData inter, final Vector3 normal, Ray ray, Material mat, int nextRecDepth) {
 		Vector3 dir = ray.direction.normalize();
 		double dot = dir.dotProduct(normal);
 
@@ -249,9 +247,11 @@ public class Scene {
 
 		Material mat = this.materials.get(inter.getShape().getMaterial());
 
+		Vector3 normal = inter.getShape().normal(inter.getIntersectionPointCpy(), ray);
+
 		//////////////////////////////////////////////////////////////////
 		// Diffuse and sepecular color calculation
-		Vector3 diffuseAndSpecColor = diffuseAndSpecColor(inter, ray, mat);
+		Vector3 diffuseAndSpecColor = diffuseAndSpecColor(inter, normal, ray, mat);
 
 		//////////////////////////////////////////////////////////////////
 		// Transparency Color calculation
@@ -259,7 +259,7 @@ public class Scene {
 
 		//////////////////////////////////////////////////////////////////
 		// Reflection Color calculation
-		Vector3 reflectionColor = reflectionColor(inter, ray, mat, recursionDepth);
+		Vector3 reflectionColor = reflectionColor(inter, normal, ray, mat, recursionDepth);
 
 		Vector3 result = new Vector3(0, 0, 0);
 		result.add(transColor.multiply(mat.getTransparency()));

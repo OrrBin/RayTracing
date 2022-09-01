@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 public class SceneRendererImpl implements SceneRenderer {
@@ -36,12 +35,10 @@ public class SceneRendererImpl implements SceneRenderer {
         }
 
         log.info("Number of Pixel tasks: {}", tasks.size());
-        final AtomicInteger finishedTasksCounter = new AtomicInteger(0);
 
         tasks.stream().parallel().forEach(task -> {
             try {
                 task.call();
-                log.info("finished {} tasks out of {}", finishedTasksCounter.incrementAndGet(), tasks.size());
             } catch (final Exception e) {
                 log.error("Failed pixel task", e);
             }
