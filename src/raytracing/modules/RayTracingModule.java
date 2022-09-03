@@ -2,7 +2,7 @@ package raytracing.modules;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import raytracing.math.ArrVector3Factory;
+import raytracing.math.SimpleVector3Factory;
 import raytracing.math.Vector3Factory;
 import raytracing.parsing.SceneParser;
 import raytracing.parsing.SceneParserCustomFormat;
@@ -19,7 +19,7 @@ public class RayTracingModule extends AbstractModule {
 
     @Provides
     public Vector3Factory getVector3Factory() {
-        return new ArrVector3Factory();
+        return new SimpleVector3Factory();
     }
 
     @Provides

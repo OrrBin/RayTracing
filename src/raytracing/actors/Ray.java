@@ -25,7 +25,7 @@ public class Ray {
     }
 
     public Vector3 pointAtDistance(double t) {
-        return this.originPoint.cpy().add(
+        return this.originPoint.cpy().addInPlace(
                 this.direction.multiply(t));
     }
 

@@ -32,7 +32,7 @@ public abstract class FunctionGraph extends Shape {
 			if(isOutOfBounds(point, dir))
 				return null;
 			
-			point.add(dir.multiply(epsilon));
+			point.addInPlace(dir.multiply(epsilon));
 			result = func(point);
 			if(isLastPhasePositive && result < 0) {				
 				isLastPhasePositive = false;

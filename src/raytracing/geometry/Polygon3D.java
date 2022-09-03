@@ -11,10 +11,9 @@ import raytracing.math.Vector3Factory;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Polygon3D {
+public class Polygon3D extends TriangulatedShape {
 
-    protected List<Triangle> triangles;
-    private Vector3Factory vector3Factory;
+    private final Vector3Factory vector3Factory;
 
     public Polygon3D(List<Vector3> vertices, int material, Vector3Factory vector3Factory) {
         this.vector3Factory = vector3Factory;
@@ -27,21 +26,19 @@ public class Polygon3D {
         List<DelaunayTriangle> delaunayTriangles = polygon.getTriangles();
         System.out.println("Number of triangles: " + delaunayTriangles.size());
 
-        triangles = delaunayTriangles.stream()
+        this.triangles = delaunayTriangles.stream()
                 .map(delaunayTriangle -> new Triangle(
                         getVector3FromTriangulationPoint(delaunayTriangle.points[0]),
                         getVector3FromTriangulationPoint(delaunayTriangle.points[1]),
                         getVector3FromTriangulationPoint(delaunayTriangle.points[2]),
                         material,
+                        this,
                         vector3Factory))
                 .collect(Collectors.toList());
 
+        this.calculateBoundingBox();
 
-    }
 
-    public List<Triangle> getTriangles() {
-
-        return triangles;
     }
 
     private Vector3 getVector3FromTriangulationPoint(final TriangulationPoint point) {
@@ -53,6 +50,4 @@ public class Polygon3D {
                 .map(vertex -> new PolygonPoint(vertex.x, vertex.y, vertex.z))
                 .collect(Collectors.toList());
     }
-
-
 }

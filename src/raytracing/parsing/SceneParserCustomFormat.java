@@ -5,14 +5,7 @@ import raytracing.actors.Camera;
 import raytracing.actors.Light;
 import raytracing.actors.Material;
 import raytracing.actors.Scene;
-import raytracing.geometry.FuncCosPlusSin;
-import raytracing.geometry.Plane;
-import raytracing.geometry.Polygon3D;
-import raytracing.geometry.Sphere;
-import raytracing.geometry.SquarePyramid;
-import raytracing.geometry.Torus;
-import raytracing.geometry.Triangle;
-import raytracing.geometry.TriangularPyramid;
+import raytracing.geometry.*;
 import raytracing.math.Vector3;
 import raytracing.math.Vector3Factory;
 
@@ -104,7 +97,7 @@ public class SceneParserCustomFormat implements SceneParser {
 					double radius = Double.parseDouble(params[3]);
 					int mat_idx = Integer.parseInt(params[4]) - 1;
 					max_mat = Math.max(max_mat, mat_idx);
-					scene.getShapes().add(new Sphere(center, radius, mat_idx));
+					scene.addShape(new Sphere(center, radius, mat_idx));
 					System.out.printf("Parsed sphere (line %d)%n", lineNum);
 					break;
 				}
@@ -114,7 +107,7 @@ public class SceneParserCustomFormat implements SceneParser {
 					double offset = Double.parseDouble(params[3]);
 					int mat_idx = Integer.parseInt(params[4]) - 1;
 					max_mat = Math.max(max_mat, mat_idx);
-					scene.getShapes().add(new Plane(normal, offset, mat_idx));
+					scene.addShape(new Plane(normal, offset, mat_idx));
 					System.out.printf("Parsed plane (line %d)%n", lineNum);
 					break;
 				}
@@ -129,7 +122,7 @@ public class SceneParserCustomFormat implements SceneParser {
 							Double.parseDouble(params[11]));
 					int mat_idx = Integer.parseInt(params[12]) - 1;
 					max_mat = Math.max(max_mat, mat_idx);
-					scene.getShapes().addAll(new TriangularPyramid(p1, p2, p3, p4, mat_idx, vector3Factory).getTriangles());
+					scene.addSuperShape(new TriangularPyramid(p1, p2, p3, p4, mat_idx, vector3Factory));
 					System.out.printf("Parsed triangular pyramid (line %d)%n", lineNum);
 					break;
 				}
@@ -146,7 +139,7 @@ public class SceneParserCustomFormat implements SceneParser {
 							Double.parseDouble(params[14]));
 					int mat_idx = Integer.parseInt(params[15]) - 1;
 					max_mat = Math.max(max_mat, mat_idx);
-					scene.getShapes().addAll(new SquarePyramid(p1, p2, p3, p4, p5, mat_idx, vector3Factory).getTriangles());
+					scene.addSuperShape(new SquarePyramid(p1, p2, p3, p4, p5, mat_idx, vector3Factory));
 					System.out.printf("Parsed square pyramid (line %d)%n", lineNum);
 					break;
 				}
@@ -162,7 +155,7 @@ public class SceneParserCustomFormat implements SceneParser {
 					}
 					int mat_idx = Integer.parseInt(params[params.length - 1]) - 1;
 					max_mat = Math.max(max_mat, mat_idx);
-					scene.getShapes().addAll(new Polygon3D(vertices, mat_idx, vector3Factory).getTriangles());
+					scene.addSuperShape(new Polygon3D(vertices, mat_idx, vector3Factory));
 					System.out.printf("Parsed Polygon (line %d)%n", lineNum);
 					break;
 				}
@@ -175,7 +168,7 @@ public class SceneParserCustomFormat implements SceneParser {
 							Double.parseDouble(params[8]));
 					int mat_idx = Integer.parseInt(params[9]) - 1;
 					max_mat = Math.max(max_mat, mat_idx);
-					scene.getShapes().add(new Triangle(p1, p2, p3, mat_idx, vector3Factory));
+					scene.addShape(new Triangle(p1, p2, p3, mat_idx, vector3Factory));
 					System.out.printf("Parsed triangle (line %d)%n", lineNum);
 					break;
 				}
@@ -188,7 +181,7 @@ public class SceneParserCustomFormat implements SceneParser {
 							Double.parseDouble(params[7]));
 					int mat_idx = Integer.parseInt(params[8]) - 1;
 					max_mat = Math.max(max_mat, mat_idx);
-					scene.getShapes().add(new Torus(sweptRadius, tubeRadius, rotation, translation, mat_idx, vector3Factory));
+					scene.addShape(new Torus(sweptRadius, tubeRadius, rotation, translation, mat_idx, vector3Factory));
 					System.out.printf("Parsed triangle (line %d)%n", lineNum);
 					break;
 				}
@@ -196,7 +189,7 @@ public class SceneParserCustomFormat implements SceneParser {
 					double zOffset = Integer.parseInt(params[0]);
 					int mat_idx = Integer.parseInt(params[1]) - 1;
 					max_mat = Math.max(max_mat, mat_idx);
-					scene.getShapes().add(new FuncCosPlusSin(zOffset, mat_idx, vector3Factory));
+					scene.addShape(new FuncCosPlusSin(zOffset, mat_idx, vector3Factory));
 					System.out.printf("Parsed cossin (line %d)%n", lineNum);
 					break;
 				}

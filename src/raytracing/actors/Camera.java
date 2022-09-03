@@ -1,6 +1,6 @@
 package raytracing.actors;
 
-import raytracing.math.ArrVector3;
+import raytracing.math.SimpleVector3;
 import raytracing.math.Vector3;
 
 public class Camera {
@@ -77,7 +77,7 @@ public class Camera {
 		return normal.cpy();
 	}
 
-	public void setNormal(ArrVector3 normal) {
+	public void setNormal(SimpleVector3 normal) {
 		this.normal = normal;
 	}
 
@@ -85,7 +85,7 @@ public class Camera {
 		return right.cpy();
 	}
 
-	public void setRight(ArrVector3 right) {
+	public void setRight(SimpleVector3 right) {
 		this.right = right;
 	}
 

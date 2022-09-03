@@ -12,7 +12,7 @@ public abstract class Vector3{
 
     public abstract Vector3 crossProduct(Vector3 other);
 
-    public abstract Vector3 add(Vector3 other);
+    public abstract Vector3 addInPlace(Vector3 other);
 
     public abstract Vector3 multiply(Vector3 other);
 
@@ -24,7 +24,7 @@ public abstract class Vector3{
 
     public abstract double dotProduct(Vector3 other);
 
-    public abstract Vector3 boundFromAbove(double[] bounds);
+    public abstract Vector3 boundFromAboveInPlace(double[] bounds);
 
     public abstract Vector3 invert();
 }

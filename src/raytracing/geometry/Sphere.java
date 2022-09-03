@@ -35,7 +35,7 @@ public class Sphere extends Shape {
 			if (t < 0)
 				return null;
 
-			return ray.getOriginPointCpy().add(ray.direction.multiply(t));
+			return ray.getOriginPointCpy().addInPlace(ray.direction.multiply(t));
 		}
 		double t1 = (-b + Math.sqrt(discriminant)) / (2);
 		double t2 = (-b - Math.sqrt(discriminant)) / (2);
@@ -43,8 +43,8 @@ public class Sphere extends Shape {
 		if (t1 < 0 && t2 < 0)
 			return null;
 
-		Vector3 intersectionPoint1 = ray.getOriginPointCpy().add(ray.direction.multiply(t1));
-		Vector3 intersectionPoint2 = ray.getOriginPointCpy().add(ray.direction.multiply(t2));
+		Vector3 intersectionPoint1 = ray.getOriginPointCpy().addInPlace(ray.direction.multiply(t1));
+		Vector3 intersectionPoint2 = ray.getOriginPointCpy().addInPlace(ray.direction.multiply(t2));
 
 		Vector3 intersectionPoint;
 

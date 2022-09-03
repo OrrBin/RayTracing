@@ -30,7 +30,7 @@ public class Plane extends Shape {
 		if (t < 0)
 			return null;
 
-		return ray.getOriginPointCpy().add(ray.direction.multiply(t));
+		return ray.getOriginPointCpy().addInPlace(ray.direction.multiply(t));
 	}
 
 	@Override

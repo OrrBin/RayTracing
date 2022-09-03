@@ -2,7 +2,7 @@ package raytracing.orchestration;
 
 import lombok.extern.slf4j.Slf4j;
 import raytracing.actors.Scene;
-import raytracing.math.ArrVector3Factory;
+import raytracing.math.SimpleVector3Factory;
 import raytracing.math.Vector3Factory;
 import raytracing.parsing.SceneParser;
 import raytracing.parsing.SceneParserCustomFormat;
@@ -16,7 +16,7 @@ import java.io.IOException;
 @Slf4j
 public class Orchestrator {
 
-    private static final int DEFAULT_IMAGE_WIDTH = 500;
+    private static final int DEFAULT_IMAGE_WIDTH = 1024;
     private static final int DEFAULT_IMAGE_HEIGHT = 500;
 
     @Inject
@@ -33,7 +33,7 @@ public class Orchestrator {
                 new File(orchestrationParams.getSceneFileName()),
                 orchestrationParams.getImageWidth(),orchestrationParams.getImageHeight());
 
-        int numOfIterations = 5;
+        int numOfIterations = 15;
         long sumTime = 0;
         long maxTime = 0;
         long minTime = Long.MAX_VALUE;
@@ -74,7 +74,8 @@ public class Orchestrator {
         int imageWidth = args.length > 3 ? Integer.parseInt(args[2]) : DEFAULT_IMAGE_WIDTH;
         int imageHeight = args.length > 3 ? Integer.parseInt(args[3]) : DEFAULT_IMAGE_HEIGHT;
 
-        final Vector3Factory vector3Factory = new ArrVector3Factory();
+        final Vector3Factory vector3Factory = new SimpleVector3Factory();
+//        final Vector3Factory vector3Factory = new EjmlVector3Factory();
 //        final Vector3Factory vector3Factory = new VectorAPIVector3Factory();
         final Orchestrator orchestrator = new Orchestrator();
         orchestrator.sceneParser = new SceneParserCustomFormat(vector3Factory);
@@ -83,9 +84,6 @@ public class Orchestrator {
 //        RayTracingModule module = new RayTracingModule();
 //        Injector injector = Guice.createInjector(module);
 //        injector.injectMembers(orchestrator); //injects the implementation of the service
-
-//        Scanner scanner = new Scanner(System.in);
-//        scanner.nextLine();
 
         orchestrator.execute(new OrchestrationParams(sceneFileName, outputFileName, imageWidth, imageHeight));
     }

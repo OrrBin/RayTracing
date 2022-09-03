@@ -8,8 +8,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @Slf4j
 public class SceneRendererImpl implements SceneRenderer {
@@ -24,7 +22,6 @@ public class SceneRendererImpl implements SceneRenderer {
         // Create a byte array to hold the pixel data:
         byte[] rgbData = new byte[scene.getImageWidth() * scene.getImageHeight() * 3];
 
-        ExecutorService executor = Executors.newFixedThreadPool(8);
         List<Callable<Boolean>> tasks = new ArrayList<>();
 
         for (int top = 0; top < scene.getImageHeight(); top++) {
@@ -39,7 +36,8 @@ public class SceneRendererImpl implements SceneRenderer {
             try {
                 task.call();
             } catch (final Exception e) {
-                log.error("Failed pixel task", e);
+//                log.error("Failed pixel task", e);
+                e.printStackTrace();
             }
         });
 

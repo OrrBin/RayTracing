@@ -14,27 +14,42 @@ public class Triangle extends Shape {
 
     private final Vector3 normal;
     private final double offset;
-    private final Vector3 p1ConnectingVectorTop2;
-    private final Vector3 p1ConnectingVectorTop3;
+    private final Vector3 p1p2Vec;
+    private final Vector3 p1p3Vec;
+    private double dot1213;
+    private double f;
+    private double dot1313;
+    private double dot1212;
 
-//    private final Vector3 min;
-//    private final Vector3 max;
-    private final double[][] bounds;
+    public final double[][] bounds;
 
-    public Triangle(Vector3 vertex1, Vector3 vertex2, Vector3 vertex3, int material, final Vector3Factory vector3Factory) {
-        super(material);
+    public Triangle(Vector3 vertex1, Vector3 vertex2, Vector3 vertex3,
+                    int material, final Vector3Factory vector3Factory) {
+        this(vertex1, vertex2, vertex3, material, null,vector3Factory);
+    }
+
+    public Triangle(Vector3 vertex1, Vector3 vertex2, Vector3 vertex3,
+                    int material, final SuperShape parent, final Vector3Factory vector3Factory) {
+        super(material, parent);
         this.p1 = vertex1;
         this.p2 = vertex2;
         this.p3 = vertex3;
 
-        Vector3 v = p1.cpy().add(p2.multiply(-1));
-        Vector3 u = p1.cpy().add(p3.multiply(-1));
+        Vector3 v = p1.cpy().addInPlace(p2.multiply(-1));
+        Vector3 u = p1.cpy().addInPlace(p3.multiply(-1));
 
         normal = v.crossProduct(u).normalize();
         offset = normal.cpy().dotProduct(p1);
 
-        p1ConnectingVectorTop2 = p1.connectingVector(p2);
-        p1ConnectingVectorTop3 = p1.connectingVector(p3);
+        p1p2Vec = p1.connectingVector(p2);
+        p1p3Vec = p1.connectingVector(p3);
+
+        dot1213 = p1p2Vec.dotProduct(p1p3Vec);
+        dot1313 = p1p3Vec.dotProduct(p1p3Vec);
+        dot1212 = p1p2Vec.dotProduct(p1p2Vec);
+        f = Math.pow(dot1213, 2) - dot1212 * dot1313;
+
+
 
         this.bounds = new double[][]{
                 {
@@ -66,13 +81,14 @@ public class Triangle extends Shape {
         if (t < 0)
             return null;
 
-        Vector3 pointOfContact = ray.getOriginPointCpy().add(ray.direction.multiply(t));
+        Vector3 pointOfContact = ray.getOriginPointCpy().addInPlace(ray.direction.multiply(t));
         Vector3 w = p1.connectingVector(pointOfContact);
 
-        double a = (p1ConnectingVectorTop2.dotProduct(p1ConnectingVectorTop3) * w.dotProduct(p1ConnectingVectorTop3) - p1ConnectingVectorTop3.dotProduct(p1ConnectingVectorTop3) * w.dotProduct(p1ConnectingVectorTop2))
-                / (Math.pow(p1ConnectingVectorTop2.dotProduct(p1ConnectingVectorTop3), 2) - p1ConnectingVectorTop2.dotProduct(p1ConnectingVectorTop2) * p1ConnectingVectorTop3.dotProduct(p1ConnectingVectorTop3));
-        double b = (p1ConnectingVectorTop2.dotProduct(p1ConnectingVectorTop3) * w.dotProduct(p1ConnectingVectorTop2) - p1ConnectingVectorTop2.dotProduct(p1ConnectingVectorTop2) * w.dotProduct(p1ConnectingVectorTop3))
-                / (Math.pow(p1ConnectingVectorTop2.dotProduct(p1ConnectingVectorTop3), 2) - p1ConnectingVectorTop2.dotProduct(p1ConnectingVectorTop2) * p1ConnectingVectorTop3.dotProduct(p1ConnectingVectorTop3));
+        double dotw13 = w.dotProduct(p1p3Vec);
+        double dotw12 = w.dotProduct(p1p2Vec);
+
+        double a = (dot1213 * dotw13 - dot1313 * dotw12) / f;
+        double b = (dot1213 * dotw12 - dot1212 * dotw13) / f;
 
         if (a >= 0 && b >= 0 && a + b <= 1)
             return pointOfContact;
