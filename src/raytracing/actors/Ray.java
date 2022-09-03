@@ -14,9 +14,9 @@ public class Ray {
         this.direction = angle;
         this.directionInverted = direction.invert();
         this.sign = new int[] {
-                (directionInverted.x() < 0) ? 1 : 0,
-                (directionInverted.y() < 0) ? 1 : 0,
-                (directionInverted.z() < 0) ? 1 : 0
+                (directionInverted.x < 0) ? 1 : 0,
+                (directionInverted.y < 0) ? 1 : 0,
+                (directionInverted.z < 0) ? 1 : 0
         };
     }
 

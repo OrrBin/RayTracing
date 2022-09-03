@@ -50,7 +50,7 @@ public class Polygon3D {
 
     private List<PolygonPoint> getPolygonPointList(final List<Vector3> vertices) {
         return vertices.stream()
-                .map(vertex -> new PolygonPoint(vertex.x(), vertex.y(), vertex.z()))
+                .map(vertex -> new PolygonPoint(vertex.x, vertex.y, vertex.z))
                 .collect(Collectors.toList());
     }
 

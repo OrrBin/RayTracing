@@ -16,8 +16,8 @@ public class Transformation3D {
 
 
     public Transformation3D translate(Vector3 translation) {
-        this.matrix = Matrix4.translate(translation.x(), translation.y(), translation.z(), vector3Factory).times(this.matrix);
-        this.invMatrix = this.invMatrix.times(Matrix4.translateInverse(translation.x(), translation.y(), translation.z(), vector3Factory));
+        this.matrix = Matrix4.translate(translation.x, translation.y, translation.z, vector3Factory).times(this.matrix);
+        this.invMatrix = this.invMatrix.times(Matrix4.translateInverse(translation.x, translation.y, translation.z, vector3Factory));
 
         return this;
     }

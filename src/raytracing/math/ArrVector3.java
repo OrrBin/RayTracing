@@ -8,31 +8,37 @@ import raytracing.util.Constants;
 
 @Getter
 @Setter
-public class ArrVector3 implements Vector3 {
-	public double arr[] = new double[3];
+public class ArrVector3 extends Vector3 {
+
+
+	public final double invX, invY, invZ;
+	public final double norm;
+
 
 	static final VectorSpecies<Double> SPECIES = DoubleVector.SPECIES_PREFERRED;
 
-	public ArrVector3() {
-
-	}
-
 	public ArrVector3(double x, double y, double z) {
-		arr[0] = x;
-		arr[1] = y;
-		arr[2] = z;
+		this.x = x;
+		this.y = y;
+		this.z = z;
+
+		invX = 1/this.x;
+		invY= 1/this.y;
+		invZ = 1/this.z;
+
+		norm = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
 	}
 
 	public ArrVector3(ArrVector3 other) {
-		arr[0] = other.arr[0];
-		arr[1] = other.arr[1];
-		arr[2] = other.arr[2];
-	}
+		this.x = other.x;
+		this.y = other.y;
+		this.z = other.z;
 
-	public ArrVector3(final double[] other) {
-		arr[0] = other[0];
-		arr[1] = other[1];
-		arr[2] = other[2];
+		invX = 1/this.x;
+		invY= 1/this.y;
+		invZ = 1/this.z;
+
+		norm = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
 	}
 
 	@Override
@@ -42,7 +48,7 @@ public class ArrVector3 implements Vector3 {
 
 	@Override
 	public double norm() {
-		return Math.sqrt(arr[0] * arr[0] + arr[1] * arr[1] + arr[2] * arr[2]);
+		return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
 	}
 
 	@Override
@@ -55,33 +61,33 @@ public class ArrVector3 implements Vector3 {
 
 	@Override
 	public Vector3 crossProduct(Vector3 other) {
-		double a = arr[1] * other.z() - arr[2] * other.y();
-		double b = arr[2] * other.x() - arr[0] * other.z();
-		double c = arr[0] * other.y() - arr[1] * other.x();
+		double a = this.y * other.z - this.z * other.y;
+		double b = this.z * other.x - this.x * other.z;
+		double c = this.x * other.y - this.y * other.x;
 		return new ArrVector3(a, b, c);
 	}
 
 	@Override
 	public ArrVector3 add(Vector3 other) {
-		this.arr[0] += other.x();
-		this.arr[1] += other.y();
-		this.arr[2] += other.z();
+		this.x += other.x;
+		this.y += other.y;
+		this.z += other.z;
 
 		return this;
 	}
 
 	@Override
 	public Vector3 multiply(Vector3 other) {
-		this.arr[0] *= other.x();
-		this.arr[1] *= other.y();
-		this.arr[2] *= other.z();
+		this.x *= other.x;
+		this.y *= other.y;
+		this.z *= other.z;
 
 		return this;
 	}
 
 	@Override
 	public ArrVector3 multiply(double a) {
-		return new ArrVector3(this.x() * a, this.y() * a, this.z() * a);
+		return new ArrVector3(this.x * a, this.y * a, this.z * a);
 	}
 
 	@Override
@@ -97,10 +103,10 @@ public class ArrVector3 implements Vector3 {
 	@Override
 	public double dotProduct(final Vector3 o) {
 		final ArrVector3 other = (ArrVector3) o;
-		double sum = 0f;
-		for (int i = 0; i < 3; ++i) {
-			sum = Math.fma(this.arr[i], other.arr[i], sum);
-		}
+		double sum = Math.fma(x, other.x, 0);
+		sum = Math.fma(y, other.y, sum);
+		sum = Math.fma(z, other.z, sum);
+
 		return sum;
 	}
 
@@ -109,36 +115,20 @@ public class ArrVector3 implements Vector3 {
 	 */
 	@Override
 	public Vector3 boundFromAbove(double[] bounds) {
-		arr[0] = Math.min(x(), bounds[0]);
-		arr[1] = Math.min(y(), bounds[1]);
-		arr[2] = Math.min(z(), bounds[2]);
+		this.x = Math.min(x, bounds[0]);
+		this.y = Math.min(y, bounds[1]);
+		this.z = Math.min(z, bounds[2]);
 
 		return this;
 	}
 
 	@Override
 	public Vector3 invert() {
-		return new ArrVector3(1/arr[0], 1/arr[1], 1/arr[2]);
+		return new ArrVector3(invX, invY, invZ);
 	}
-
-	@Override
-	public double x() {
-		return arr[0];
-	}
-
-	@Override
-	public double y() {
-		return arr[1];
-	}
-
-	@Override
-	public double z() {
-		return arr[2];
-	}
-
 
 	@Override
 	public String toString() {
-		return String.format("(%s, %s, %s)", arr[0], arr[1], arr[2]);
+		return String.format("(%s, %s, %s)", this.x, this.y, this.z);
 	}
 }

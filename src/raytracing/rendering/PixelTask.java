@@ -33,9 +33,9 @@ public class PixelTask implements Callable<Boolean> {
 
 			
 			Vector3 color = sum.multiply(1/((double)(size)));
-			rgbData[(row* scene.getImageWidth() + col) * 3] = (byte) ((int) (color.x() * 255));
-			rgbData[(row * scene.getImageWidth() + col) * 3 + 1] = (byte) ((int) (color.y() * 255));
-			rgbData[(row * scene.getImageWidth() + col) * 3 + 2] = (byte) ((int) (color.z() * 255));
+			rgbData[(row* scene.getImageWidth() + col) * 3] = (byte) ((int) (color.x * 255));
+			rgbData[(row * scene.getImageWidth() + col) * 3 + 1] = (byte) ((int) (color.y * 255));
+			rgbData[(row * scene.getImageWidth() + col) * 3 + 2] = (byte) ((int) (color.z * 255));
 		
 		return true;
 	}

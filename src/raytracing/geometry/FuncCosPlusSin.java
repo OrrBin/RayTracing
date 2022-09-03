@@ -17,17 +17,17 @@ public class FuncCosPlusSin extends FunctionGraph {
     private final double zOffset;
 
     public double func(Vector3 point) {
-        return Math.cos(point.x()) + Math.sin(point.y()) + zOffset - point.z();
+        return Math.cos(point.x) + Math.sin(point.y) + zOffset - point.z;
     }
 
     public boolean isOutOfBounds(Vector3 point, Vector3 dir) {
-        return ((point.z() > (2 + zOffset) && dir.z() > 0)) || ((point.z() < (-2 + zOffset) && dir.z() < 0));
+        return ((point.z > (2 + zOffset) && dir.z > 0)) || ((point.z < (-2 + zOffset) && dir.z < 0));
     }
 
     @Override
     public Vector3 normal(Vector3 point, Ray ray) {
-        double x = -1 * Math.sin(point.x());
-        double y = Math.cos(point.y());
+        double x = -1 * Math.sin(point.x);
+        double y = Math.cos(point.y);
         double z = -1;
 
         Vector3 normal = vector3Factory.getVector3(x, y, z);

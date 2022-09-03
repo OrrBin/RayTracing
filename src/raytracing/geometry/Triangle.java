@@ -38,14 +38,14 @@ public class Triangle extends Shape {
 
         this.bounds = new double[][]{
                 {
-                        Math.min(p1.x(), Math.min(p2.x(), p3.x())),
-                        Math.min(p1.y(), Math.min(p2.y(), p3.y())),
-                        Math.min(p1.z(), Math.min(p2.z(), p3.z()))
+                        Math.min(p1.x, Math.min(p2.x, p3.x)),
+                        Math.min(p1.y, Math.min(p2.y, p3.y)),
+                        Math.min(p1.z, Math.min(p2.z, p3.z))
                 },
                 {
-                        Math.max(p1.x(), Math.max(p2.x(), p3.x())),
-                        Math.max(p1.y(), Math.max(p2.y(), p3.y())),
-                        Math.max(p1.z(), Math.max(p2.z(), p3.z()))
+                        Math.max(p1.x, Math.max(p2.x, p3.x)),
+                        Math.max(p1.y, Math.max(p2.y, p3.y)),
+                        Math.max(p1.z, Math.max(p2.z, p3.z))
                 }
         };
 

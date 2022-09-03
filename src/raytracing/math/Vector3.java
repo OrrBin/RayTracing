@@ -1,33 +1,30 @@
 package raytracing.math;
 
-public interface Vector3{
-    Vector3 cpy();
+public abstract class Vector3{
 
-    double norm();
+    public double x, y, z;
 
-    Vector3 normalize();
+    public abstract Vector3 cpy();
 
-    Vector3 crossProduct(Vector3 other);
+    public abstract double norm();
 
-    Vector3 add(Vector3 other);
+    public abstract Vector3 normalize();
 
-    Vector3 multiply(Vector3 other);
+    public abstract Vector3 crossProduct(Vector3 other);
 
-    Vector3 multiply(double a);
+    public abstract Vector3 add(Vector3 other);
 
-    Vector3 connectingVector(Vector3 other);
+    public abstract Vector3 multiply(Vector3 other);
 
-    double distance(Vector3 other);
+    public abstract Vector3 multiply(double a);
 
-    double dotProduct(Vector3 other);
+    public abstract Vector3 connectingVector(Vector3 other);
 
-    Vector3 boundFromAbove(double[] bounds);
+    public abstract double distance(Vector3 other);
 
-    Vector3 invert();
+    public abstract double dotProduct(Vector3 other);
 
-    double x();
+    public abstract Vector3 boundFromAbove(double[] bounds);
 
-    double y();
-
-    double z();
+    public abstract Vector3 invert();
 }

@@ -32,9 +32,9 @@ public class Torus extends Shape {
         this.rotation = rotation;
 
         this.transformation = new Transformation3D(vector3Factory);
-        transformation.rotateX(rotation.x());
-        transformation.rotateY(rotation.y());
-        transformation.rotateZ(rotation.z());
+        transformation.rotateX(rotation.x);
+        transformation.rotateY(rotation.y);
+        transformation.rotateZ(rotation.z);
         transformation.translate(translation);
 
         this.bounds = new double[][] {
@@ -80,9 +80,9 @@ public class Torus extends Shape {
     private Vector3 computeNormalAtPoint(final Vector3 localHitPoint) {
         double paramSquared = this.sweptRadius * this.sweptRadius + this.tubeRadius * this.tubeRadius;
 
-        double x = localHitPoint.x();
-        double y = localHitPoint.y();
-        double z = localHitPoint.z();
+        double x = localHitPoint.x;
+        double y = localHitPoint.y;
+        double z = localHitPoint.z;
         double sumSquared = x * x + y * y + z * z;
 
         Vector3 tmp = vector3Factory.getVector3(
@@ -94,13 +94,13 @@ public class Torus extends Shape {
     }
 
     private Double findIntersection(final Ray ray) {
-        double ox = ray.originPoint.x();
-        double oy = ray.originPoint.y();
-        double oz = ray.originPoint.z();
+        double ox = ray.originPoint.x;
+        double oy = ray.originPoint.y;
+        double oz = ray.originPoint.z;
 
-        double dx = ray.direction.x();
-        double dy = ray.direction.y();
-        double dz = ray.direction.z();
+        double dx = ray.direction.x;
+        double dy = ray.direction.y;
+        double dz = ray.direction.z;
 
         // define the coefficients of the quartic equation
         double sumDSqrd = dx * dx + dy * dy + dz * dz;
