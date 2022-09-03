@@ -39,7 +39,10 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok:1.18.24'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
 
-    implementation group: 'com.aparapi', name: 'aparapi', version: '2.0.0'
+    implementation group: 'org.ejml', name: 'ejml-all', version: '0.41'
+
+
+//     implementation group: 'com.aparapi', name: 'aparapi', version: '2.0.0'
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'

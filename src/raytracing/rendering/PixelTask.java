@@ -1,7 +1,8 @@
-package raytracing.orchestration;
+package raytracing.rendering;
 
 import raytracing.actors.Ray;
 import raytracing.actors.Scene;
+import raytracing.math.ArrVector3;
 import raytracing.math.Vector3;
 
 import java.util.concurrent.Callable;
@@ -26,15 +27,15 @@ public class PixelTask implements Callable<Boolean> {
 			int size = Math.max(1, N*N);
 			Ray[] rays = scene.getSuperSamplingRays(row, col);
 
-			Vector3 sum = new Vector3(0,0,0);
+			Vector3 sum = new ArrVector3(0,0,0);
 			for(int i = 0; i < size; i++)
 				sum.add(scene.calculateColor(rays[i]));
 
 			
 			Vector3 color = sum.multiply(1/((double)(size)));
-			rgbData[(row* scene.getImageWidth() + col) * 3] = (byte) ((int) (color.getX() * 255));
-			rgbData[(row * scene.getImageWidth() + col) * 3 + 1] = (byte) ((int) (color.getY() * 255));
-			rgbData[(row * scene.getImageWidth() + col) * 3 + 2] = (byte) ((int) (color.getZ() * 255));
+			rgbData[(row* scene.getImageWidth() + col) * 3] = (byte) ((int) (color.x() * 255));
+			rgbData[(row * scene.getImageWidth() + col) * 3 + 1] = (byte) ((int) (color.y() * 255));
+			rgbData[(row * scene.getImageWidth() + col) * 3 + 2] = (byte) ((int) (color.z() * 255));
 		
 		return true;
 	}

@@ -1,18 +1,19 @@
 package raytracing.math;
 
-import com.aparapi.Kernel;
 
 import java.util.Arrays;
 
 public class Matrix4 {
 
     double[] m;
+    private final Vector3Factory vector3Factory;
 
-    public Matrix4(double[] elements) {
+    public Matrix4(final double[] elements, final Vector3Factory vector3Factory) {
         if (elements.length != 16)
             throw new RuntimeException("Expecting array of length 16 but found: " + Arrays.toString(elements) + ".");
 
         this.m = elements.clone();
+        this.vector3Factory = vector3Factory;
     }
 
     double get(int row, int col) {
@@ -36,25 +37,7 @@ public class Matrix4 {
             }
         }
 
-        return new Matrix4(copy);
-    }
-
-    public static double[] mult(final double[] A, final double[] B, final int N) {
-        final double[] C = new double[N*N];
-        Kernel kernel = new Kernel() {
-            /** {@inheritDoc} */
-            @Override public void run() {
-                int id = getGlobalId();
-                int i = id / N;
-                int j = id % N;
-                for (int k = 0; k < N; k++) {
-                    C[i * N + j] += A[i * N + k] * B[k * N + j];
-                }
-            }
-        };
-        kernel.setExecutionMode(Kernel.EXECUTION_MODE.GPU);
-        kernel.execute(C.length);
-        return C;
+        return new Matrix4(copy, vector3Factory);
     }
 
     public Matrix4 add(Matrix4 otherMatrix) {
@@ -66,7 +49,7 @@ public class Matrix4 {
             }
         }
 
-        return new Matrix4(copy);
+        return new Matrix4(copy, vector3Factory);
     }
 
     public Matrix4 transpose() {
@@ -78,21 +61,21 @@ public class Matrix4 {
             }
         }
 
-        return new Matrix4(copy);
+        return new Matrix4(copy, vector3Factory);
     }
 
     public Vector3 transformPoint(Vector3 point) {
-        return new Vector3(
-                m[0] * point.x + m[1] * point.y + m[2] * point.z + m[3],
-                m[4] * point.x + m[5] * point.y + m[6] * point.z + m[7],
-                m[8] * point.x + m[9] * point.y + m[10] * point.z + m[11]);
+        return vector3Factory.getVector3(
+                m[0] * point.x() + m[1] * point.y() + m[2] * point.z() + m[3],
+                m[4] * point.x() + m[5] * point.y() + m[6] * point.z() + m[7],
+                m[8] * point.x() + m[9] * point.y() + m[10] * point.z() + m[11]);
     }
 
     public Vector3 transformVector(Vector3 vec) {
-        return new Vector3(
-                m[0] * vec.x + m[1] * vec.y + m[2] * vec.z,
-                m[4] * vec.x + m[5] * vec.y + m[6] * vec.z,
-                m[8] * vec.x + m[9] * vec.y + m[10] * vec.z);
+        return vector3Factory.getVector3(
+                m[0] * vec.x() + m[1] * vec.y() + m[2] * vec.z(),
+                m[4] * vec.x() + m[5] * vec.y() + m[6] * vec.z(),
+                m[8] * vec.x() + m[9] * vec.y() + m[10] * vec.z());
     }
 
 
@@ -100,31 +83,31 @@ public class Matrix4 {
      * We use equality {@code (transposed matrix)*normal = transformed_normal}.
      */
     public Vector3 transformNormal(Vector3 n) {
-        return new Vector3(
-                m[0] * n.x + m[4] * n.y + m[8] * n.z,
-                m[1] * n.x + m[5] * n.y + m[9] * n.z,
-                m[2] * n.x + m[6] * n.y + m[10] * n.z);
+        return vector3Factory.getVector3(
+                m[0] * n.x() + m[4] * n.y() + m[8] * n.z(),
+                m[1] * n.x() + m[5] * n.y() + m[9] * n.z(),
+                m[2] * n.x() + m[6] * n.y() + m[10] * n.z());
     }
 
-    public static Matrix4 translate(double dx, double dy, double dz) {
+    public static Matrix4 translate(final double dx, final double dy, final double dz, final Vector3Factory vector3Factory) {
         return new Matrix4(new double[]{
                 1.0, 0.0, 0.0, dx,
                 0.0, 1.0, 0.0, dy,
                 0.0, 0.0, 1.0, dz,
                 0.0, 0.0, 0.0, 1.0
-        });
+        }, vector3Factory);
     }
 
-    public static Matrix4 translateInverse(double dx, double dy, double dz) {
+    public static Matrix4 translateInverse(final double dx, final double dy, final double dz, final Vector3Factory vector3Factory) {
         return new Matrix4(new double[]{
                 1.0, 0.0, 0.0, -dx,
                 0.0, 1.0, 0.0, -dy,
                 0.0, 0.0, 1.0, -dz,
                 0.0, 0.0, 0.0, 1.0
-        });
+        }, vector3Factory);
     }
 
-    public static Matrix4 rotateX(double angleDeg) {
+    public static Matrix4 rotateX(final double angleDeg, final Vector3Factory vector3Factory) {
         double sin = Math.sin(deg2rad(angleDeg));
         double cos = Math.cos(deg2rad(angleDeg));
 
@@ -133,10 +116,10 @@ public class Matrix4 {
                 0.0, cos, -sin, 0.0,
                 0.0, sin, cos, 0.0,
                 0.0, 0.0, 0.0, 1.0
-        });
+        }, vector3Factory);
     }
 
-    public static Matrix4 rotateXInverse(double angleDeg) {
+    public static Matrix4 rotateXInverse(final double angleDeg, final Vector3Factory vector3Factory) {
         double sin = Math.sin(deg2rad(angleDeg));
         double cos = Math.cos(deg2rad(angleDeg));
 
@@ -145,10 +128,10 @@ public class Matrix4 {
                 0.0, cos, sin, 0.0,
                 0.0, -sin, cos, 0.0,
                 0.0, 0.0, 0.0, 1.0
-        });
+        }, vector3Factory);
     }
 
-    public static Matrix4 rotateY(double angleDeg) {
+    public static Matrix4 rotateY(double angleDeg, final Vector3Factory vector3Factory) {
         double sin = Math.sin(deg2rad(angleDeg));
         double cos = Math.cos(deg2rad(angleDeg));
 
@@ -157,10 +140,10 @@ public class Matrix4 {
                 0.0, 1.0, 0.0, 0.0,
                 -sin, 0.0, cos, 0.0,
                 0.0, 0.0, 0.0, 1.0
-        });
+        }, vector3Factory);
     }
 
-    public static Matrix4 rotateYInverse(double angleDeg) {
+    public static Matrix4 rotateYInverse(double angleDeg, final Vector3Factory vector3Factory) {
         double sin = Math.sin(deg2rad(angleDeg));
         double cos = Math.cos(deg2rad(angleDeg));
 
@@ -169,10 +152,10 @@ public class Matrix4 {
                 0.0, 1.0, 0.0, 0.0,
                 sin, 0.0, cos, 0.0,
                 0.0, 0.0, 0.0, 1.0
-        });
+        }, vector3Factory);
     }
 
-    public static Matrix4 rotateZ(double angleDeg) {
+    public static Matrix4 rotateZ(double angleDeg, final Vector3Factory vector3Factory) {
         double sin = Math.sin(deg2rad(angleDeg));
         double cos = Math.cos(deg2rad(angleDeg));
 
@@ -181,10 +164,10 @@ public class Matrix4 {
                 sin, cos, 0.0, 0.0,
                 0.0, 0.0, 1.0, 0.0,
                 0.0, 0.0, 0.0, 1.0
-        });
+        }, vector3Factory);
     }
 
-    public static Matrix4 rotateZInverse(double angleDeg) {
+    public static Matrix4 rotateZInverse(double angleDeg, final Vector3Factory vector3Factory) {
         double sin = Math.sin(deg2rad(angleDeg));
         double cos = Math.cos(deg2rad(angleDeg));
 
@@ -193,23 +176,24 @@ public class Matrix4 {
                 -sin, cos, 0.0, 0.0,
                 0.0, 0.0, 1.0, 0.0,
                 0.0, 0.0, 0.0, 1.0
-        });
+        }, vector3Factory);
     }
 
 
-    public static final Matrix4 MATRIX4_IDENTITY = new Matrix4(new double[]{
+
+    public static final double[] MATRIX4_IDENTITY = new double[]{
             1.0, 0.0, 0.0, 0.0,
             0.0, 1.0, 0.0, 0.0,
             0.0, 0.0, 1.0, 0.0,
             0.0, 0.0, 0.0, 1.0
-    });
+    };
 
-    public static final Matrix4 MATRIX4_ZERO = new Matrix4(new double[]{
+    public static final double[] MATRIX4_ZERO = new double[]{
             0.0, 0.0, 0.0, 0.0,
             0.0, 0.0, 0.0, 0.0,
             0.0, 0.0, 0.0, 0.0,
             0.0, 0.0, 0.0, 0.0
-    });
+    };
 
     public static double deg2rad(double angleDeg) {
         return (angleDeg / 180.0) * Math.PI;

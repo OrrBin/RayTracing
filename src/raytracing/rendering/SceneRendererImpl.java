@@ -3,7 +3,6 @@ package raytracing.rendering;
 import lombok.extern.slf4j.Slf4j;
 import raytracing.actors.Scene;
 import raytracing.io.ImageUtils;
-import raytracing.orchestration.PixelTask;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -43,9 +42,6 @@ public class SceneRendererImpl implements SceneRenderer {
                 log.error("Failed pixel task", e);
             }
         });
-
-//        executor.invokeAll(tasks);
-//        executor.shutdown();
 
         final long renderTime = System.currentTimeMillis() - startTime;
 

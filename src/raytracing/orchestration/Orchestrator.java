@@ -1,12 +1,13 @@
 package raytracing.orchestration;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import lombok.extern.slf4j.Slf4j;
 import raytracing.actors.Scene;
-import raytracing.modules.RayTracingModule;
+import raytracing.math.ArrVector3Factory;
+import raytracing.math.Vector3Factory;
 import raytracing.parsing.SceneParser;
+import raytracing.parsing.SceneParserCustomFormat;
 import raytracing.rendering.SceneRenderer;
+import raytracing.rendering.SceneRendererImpl;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -73,12 +74,15 @@ public class Orchestrator {
         int imageWidth = args.length > 3 ? Integer.parseInt(args[2]) : DEFAULT_IMAGE_WIDTH;
         int imageHeight = args.length > 3 ? Integer.parseInt(args[3]) : DEFAULT_IMAGE_HEIGHT;
 
-
+        final Vector3Factory vector3Factory = new ArrVector3Factory();
+//        final Vector3Factory vector3Factory = new VectorAPIVector3Factory();
         final Orchestrator orchestrator = new Orchestrator();
+        orchestrator.sceneParser = new SceneParserCustomFormat(vector3Factory);
+        orchestrator.sceneRenderer = new SceneRendererImpl();
 
-        RayTracingModule module = new RayTracingModule();
-        Injector injector = Guice.createInjector(module);
-        injector.injectMembers(orchestrator); //injects the implementation of the service
+//        RayTracingModule module = new RayTracingModule();
+//        Injector injector = Guice.createInjector(module);
+//        injector.injectMembers(orchestrator); //injects the implementation of the service
 
 //        Scanner scanner = new Scanner(System.in);
 //        scanner.nextLine();

@@ -1,114 +1,33 @@
 package raytracing.math;
 
-import lombok.Getter;
-import lombok.Setter;
-import raytracing.util.Constants;
+public interface Vector3{
+    Vector3 cpy();
 
-@Getter
-@Setter
-public class Vector3 {
-	public double x;
-	public double y;
-	public double z;
+    double norm();
 
-	public Vector3() {
+    Vector3 normalize();
 
-	}
+    Vector3 crossProduct(Vector3 other);
 
-	public Vector3(double x, double y, double z) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
-	}
+    Vector3 add(Vector3 other);
 
-	public Vector3(Vector3 other) {
-		this.x = other.x;
-		this.y = other.y;
-		this.z = other.z;
-	}
+    Vector3 multiply(Vector3 other);
 
-	public Vector3 cpy() {
-		return new Vector3(this);
-	}
+    Vector3 multiply(double a);
 
-	public double norm() {
-		return Math.sqrt(x * x + y * y + z * z);
-	}
+    Vector3 connectingVector(Vector3 other);
 
-	public Vector3 normalize() {
-		if (norm() < Constants.EPSILON)
-			return cpy();
+    double distance(Vector3 other);
 
-		return multiply(1 / norm());
-	}
+    double dotProduct(Vector3 other);
 
-	public Vector3 crossProduct(Vector3 other) {
-		double a = y * other.z - z * other.y;
-		double b = z * other.x - x * other.z;
-		double c = x * other.y - y * other.x;
-		return new Vector3(a, b, c);
-	}
+    Vector3 boundFromAbove(double[] bounds);
 
-	public Vector3 add(Vector3 other) {
-		this.x += other.x;
-		this.y += other.y;
-		this.z += other.z;
+    Vector3 invert();
 
-		return this;
-	}
+    double x();
 
-	public Vector3 multiply(Vector3 other) {
-		this.x *= other.x;
-		this.y *= other.y;
-		this.z *= other.z;
+    double y();
 
-		return this;
-	}
-
-	public Vector3 multiply(double a) {
-		return new Vector3(this.x * a, this.y * a, this.z * a);
-	}
-
-	public Vector3 connectingVector(Vector3 other) {
-		return other.cpy().add(this.multiply(-1));
-	}
-
-	public double distance(Vector3 other) {
-		return connectingVector(other).norm();
-	}
-
-	public double dotProduct(Vector3 other) {
-		return this.x * other.x + this.y * other.y + this.z * other.z;
-	}
-
-	public double angle(Vector3 other) {
-		return Math.acos(dotProduct(other) / (norm() * other.norm()));
-	}
-
-	/**
-	 * Bounds the values of x,y,z from above
-	 */
-	public Vector3 boundFromAbove(int i, int j, int k) {
-		x = Math.min(x, i);
-		y = Math.min(y, j);
-		z = Math.min(z, k);
-
-		return this;
-	}
-
-	/**
-	 * Bounds the values of x,y,z from below
-	 */
-	public Vector3 boundFromBelow(int i, int j, int k) {
-		x = Math.max(x, i);
-		y = Math.max(y, j);
-		z = Math.max(z, k);
-
-		return this;
-	}
-
-	@Override
-	public String toString() {
-		return String.format("(%s, %s, %s)", x, y, z);
-	}
+    double z();
 }

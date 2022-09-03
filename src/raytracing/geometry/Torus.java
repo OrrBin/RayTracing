@@ -3,6 +3,8 @@ package raytracing.geometry;
 import raytracing.actors.Ray;
 import raytracing.math.Transformation3D;
 import raytracing.math.Vector3;
+import raytracing.math.Vector3Factory;
+import raytracing.math.util.IntersectionUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,24 +17,30 @@ public class Torus extends Shape {
     private final double tubeRadius;
     private final Vector3 rotation;
     private final Transformation3D transformation;
-    private final Vector3 min;
-    private final Vector3 max;
+    private final double[][] bounds;
+    private final Vector3Factory vector3Factory;
 
-    public Torus(double sweptRadius, double tubeRadius, Vector3 rotation, Vector3 translation, int material) {
+    public Torus(double sweptRadius, double tubeRadius,
+                 Vector3 rotation, Vector3 translation,
+                 int material, Vector3Factory vector3Factory) {
         super(material);
+
+        this.vector3Factory = vector3Factory;
 
         this.sweptRadius = sweptRadius;
         this.tubeRadius = tubeRadius;
         this.rotation = rotation;
 
-        this.transformation = new Transformation3D();
-        transformation.rotateX(rotation.getX());
-        transformation.rotateY(rotation.getY());
-        transformation.rotateZ(rotation.getZ());
+        this.transformation = new Transformation3D(vector3Factory);
+        transformation.rotateX(rotation.x());
+        transformation.rotateY(rotation.y());
+        transformation.rotateZ(rotation.z());
         transformation.translate(translation);
 
-        this.min = new Vector3( -sweptRadius - tubeRadius, -tubeRadius, -sweptRadius - tubeRadius );
-        this.max = new Vector3( sweptRadius + tubeRadius, tubeRadius, sweptRadius + tubeRadius );
+        this.bounds = new double[][] {
+                { -sweptRadius - tubeRadius, -tubeRadius, -sweptRadius - tubeRadius },
+                { sweptRadius + tubeRadius, tubeRadius, sweptRadius + tubeRadius }
+        };
 
     }
 
@@ -41,7 +49,7 @@ public class Torus extends Shape {
     public Vector3 intersection(final Ray ray) {
         Ray tfRay = this.transformation.transformRay(ray);
 
-        if (!intersectionWithBoundingBox(tfRay)) {
+        if (!IntersectionUtils.intersectionWithBoundingBox(tfRay,bounds)) {
             return null;
         }
 
@@ -50,46 +58,6 @@ public class Torus extends Shape {
             return null;
 
         return ray.pointAtDistance(t); // Changed from the code in github
-    }
-
-    private boolean intersectionWithBoundingBox(final Ray r) {
-        double tmin = (min.x - r.originPoint.x) / r.direction.x;
-        double tmax = (max.x - r.originPoint.x) / r.direction.x;
-
-        if (tmin > tmax) {
-            double tmp = tmin;
-            tmin = tmax;
-            tmax = tmp;
-        }
-
-        double tymin = (min.y - r.originPoint.y) / r.direction.y;
-        double tymax = (max.y - r.originPoint.y) / r.direction.y;
-
-        if (tymin > tymax) {
-            double tmp = tymin;
-            tymin = tymax;
-            tymax = tmp;
-        }
-
-        if ((tmin > tymax) || (tymin > tmax))
-            return false;
-
-        if (tymin > tmin)
-            tmin = tymin;
-
-        if (tymax < tmax)
-            tmax = tymax;
-
-        double tzmin = (min.z - r.originPoint.z) / r.direction.z;
-        double tzmax = (max.z - r.originPoint.z) / r.direction.z;
-
-        if (tzmin > tzmax) {
-            double tmp = tzmin;
-            tzmin = tzmax;
-            tzmax = tmp;
-        }
-
-        return (!(tmin > tzmax)) && (!(tzmin > tmax));
     }
 
 
@@ -112,12 +80,12 @@ public class Torus extends Shape {
     private Vector3 computeNormalAtPoint(final Vector3 localHitPoint) {
         double paramSquared = this.sweptRadius * this.sweptRadius + this.tubeRadius * this.tubeRadius;
 
-        double x = localHitPoint.x;
-        double y = localHitPoint.y;
-        double z = localHitPoint.z;
+        double x = localHitPoint.x();
+        double y = localHitPoint.y();
+        double z = localHitPoint.z();
         double sumSquared = x * x + y * y + z * z;
 
-        Vector3 tmp = new Vector3(
+        Vector3 tmp = vector3Factory.getVector3(
                 4.0 * x * (sumSquared - paramSquared),
                 4.0 * y * (sumSquared - paramSquared + 2.0 * this.sweptRadius * this.sweptRadius),
                 4.0 * z * (sumSquared - paramSquared));
@@ -126,13 +94,13 @@ public class Torus extends Shape {
     }
 
     private Double findIntersection(final Ray ray) {
-        double ox = ray.originPoint.x;
-        double oy = ray.originPoint.y;
-        double oz = ray.originPoint.z;
+        double ox = ray.originPoint.x();
+        double oy = ray.originPoint.y();
+        double oz = ray.originPoint.z();
 
-        double dx = ray.direction.x;
-        double dy = ray.direction.y;
-        double dz = ray.direction.z;
+        double dx = ray.direction.x();
+        double dy = ray.direction.y();
+        double dz = ray.direction.z();
 
         // define the coefficients of the quartic equation
         double sumDSqrd = dx * dx + dy * dy + dz * dz;

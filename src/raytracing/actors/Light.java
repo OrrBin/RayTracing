@@ -1,26 +1,29 @@
 package raytracing.actors;
 
 import raytracing.math.Vector3;
+import raytracing.math.Vector3Factory;
 
 import java.util.Random;
 
 public class Light {
-	private Vector3 position;
-	private Vector3 color;
-	private double specularIntensity;
-	private double shadowIntensity;
-	private double lightRadius;
+	private final Vector3 position;
+	private final Vector3 color;
+	private final double specularIntensity;
+	private final double shadowIntensity;
+	private final double lightRadius;
+	private final Vector3Factory vector3Factory;
+	private final Vector3 up;
 
-	public Light() {
-	}
-
-	public Light(Vector3 position, Vector3 color, double specularIntensity, double shadowIntensity,
-			double lightRadius) {
+	public Light(final Vector3 position, final Vector3 color, final double specularIntensity,
+				 final double shadowIntensity, final double lightRadius,
+				 final Vector3 up, final Vector3Factory vector3Factory) {
 		this.position = position;
 		this.color = color;
 		this.specularIntensity = specularIntensity;
 		this.shadowIntensity = shadowIntensity;
 		this.lightRadius = lightRadius;
+		this.up = up;
+		this.vector3Factory = vector3Factory;
 	}
 
 	/**
@@ -31,7 +34,6 @@ public class Light {
 		Ray[] rays = new Ray[numOfShadowRays * numOfShadowRays];
 
 		Vector3 normal = this.position.connectingVector(intersectionPoint).normalize();
-		Vector3 up = new Vector3(0, 1, 0);
 		Vector3 right = up.crossProduct(normal).normalize();
 		Vector3 top = normal.crossProduct(right);
 
@@ -57,40 +59,24 @@ public class Light {
 		return position.cpy();
 	}
 
-	public void setPosition(Vector3 position) {
-		this.position = position;
-	}
 
 	public Vector3 getColor() {
 		return color.cpy();
 	}
 
-	public void setColor(Vector3 color) {
-		this.color = color;
-	}
 
 	public double getSpecularIntensity() {
 		return specularIntensity;
 	}
 
-	public void setSpecularIntensity(double specularIntensity) {
-		this.specularIntensity = specularIntensity;
-	}
 
 	public double getShadowIntensity() {
 		return shadowIntensity;
 	}
 
-	public void setShadowIntensity(double shadowIntensity) {
-		this.shadowIntensity = shadowIntensity;
-	}
 
 	public double getLightRadius() {
 		return lightRadius;
-	}
-
-	public void setLightRadius(double lightRadius) {
-		this.lightRadius = lightRadius;
 	}
 
 }

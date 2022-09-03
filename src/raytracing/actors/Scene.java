@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import raytracing.geometry.Shape;
 import raytracing.math.Vector3;
+import raytracing.math.Vector3Factory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,8 +25,9 @@ public class Scene {
 	private List<Light> lights;
 	private List<Shape> shapes;
 	private List<Material> materials;
+	private Vector3Factory vector3Factory;
 
-	public Scene(int width, int height) {
+	public Scene(int width, int height, Vector3Factory vector3Factory) {
 		this.imageHeight = height;
 		this.imageWidth = width;
 		this.aspectRatio = ((double) this.imageWidth) / this.imageHeight;
@@ -34,6 +36,7 @@ public class Scene {
 		this.shapes = new ArrayList<>();
 		this.lights = new ArrayList<>();
 		this.settings = new Settings();
+		this.vector3Factory = vector3Factory;
 	}
 
 	public Ray[] getSuperSamplingRays(int top, int left)
@@ -92,8 +95,8 @@ public class Scene {
 	 * calculates diffuse and sepcular colors
 	 */
 	Vector3 diffuseAndSpecColor(IntersectionData inter, final Vector3 normal, Ray ray, Material mat) {
-		Vector3 diffLight = new Vector3(0, 0, 0);
-		Vector3 specLight = new Vector3(0, 0, 0);
+		Vector3 diffLight = vector3Factory.getVector3(0, 0, 0);
+		Vector3 specLight = vector3Factory.getVector3(0, 0, 0);
 
 		Vector3 v = ray.direction.multiply(-1).normalize();
 
@@ -133,8 +136,8 @@ public class Scene {
 
 		}
 
-		diffLight.multiply(mat.getDiffuseColor());
-		specLight.multiply(mat.getSpecularColor());
+		diffLight = diffLight.multiply(mat.getDiffuseColor());
+		specLight = specLight.multiply(mat.getSpecularColor());
 
 		return diffLight.add(specLight);
 	}
@@ -143,7 +146,7 @@ public class Scene {
 	 * calculates transparent colors
 	 */
 	Vector3 transparencyColor(IntersectionData inter, Ray ray, Material mat, int nextRecDepth) {
-		Vector3 transColor = new Vector3(0, 0, 0);
+		Vector3 transColor = vector3Factory.getVector3(0, 0, 0);
 		if (mat.getTransparency() > 0) {
 			Vector3 delta = ray.direction.multiply(0.0001);
 			Ray trasRay = new Ray(inter.intersectionPoint.cpy().add(delta), ray.direction.cpy());
@@ -172,7 +175,6 @@ public class Scene {
 	 *
 	 */
 	public IntersectionData calcIntersection(Ray ray, Shape excludeShape) {
-
 		double tmpDistance;
 		double minDistance = Double.POSITIVE_INFINITY;
 		IntersectionData intersection = null;
@@ -234,7 +236,7 @@ public class Scene {
 	public Vector3 calculateColor(Ray ray, int recursionDepth, Shape excludeShape) {
 		// We limit recursion depth
 		if (recursionDepth > this.settings.getMaxRecursionLevel()) {
-			return new Vector3(0, 0, 0);
+			return vector3Factory.getVector3(0, 0, 0);
 		}
 
 		recursionDepth += 1;
@@ -261,12 +263,12 @@ public class Scene {
 		// Reflection Color calculation
 		Vector3 reflectionColor = reflectionColor(inter, normal, ray, mat, recursionDepth);
 
-		Vector3 result = new Vector3(0, 0, 0);
+		Vector3 result = vector3Factory.getVector3(0, 0, 0);
 		result.add(transColor.multiply(mat.getTransparency()));
 		result.add(diffuseAndSpecColor.cpy().multiply(1 - mat.getTransparency()));
 		result.add(reflectionColor);
 
-		return result.boundFromAbove(1, 1, 1);
+		return result.boundFromAbove(new double[] {1d, 1d, 1d});
 	}
 
 }
