@@ -5,7 +5,14 @@ import raytracing.actors.Camera;
 import raytracing.actors.Light;
 import raytracing.actors.Material;
 import raytracing.actors.Scene;
-import raytracing.geometry.*;
+import raytracing.geometry.FuncCosPlusSin;
+import raytracing.geometry.Plane;
+import raytracing.geometry.Polygon3D;
+import raytracing.geometry.Sphere;
+import raytracing.geometry.SquarePyramid;
+import raytracing.geometry.Torus;
+import raytracing.geometry.Triangle;
+import raytracing.geometry.TriangularPyramid;
 import raytracing.math.Vector3;
 import raytracing.math.Vector3Factory;
 
@@ -38,7 +45,8 @@ public class SceneParserCustomFormat implements SceneParser {
 	@Override
 	public Scene parseScene(final File sceneFile, final int imageWidth, final int imageHeight) throws IOException {
 
-		final Scene scene = new Scene(imageWidth, imageHeight, vector3Factory);
+		final String sceneId = sceneFile.getName().substring(0, sceneFile.getName().indexOf("."));
+		final Scene scene = new Scene(sceneId, imageWidth, imageHeight, vector3Factory);
 
 		log.info("Started parsing scene file: {}", sceneFile.getAbsolutePath());
 

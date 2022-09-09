@@ -8,6 +8,8 @@ import raytracing.parsing.SceneParser;
 import raytracing.parsing.SceneParserCustomFormat;
 import raytracing.rendering.SceneRenderer;
 import raytracing.rendering.SceneRendererImpl;
+import raytracing.video.ImagesToVideoConverter;
+import raytracing.video.SimpleImagesToVideoConverter;
 
 import javax.inject.Inject;
 
@@ -31,5 +33,10 @@ public class RayTracingModule extends AbstractModule {
     @Provides
     public SceneRenderer getSceneRenderer() {
         return new SceneRendererImpl();
+    }
+
+    @Provides
+    public ImagesToVideoConverter imagesToVideoConverter() {
+        return new SimpleImagesToVideoConverter();
     }
 }

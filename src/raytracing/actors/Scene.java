@@ -13,12 +13,18 @@ import raytracing.math.Vector3;
 import raytracing.math.Vector3Factory;
 import raytracing.math.util.IntersectionUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 @Slf4j
 @Getter
 @Setter
 public class Scene {
+
+    private String sceneId;
 
     private int imageWidth, imageHeight;
 
@@ -32,7 +38,8 @@ public class Scene {
     private List<Material> materials;
     private Vector3Factory vector3Factory;
 
-    public Scene(int width, int height, Vector3Factory vector3Factory) {
+    public Scene(final String sceneId, final int width,final int height, final Vector3Factory vector3Factory) {
+        this.sceneId = sceneId;
         this.imageHeight = height;
         this.imageWidth = width;
         this.aspectRatio = ((double) this.imageWidth) / this.imageHeight;

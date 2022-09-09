@@ -1,12 +1,14 @@
 package raytracing.actors;
 
+import lombok.Setter;
 import raytracing.math.Vector3;
 import raytracing.math.Vector3Factory;
 
 import java.util.Random;
 
+@Setter
 public class Light {
-	private final Vector3 position;
+	private Vector3 position;
 	private final Vector3 color;
 	private final double specularIntensity;
 	private final double shadowIntensity;
@@ -73,5 +75,4 @@ public class Light {
 	public double getShadowIntensity() {
 		return shadowIntensity;
 	}
-
 }

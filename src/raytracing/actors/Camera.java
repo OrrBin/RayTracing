@@ -16,7 +16,6 @@ public class Camera {
 	private Vector3 right, top, forward;
 
 	public Camera(Vector3 position, Vector3 lookAtPoint, Vector3 upVector, double screenDistance, double screenWidth) {
-		super();
 		this.position = position;
 		this.lookAtPoint = lookAtPoint;
 		this.upVector = upVector;
@@ -39,6 +38,7 @@ public class Camera {
 
 	public void setPosition(Vector3 position) {
 		this.position = position;
+		createCoordSystem();
 	}
 
 	public Vector3 getLookAtPoint() {

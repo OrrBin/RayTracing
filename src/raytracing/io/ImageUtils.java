@@ -23,7 +23,7 @@ public class ImageUtils {
         try {
 
             BufferedImage image = bytes2RGB(width, rgbData);
-            ImageIO.write(image, "png", file);
+            ImageIO.write(image, "jpeg", file);
 
         } catch (IOException e) {
             System.out.println("ERROR SAVING FILE: " + e.getMessage());
