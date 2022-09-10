@@ -1,9 +1,21 @@
 {
+  "settings": {
+    "backgroundColor": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "numOfShadowRays": 2,
+    "maxRecursionLevel": 2,
+    "superSamplingLevel": 1,
+    "numberOfFrames" : 72,
+    "framesPerSecond": 24
+  },
   "camera": {
     "position": {
-      "x": 30,
-      "y": 70,
-      "z": 60
+      "x": -120,
+      "y": 20,
+      "z": 20
     },
     "lookAtPoint": {
       "x": 14,
@@ -17,16 +29,6 @@
     },
     "screenDistance": 1.4,
     "screenWidth": 1
-  },
-  "settings": {
-    "backgroundColor": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-    },
-    "numOfShadowRays": 3,
-    "maxRecursionLevel": 2,
-    "superSamplingLevel": 2
   },
   "materials": [
     {
@@ -313,8 +315,7 @@
     {
       "type": "POLYGON",
       "material": 2,
-      "vertices": [[19.5, 0, 0], [15, 0.1, 5.5], [10.5, 0.12, 0.5],
-        [5, 0.04, 4], [10.5, 0.11, 0]]
+      "vertices": [[19.5, 0, 0], [15, 0.1, 5.5], [10.5, 0.12, 0.5]]
     },
     {
       "type": "POLYGON",

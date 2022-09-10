@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import raytracing.actors.Scene;
 import raytracing.actors.SceneSettings;
+import raytracing.animation.StageManager;
 import raytracing.math.Vector3Factory;
 
 import java.io.File;
@@ -16,6 +17,7 @@ import java.nio.file.Files;
 @AllArgsConstructor()
 public class SceneJsonParser implements SceneParser {
 
+    private StageManager stageManager;
     private Vector3Factory vector3Factory;
     private Gson gson;
 
@@ -23,7 +25,7 @@ public class SceneJsonParser implements SceneParser {
     public Scene parseScene(final File sceneFile, final int imageWidth, final int imageHeight) throws IOException {
 
         final String sceneId = sceneFile.getName().substring(0, sceneFile.getName().indexOf("."));
-        final Scene scene = new Scene(sceneId, imageWidth, imageHeight, vector3Factory);
+        final Scene scene = new Scene(sceneId, imageWidth, imageHeight, stageManager, vector3Factory);
 
         log.info("Started parsing json scene file: {}", sceneFile.getAbsolutePath());
 
@@ -43,6 +45,7 @@ public class SceneJsonParser implements SceneParser {
 
         log.info("Finished parsing json scene file: {}", sceneFile.getAbsolutePath());
 
+        scene.getStageManager().init(sceneSettings.getSettings().getNumberOfFrames(), sceneSettings.getSettings().getFramesPerSecond());
         return scene;
     }
 }

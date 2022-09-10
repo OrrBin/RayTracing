@@ -7,6 +7,7 @@ import raytracing.actors.graph.GraphNode;
 import raytracing.actors.graph.SceneNode;
 import raytracing.actors.graph.ShapeNode;
 import raytracing.actors.graph.SuperShapeNode;
+import raytracing.animation.StageManager;
 import raytracing.geometry.Shape;
 import raytracing.geometry.SuperShape;
 import raytracing.math.Vector3;
@@ -36,9 +37,13 @@ public class Scene {
     private List<Shape> shapes;
     private SceneNode sceneNode;
     private List<Material> materials;
+
+    private StageManager stageManager;
     private Vector3Factory vector3Factory;
 
-    public Scene(final String sceneId, final int width,final int height, final Vector3Factory vector3Factory) {
+    public Scene(final String sceneId, final int width,final int height,
+                 final StageManager stageManager,
+                 final Vector3Factory vector3Factory) {
         this.sceneId = sceneId;
         this.imageHeight = height;
         this.imageWidth = width;
@@ -49,6 +54,8 @@ public class Scene {
         this.sceneNode = new SceneNode(this);
         this.lights = new ArrayList<>();
         this.settings = new Settings();
+
+        this.stageManager = stageManager;
         this.vector3Factory = vector3Factory;
     }
 

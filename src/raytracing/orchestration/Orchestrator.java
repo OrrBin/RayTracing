@@ -4,8 +4,9 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import lombok.extern.slf4j.Slf4j;
 import raytracing.actors.Scene;
-import raytracing.math.SimpleVector3;
-import raytracing.math.Vector3;
+import raytracing.animation.LinearCameraTransition;
+import raytracing.animation.easings.EaseOutBounce;
+import raytracing.math.Vector3Factory;
 import raytracing.modules.RayTracingModule;
 import raytracing.parsing.SceneParser;
 import raytracing.rendering.SceneRenderer;
@@ -32,23 +33,42 @@ public class Orchestrator {
     @Inject
     private ImagesToVideoConverter imagesToVideoConverter;
 
+    @Inject
+    private Vector3Factory vector3Factory;
+
 
     public void execute(final OrchestrationParams orchestrationParams) throws IOException, InterruptedException {
+
         // Parse scene file:
         final Scene scene = sceneParser.parseScene(
                 new File(orchestrationParams.getSceneFileName()),
                 orchestrationParams.getImageWidth(), orchestrationParams.getImageHeight());
 
-        final int FRAME_NUMBER = 50;
-        final Vector3 initialPos = new SimpleVector3(-80, 40, 40);
-        final Vector3 moveAmount = new SimpleVector3(160, 20, 0);
-        final List<Vector3> camPositions = new ArrayList<>();
-        for (int i = 0; i < FRAME_NUMBER; i++) {
-            camPositions.add(initialPos.cpy().addInPlace(new SimpleVector3(
-                    i * (moveAmount.x / FRAME_NUMBER),
-                    (i < FRAME_NUMBER / 2.0) ? (i * (moveAmount.y / FRAME_NUMBER)) : ((FRAME_NUMBER - i) * (moveAmount.y / FRAME_NUMBER)),
-                    i * (moveAmount.z) / FRAME_NUMBER)));
-        }
+        scene.getCamera().init();
+        scene.getStageManager().init(scene.getSettings().getNumberOfFrames(), scene.getSettings().getFramesPerSecond());
+
+
+        scene.getStageManager().addTransition(
+                new LinearCameraTransition(
+                        scene.getStageManager().getFramesNumber(),
+                        0,
+                        scene.getStageManager().getFramesNumber() / 2,
+                        scene.getCamera(),
+                        vector3Factory.getVector3(40, 40, 40),
+                        new EaseOutBounce(),
+                        vector3Factory)
+        );
+
+        scene.getStageManager().addTransition(
+                new LinearCameraTransition(
+                        scene.getStageManager().getFramesNumber(),
+                        scene.getStageManager().getFramesNumber() / 2 + 1,
+                        scene.getStageManager().getFramesNumber() - 1,
+                        scene.getCamera(),
+                        vector3Factory.getVector3(10, 80, 40),
+                        new EaseOutBounce(),
+                        vector3Factory)
+        );
 
 
         long sumTime = 0;
@@ -57,8 +77,8 @@ public class Orchestrator {
 
         // Render scene:
         final List<File> imageFiles = new ArrayList<>();
-        for (int i = 0; i < camPositions.size(); i++) {
-            scene.getCamera().setPosition(camPositions.get(i));
+        for (int i = 0; i < scene.getStageManager().getFramesNumber(); i++) {
+            scene.getStageManager().transitionScene();
             log.info("Starting rendering iteration: {}", i + 1);
             long startTime = System.currentTimeMillis();
             final File outputFile = getOutputFile(orchestrationParams, scene, i);
@@ -71,8 +91,9 @@ public class Orchestrator {
             log.info("Finished rendering iteration: {} in {} millis", i + 1, totalTime);
         }
 
-        final String videoFilePath = getVideoFileName(orchestrationParams.getOutputDirectoryFileName(),  scene);
-        imagesToVideoConverter.createVideo(imageFiles, scene, videoFilePath);
+        if (orchestrationParams.isCreateVideoOutput()) {
+            createVideoOutput(orchestrationParams, scene, imageFiles);
+        }
 
     }
 
@@ -83,6 +104,11 @@ public class Orchestrator {
 
     private String getVideoFileName(final String outputDirectoryFileName, final Scene scene) {
         return outputDirectoryFileName + File.separator + scene.getSceneId() + ".mp4";
+    }
+
+    private void createVideoOutput(final OrchestrationParams orchestrationParams, final Scene scene, final List<File> imageFiles) {
+        final String videoFilePath = getVideoFileName(orchestrationParams.getOutputDirectoryFileName(), scene);
+        imagesToVideoConverter.createVideo(imageFiles, scene, videoFilePath);
     }
 
     /**

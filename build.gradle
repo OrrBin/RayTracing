@@ -21,8 +21,8 @@ jar {
 // end::jar[]
 
 // tag::dependencies[]
-sourceCompatibility = 1.9
-targetCompatibility = 1.9
+sourceCompatibility = 1.15
+targetCompatibility = 1.15
 
 dependencies {
     // https://mvnrepository.com/artifact/com.google.inject/guice

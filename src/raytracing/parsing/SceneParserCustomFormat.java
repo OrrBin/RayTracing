@@ -6,6 +6,7 @@ import raytracing.actors.Camera;
 import raytracing.actors.Light;
 import raytracing.actors.Material;
 import raytracing.actors.Scene;
+import raytracing.animation.StageManager;
 import raytracing.geometry.FuncCosPlusSin;
 import raytracing.geometry.Plane;
 import raytracing.geometry.Polygon3D;
@@ -33,6 +34,7 @@ import java.util.List;
 public class SceneParserCustomFormat implements SceneParser {
 
 	private Vector3Factory vector3Factory;
+	private StageManager stageManager;
 
 	/**
 	 * Parses the scene file and creates the scene. Change this function so it
@@ -42,7 +44,7 @@ public class SceneParserCustomFormat implements SceneParser {
 	public Scene parseScene(final File sceneFile, final int imageWidth, final int imageHeight) throws IOException {
 
 		final String sceneId = sceneFile.getName().substring(0, sceneFile.getName().indexOf("."));
-		final Scene scene = new Scene(sceneId, imageWidth, imageHeight, vector3Factory);
+		final Scene scene = new Scene(sceneId, imageWidth, imageHeight, stageManager, vector3Factory);
 
 		log.info("Started parsing scene file: {}", sceneFile.getAbsolutePath());
 

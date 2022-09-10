@@ -16,6 +16,8 @@ public class Settings {
 	private int numOfShadowRays;
 	private int maxRecursionLevel;
 	private int superSamplingLevel;
+	private int numberOfFrames;
+	private int framesPerSecond;
 
 	public Vector3 getBackgroundColor() {
 		return backgroundColor.cpy();

@@ -12,12 +12,14 @@ public class OrchestrationParams {
     private final String outputDirectoryFileName;
     private final int imageWidth;
     private final int imageHeight;
+    private final boolean createVideoOutput;
 
     public OrchestrationParams(
             final String sceneFileName,
             final String outputDirectoryFileName,
             final int imageWidth,
-            final int imageHeight) throws IOException {
+            final int imageHeight,
+            final boolean createVideoOutput) throws IOException {
         this.sceneFileName = sceneFileName;
         this.outputDirectoryFileName = outputDirectoryFileName;
         final File outputFile = new File(this.outputDirectoryFileName);
@@ -28,5 +30,14 @@ public class OrchestrationParams {
         }
         this.imageWidth = imageWidth;
         this.imageHeight = imageHeight;
+        this.createVideoOutput = createVideoOutput;
+    }
+
+    public OrchestrationParams(
+            final String sceneFileName,
+            final String outputDirectoryFileName,
+            final int imageWidth,
+            final int imageHeight) throws IOException {
+        this(sceneFileName, outputDirectoryFileName, imageWidth, imageHeight, true);
     }
 }

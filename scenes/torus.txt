@@ -1,7 +1,7 @@
 # Camera: 	px py  pz 	lx  	ly  	lz 	ux  	uy  	uz 	sc_dist	sc_width
-cam 	  	50   	50	50 	0   	0   	0  	0   	1   	0  	1.4	1
+cam 	  	50   	50	50 	0   	0   	0  	0   	0   	1  	1.4	1
 # Settings: bgr  bgg   bgb	sh_rays	rec_max SS
-set 		1  	1  	1   	5 	10           1
+set 		1  	1  	1   	2 	10           1
 
 # Material:	dr      dg  db	    sr    sg    sb 	    rr    rg  rb	    phong trans
 mtl		0.95	0.07	0.07	1	1	1	0.2	0.1	0.1	30	0

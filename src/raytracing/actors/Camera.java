@@ -2,13 +2,11 @@ package raytracing.actors;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import raytracing.math.Vector3;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 public class Camera {
 
@@ -32,6 +30,10 @@ public class Camera {
 		createCoordSystem();
 	}
 
+	public void init() {
+		createCoordSystem();
+	}
+
 	private void createCoordSystem() {
 		this.normal = this.position.connectingVector(this.lookAtPoint);
 		this.forward = this.normal.normalize();
@@ -43,7 +45,7 @@ public class Camera {
 		return position.cpy();
 	}
 
-	public void setPosition(Vector3 position) {
+	public void setPosition(final Vector3 position) {
 		this.position = position;
 		createCoordSystem();
 	}

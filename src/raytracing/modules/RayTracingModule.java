@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import raytracing.animation.StageManager;
 import raytracing.geometry.Shape;
 import raytracing.geometry.SuperShape;
 import raytracing.math.SimpleVector3Factory;
@@ -21,11 +22,17 @@ import raytracing.video.ImagesToVideoConverter;
 import raytracing.video.SimpleImagesToVideoConverter;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 public class RayTracingModule extends AbstractModule {
 
     protected void configure() {
 
+    }
+
+    @Singleton
+    public StageManager getStageManager() {
+        return new StageManager();
     }
 
     @Provides
@@ -35,9 +42,9 @@ public class RayTracingModule extends AbstractModule {
 
     @Provides
     @Inject
-    public SceneParser getSceneParser(final Gson gson, final Vector3Factory vector3Factory) {
+    public SceneParser getSceneParser(final StageManager stageManager, final Gson gson, final Vector3Factory vector3Factory) {
 //        return new SceneParserCustomFormat(vector3Factory);
-        return new SceneJsonParser(vector3Factory, gson);
+        return new SceneJsonParser(stageManager, vector3Factory, gson);
     }
 
     @Provides
