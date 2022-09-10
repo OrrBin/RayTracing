@@ -1,10 +1,13 @@
 package raytracing.geometry;
 
 import lombok.Getter;
+import raytracing.math.Vector3;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Getter
 public abstract class TriangulatedShape extends SuperShape {
@@ -40,7 +43,13 @@ public abstract class TriangulatedShape extends SuperShape {
             }
         }
 
+    }
 
+    public List<Vector3> getVertices() {
+        return Stream.concat(Stream.concat(
+                triangles.stream().map(Triangle::getP1), triangles.stream().map(Triangle::getP2)),
+                triangles.stream().map(Triangle::getP3))
+                .collect(Collectors.toList());
     }
 
 

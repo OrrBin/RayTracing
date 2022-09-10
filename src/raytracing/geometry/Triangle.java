@@ -1,5 +1,6 @@
 package raytracing.geometry;
 
+import lombok.Getter;
 import raytracing.actors.Ray;
 import raytracing.math.Vector3;
 import raytracing.math.Vector3Factory;
@@ -8,20 +9,23 @@ import raytracing.util.Constants;
 
 public class Triangle extends Shape {
 
+    @Getter
     private final Vector3 p1;
+    @Getter
     private final Vector3 p2;
+    @Getter
     private final Vector3 p3;
 
-    private final Vector3 normal;
-    private final double offset;
-    private final Vector3 p1p2Vec;
-    private final Vector3 p1p3Vec;
+    private Vector3 normal;
+    private double offset;
+    private Vector3 p1p2Vec;
+    private Vector3 p1p3Vec;
     private double dot1213;
     private double f;
     private double dot1313;
     private double dot1212;
 
-    public final double[][] bounds;
+    public double[][] bounds;
 
     public Triangle(Vector3 vertex1, Vector3 vertex2, Vector3 vertex3,
                     int material, final Vector3Factory vector3Factory) {
@@ -35,6 +39,11 @@ public class Triangle extends Shape {
         this.p2 = vertex2;
         this.p3 = vertex3;
 
+        init();
+
+    }
+
+    public void init() {
         Vector3 v = p1.cpy().addInPlace(p2.multiply(-1));
         Vector3 u = p1.cpy().addInPlace(p3.multiply(-1));
 
@@ -50,7 +59,6 @@ public class Triangle extends Shape {
         f = Math.pow(dot1213, 2) - dot1212 * dot1313;
 
 
-
         this.bounds = new double[][]{
                 {
                         Math.min(p1.x, Math.min(p2.x, p3.x)),
@@ -63,7 +71,6 @@ public class Triangle extends Shape {
                         Math.max(p1.z, Math.max(p2.z, p3.z))
                 }
         };
-
     }
 
     @Override

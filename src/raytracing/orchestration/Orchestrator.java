@@ -4,9 +4,16 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import lombok.extern.slf4j.Slf4j;
 import raytracing.actors.Scene;
+import raytracing.actors.graph.GraphNode;
+import raytracing.actors.graph.SuperShapeNode;
 import raytracing.animation.LinearCameraTransition;
+import raytracing.animation.PolygonTransition;
+import raytracing.animation.easings.EaseInOutQuint;
 import raytracing.animation.easings.EaseOutBounce;
+import raytracing.animation.easings.EaseOutQuad;
+import raytracing.geometry.Polygon3D;
 import raytracing.math.Vector3Factory;
+import raytracing.math.transformation.PolygonTranslationTransformation;
 import raytracing.modules.RayTracingModule;
 import raytracing.parsing.SceneParser;
 import raytracing.rendering.SceneRenderer;
@@ -48,14 +55,28 @@ public class Orchestrator {
         scene.getStageManager().init(scene.getSettings().getNumberOfFrames(), scene.getSettings().getFramesPerSecond());
 
 
+        scene.getSceneNode().getChildren().stream()
+                .filter(graphNode -> graphNode instanceof SuperShapeNode)
+                .map(graphNode -> (SuperShapeNode) graphNode)
+                .map(GraphNode::getValue)
+                .filter(superShape -> superShape instanceof Polygon3D)
+                .map(superShape -> (Polygon3D) superShape)
+                .forEach(polygon -> scene.getStageManager().addTransition(
+                        new PolygonTransition(
+                                polygon,
+                                new PolygonTranslationTransformation(vector3Factory.getVector3(0, -20, -28), vector3Factory),
+                                scene.getStageManager().getFramesNumber(),
+                                0,
+                                scene.getStageManager().getFramesNumber() - 1,
+                                new EaseOutBounce())));
         scene.getStageManager().addTransition(
                 new LinearCameraTransition(
                         scene.getStageManager().getFramesNumber(),
                         0,
                         scene.getStageManager().getFramesNumber() / 2,
                         scene.getCamera(),
-                        vector3Factory.getVector3(40, 40, 40),
-                        new EaseOutBounce(),
+                        vector3Factory.getVector3(40, 70, 70),
+                        new EaseInOutQuint(),
                         vector3Factory)
         );
 
@@ -65,8 +86,8 @@ public class Orchestrator {
                         scene.getStageManager().getFramesNumber() / 2 + 1,
                         scene.getStageManager().getFramesNumber() - 1,
                         scene.getCamera(),
-                        vector3Factory.getVector3(10, 80, 40),
-                        new EaseOutBounce(),
+                        vector3Factory.getVector3(10, 100, 80),
+                        new EaseOutQuad(),
                         vector3Factory)
         );
 

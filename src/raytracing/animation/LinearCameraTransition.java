@@ -44,7 +44,6 @@ public class LinearCameraTransition extends CameraTransition {
         }
 
         final double t = easing.ease((frame - startFrame) / (double) numberOfFramesOfTransition);
-        System.out.println("t: " + t);
         camera.setPosition(originalPoint.cpy().addInPlace(vector3Factory.getVector3(t*dx, t*dy, t*dz)));
 
         return true;
