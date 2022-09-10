@@ -1,5 +1,7 @@
 package raytracing.actors;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import raytracing.math.Vector3;
 import raytracing.math.Vector3Factory;
@@ -7,26 +9,16 @@ import raytracing.math.Vector3Factory;
 import java.util.Random;
 
 @Setter
+@Getter
+@RequiredArgsConstructor
 public class Light {
-	private Vector3 position;
+	private final Vector3 position;
 	private final Vector3 color;
 	private final double specularIntensity;
 	private final double shadowIntensity;
 	private final double lightRadius;
-	private final Vector3Factory vector3Factory;
-	private final Vector3 up;
-
-	public Light(final Vector3 position, final Vector3 color, final double specularIntensity,
-				 final double shadowIntensity, final double lightRadius,
-				 final Vector3 up, final Vector3Factory vector3Factory) {
-		this.position = position;
-		this.color = color;
-		this.specularIntensity = specularIntensity;
-		this.shadowIntensity = shadowIntensity;
-		this.lightRadius = lightRadius;
-		this.up = up;
-		this.vector3Factory = vector3Factory;
-	}
+	private Vector3 up;
+	private Vector3Factory vector3Factory;
 
 	/**
 	 * Calculate multiple rays for this light source to create shadows. We create
@@ -61,18 +53,7 @@ public class Light {
 		return position.cpy();
 	}
 
-
 	public Vector3 getColor() {
 		return color.cpy();
-	}
-
-
-	public double getSpecularIntensity() {
-		return specularIntensity;
-	}
-
-
-	public double getShadowIntensity() {
-		return shadowIntensity;
 	}
 }

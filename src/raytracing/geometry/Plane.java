@@ -1,17 +1,15 @@
 package raytracing.geometry;
 
+import lombok.AllArgsConstructor;
 import raytracing.actors.Ray;
 import raytracing.math.Vector3;
 import raytracing.util.Constants;
 
+@AllArgsConstructor
 public class Plane extends Shape {
 
 	private Vector3 normal;
 	private double offset;
-
-	public Plane() {
-
-	}
 
 	public Plane(Vector3 normal, double offset, int material) {
 		super(material);

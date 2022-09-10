@@ -1,7 +1,15 @@
 package raytracing.actors;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import raytracing.math.Vector3;
 
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Settings {
 
 	private Vector3 backgroundColor;
@@ -9,46 +17,7 @@ public class Settings {
 	private int maxRecursionLevel;
 	private int superSamplingLevel;
 
-	public Settings() {
-	}
-
-	public Settings(Vector3 backgroundColor, int numOfShadowRays, int maxRecursionLevel, int superSamplingLevel) {
-		this.backgroundColor = backgroundColor;
-		this.numOfShadowRays = numOfShadowRays;
-		this.maxRecursionLevel = maxRecursionLevel;
-		this.superSamplingLevel = superSamplingLevel;
-	}
-
 	public Vector3 getBackgroundColor() {
 		return backgroundColor.cpy();
 	}
-
-	public void setBackgroundColor(Vector3 backgroundColor) {
-		this.backgroundColor = backgroundColor;
-	}
-
-	public int getNumOfShadowRays() {
-		return numOfShadowRays;
-	}
-
-	public void setNumOfShadowRays(int numOfShadowRays) {
-		this.numOfShadowRays = numOfShadowRays;
-	}
-
-	public int getMaxRecursionLevel() {
-		return maxRecursionLevel;
-	}
-
-	public void setMaxRecursionLevel(int maxRecursionLevel) {
-		this.maxRecursionLevel = maxRecursionLevel;
-	}
-
-	public int getSuperSamplingLevel() {
-		return superSamplingLevel;
-	}
-
-	public void setSuperSamplingLevel(int superSamplingLevel) {
-		this.superSamplingLevel = superSamplingLevel;
-	}
-
 }

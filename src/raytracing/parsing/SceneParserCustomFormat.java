@@ -1,5 +1,6 @@
 package raytracing.parsing;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import raytracing.actors.Camera;
 import raytracing.actors.Light;
@@ -16,7 +17,6 @@ import raytracing.geometry.TriangularPyramid;
 import raytracing.math.Vector3;
 import raytracing.math.Vector3Factory;
 
-import javax.inject.Inject;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -29,14 +29,10 @@ import java.util.List;
  */
 
 @Slf4j
+@AllArgsConstructor
 public class SceneParserCustomFormat implements SceneParser {
 
 	private Vector3Factory vector3Factory;
-
-	@Inject
-	public SceneParserCustomFormat(final Vector3Factory vector3Factory) {
-		this.vector3Factory = vector3Factory;
-	}
 
 	/**
 	 * Parses the scene file and creates the scene. Change this function so it
@@ -209,9 +205,11 @@ public class SceneParserCustomFormat implements SceneParser {
 					double specularIntensity = Double.parseDouble(params[6]);
 					double shadowIntensity = Double.parseDouble(params[7]);
 					double lightRadius = Double.parseDouble(params[8]);
-					scene.getLights().add(new Light(
-							center, color, specularIntensity, shadowIntensity, lightRadius,
-							scene.getCamera().getUpVectorCpy(), vector3Factory));
+					final Light light = new Light(
+							center, color, specularIntensity, shadowIntensity, lightRadius);
+					light.setUp(scene.getCamera().getUpVector());
+					light.setVector3Factory(vector3Factory);
+					scene.getLights().add(light);
 					System.out.printf("Parsed light (line %d)%n", lineNum);
 					break;
 				}

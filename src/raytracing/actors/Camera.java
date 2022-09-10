@@ -1,15 +1,22 @@
 package raytracing.actors;
 
-import raytracing.math.SimpleVector3;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import raytracing.math.Vector3;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Camera {
 
 	private Vector3 position;
 	private Vector3 lookAtPoint;
 	private Vector3 upVector;
-	private double screenDistance;
-	private double screenWidth;
+	private double  screenDistance;
+	private double  screenWidth;
 
 	//Coordinate system attributes
 	private Vector3 normal;
@@ -45,64 +52,28 @@ public class Camera {
 		return lookAtPoint.cpy();
 	}
 
-	public void setLookAtPoint(Vector3 lookAtPoint) {
-		this.lookAtPoint = lookAtPoint;
-	}
-
-	public Vector3 getUpVectorCpy() {
+	public Vector3 getUpVector() {
 		return upVector.cpy();
-	}
-
-	public void setUpVector(Vector3 upVector) {
-		this.upVector = upVector;
-	}
-
-	public double getScreenDistance() {
-		return screenDistance;
-	}
-
-	public void setScreenDistance(double screenDistance) {
-		this.screenDistance = screenDistance;
-	}
-
-	public double getScreenWidth() {
-		return screenWidth;
-	}
-
-	public void setScreenWidth(double screenWidth) {
-		this.screenWidth = screenWidth;
 	}
 
 	public Vector3 getNormal() {
 		return normal.cpy();
 	}
 
-	public void setNormal(SimpleVector3 normal) {
-		this.normal = normal;
-	}
-
 	public Vector3 getRight() {
 		return right.cpy();
-	}
-
-	public void setRight(SimpleVector3 right) {
-		this.right = right;
 	}
 
 	public Vector3 getTop() {
 		return top.cpy();
 	}
 
-	public void setTop(Vector3 top) {
-		this.top = top;
-	}
-
 	public Vector3 getForward() {
 		return forward.cpy();
 	}
 
-	public void setForward(Vector3 forward) {
-		this.forward = forward;
-	}
+
 
 }
+
+

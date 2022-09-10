@@ -15,7 +15,10 @@ public class Polygon3D extends TriangulatedShape {
 
     private final Vector3Factory vector3Factory;
 
-    public Polygon3D(List<Vector3> vertices, int material, Vector3Factory vector3Factory) {
+    public Polygon3D(
+            final List<Vector3> vertices,
+            final int material,
+            final Vector3Factory vector3Factory) {
         this.vector3Factory = vector3Factory;
         List<PolygonPoint> polygonPoints = getPolygonPointList(vertices);
         // Prepare input data
@@ -24,7 +27,6 @@ public class Polygon3D extends TriangulatedShape {
         Poly2Tri.triangulate(polygon);
         // Gather triangles
         List<DelaunayTriangle> delaunayTriangles = polygon.getTriangles();
-        System.out.println("Number of triangles: " + delaunayTriangles.size());
 
         this.triangles = delaunayTriangles.stream()
                 .map(delaunayTriangle -> new Triangle(
