@@ -1,221 +1,133 @@
 {
   "settings": {
-    "backgroundColor": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-    },
-    "numOfShadowRays": 2,
-    "maxRecursionLevel": 2,
+    "backgroundColor": [0, 0, 0],
+    "numOfShadowRays": 3,
+    "maxRecursionLevel": 1,
     "superSamplingLevel": 1,
-    "numberOfFrames" : 72,
+    "numberOfFrames" : 120,
     "framesPerSecond": 24
   },
   "camera": {
-    "position": {
-      "x": -20,
-      "y": 80,
-      "z": 80
-    },
-    "lookAtPoint": {
-      "x": 14,
-      "y": 0,
-      "z": 6
-    },
-    "upVector": {
-      "x": 0,
-      "y": 0,
-      "z": 1
-    },
+    "position": [ -50, 60, 30 ],
+    "lookAtPoint": [ 14, 0, 6 ],
+    "upVector": [0, 0, 1 ],
     "screenDistance": 1.4,
     "screenWidth": 1
   },
   "materials": [
     {
-      "diffuseColor": {
-        "x": 0.925,
-        "y": 0.25,
-        "z": 0.196
-      },
-      "specularColor": {
-        "x": 1,
-        "y": 1,
-        "z": 1
-      },
-      "reflectionColor": {
-        "x": 0.2,
-        "y": 0.2,
-        "z": 0.1
-      },
+      "diffuseColor": [0.925, 0.25, 0.196],
+      "specularColor": [1, 1, 1],
+      "reflectionColor": [0.2, 0.2, 0.1],
       "phongSpecularityCoefficient": 30,
       "transparency": 0
     },
     {
-      "diffuseColor": {
-        "x": 0.97,
-        "y": 0.9,
-        "z": 0.247
-      },
-      "specularColor": {
-        "x": 1,
-        "y": 1,
-        "z": 1
-      },
-      "reflectionColor": {
-        "x": 0.2,
-        "y": 0.2,
-        "z": 0.1
-      },
+      "diffuseColor": [0.97, 0.9, 0.247],
+      "specularColor": [1, 1, 1],
+      "reflectionColor": [0.2, 0.2, 0.1],
       "phongSpecularityCoefficient": 30,
       "transparency": 0
     },
     {
-      "diffuseColor": {
-        "x": 0.247,
-        "y": 0.525,
-        "z": 0.956
-      },
-      "specularColor": {
-        "x": 1,
-        "y": 1,
-        "z": 1
-      },
-      "reflectionColor": {
-        "x": 0.2,
-        "y": 0.2,
-        "z": 0.1
-      },
+      "diffuseColor": [0.247, 0.525, 0.956],
+      "specularColor": [1, 1, 1],
+      "reflectionColor": [0.2, 0.2, 0.1],
       "phongSpecularityCoefficient": 30,
       "transparency": 0
     },
     {
-      "diffuseColor": {
-        "x": 1,
-        "y": 0.55,
-        "z": 0
-      },
-      "specularColor": {
-        "x": 1,
-        "y": 1,
-        "z": 1
-      },
-      "reflectionColor": {
-        "x": 0.2,
-        "y": 0.2,
-        "z": 0.1
-      },
+      "diffuseColor": [1, 0.55, 0],
+      "specularColor": [1, 1, 1],
+      "reflectionColor": [0.2, 0.2, 0.1],
       "phongSpecularityCoefficient": 30,
       "transparency": 0
     },
     {
-      "diffuseColor": {
-        "x": 0.57,
-        "y": 0.82,
-        "z": 0.3
-      },
-      "specularColor": {
-        "x": 1,
-        "y": 1,
-        "z": 1
-      },
-      "reflectionColor": {
-        "x": 0.2,
-        "y": 0.2,
-        "z": 0.1
-      },
+      "diffuseColor": [0.57, 0.82, 0.3],
+      "specularColor": [1, 1, 1],
+      "reflectionColor": [0.2, 0.2, 0.1],
       "phongSpecularityCoefficient": 30,
       "transparency": 0
     },
     {
-      "diffuseColor": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "specularColor": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "reflectionColor": {
-        "x": 2,
-        "y": 2,
-        "z": 1
-      },
+      "diffuseColor": [0, 0, 0],
+      "specularColor": [0, 0, 0],
+      "reflectionColor": [2, 2, 1],
       "phongSpecularityCoefficient": 1,
       "transparency": 0
     },
     {
-      "diffuseColor": {
-        "x": 0.5,
-        "y": 0.5,
-        "z": 0.5
-      },
-      "specularColor": {
-        "x": 1,
-        "y": 1,
-        "z": 1
-      },
-      "reflectionColor": {
-        "x": 0.2,
-        "y": 0.2,
-        "z": 0
-      },
+      "diffuseColor": [0.5, 0.5, 0.5],
+      "specularColor": [1, 1, 1],
+      "reflectionColor": [0.2, 0.2, 0],
       "phongSpecularityCoefficient": 30,
       "transparency": 0
     }
   ],
   "lights": [
     {
-      "position": {
-        "x": 40,
-        "y": 50,
-        "z": 20
-      },
-      "color": {
-        "x": 0.5,
-        "y": 0.5,
-        "z": 0.5
-      },
+      "position": [20, 50,	20],
+      "color": [0.5, 0.5, 0.5],
       "specularIntensity":  0.1,
       "shadowIntensity": 0.9,
       "lightRadius": 1
     },
     {
-      "position": {
-        "x": -20,
-        "y": 50,
-        "z": 20
-      },
-      "color": {
-        "x": 0.5,
-        "y": 0.5,
-        "z": 0.5
-      },
+      "position": [-20, 50, 20],
+      "color": [0.5, 0.5, 0.5],
+      "specularIntensity":  0.1,
+      "shadowIntensity": 0.9,
+      "lightRadius": 1
+    },
+    {
+      "position": [3.4, -0.2, 6],
+      "color": [0.925, 0.25, 0.196],
+      "specularIntensity":  0.1,
+      "shadowIntensity": 0.9,
+      "lightRadius": 1
+    },
+    {
+      "position": [7.5, -0.2, 6],
+      "color": [0.97, 0.9, 0.247],
+      "specularIntensity":  0.1,
+      "shadowIntensity": 0.9,
+      "lightRadius": 1
+    },
+    {
+      "position": [14.5, -0.2, 6],
+      "color": [0.247, 0.525, 0.956],
+      "specularIntensity":  0.1,
+      "shadowIntensity": 0.9,
+      "lightRadius": 1
+    },
+    {
+      "position": [21, -0.2, 6],
+      "color": [1, 0.55, 0],
+      "specularIntensity":  0.1,
+      "shadowIntensity": 0.9,
+      "lightRadius": 1
+    },
+    {
+      "position": [25, -0.2, 6],
+      "color": [0.57, 0.82, 0.3],
       "specularIntensity":  0.1,
       "shadowIntensity": 0.9,
       "lightRadius": 1
     }
+
   ],
   "shapes": [
     {
       "type": "PLANE",
       "material": 6,
-      "normal": {
-        "x": 0,
-        "y": 0,
-        "z": 1
-      },
-      "offset": -30
+      "normal": [0, 0, 1],
+      "offset": -1
     },
     {
       "type": "PLANE",
       "material": 5,
-      "normal": {
-        "x": 0,
-        "y": 0,
-        "z": 1
-      },
+      "normal": [0, 0, 1],
       "offset": 100
     }
   ],

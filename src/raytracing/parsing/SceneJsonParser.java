@@ -7,6 +7,7 @@ import raytracing.actors.Scene;
 import raytracing.actors.SceneSettings;
 import raytracing.animation.StageManager;
 import raytracing.math.Vector3Factory;
+import raytracing.util.ImageUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,12 +21,13 @@ public class SceneJsonParser implements SceneParser {
     private StageManager stageManager;
     private Vector3Factory vector3Factory;
     private Gson gson;
+    private ImageUtils imageUtils;
 
     @Override
     public Scene parseScene(final File sceneFile, final int imageWidth, final int imageHeight) throws IOException {
 
         final String sceneId = sceneFile.getName().substring(0, sceneFile.getName().indexOf("."));
-        final Scene scene = new Scene(sceneId, imageWidth, imageHeight, stageManager, vector3Factory);
+        final Scene scene = new Scene(sceneId, imageWidth, imageHeight, stageManager, imageUtils, vector3Factory);
 
         log.info("Started parsing json scene file: {}", sceneFile.getAbsolutePath());
 

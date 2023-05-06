@@ -1,4 +1,4 @@
-package raytracing.parsing;
+package raytracing.parsing.serialization.json;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +17,9 @@ import raytracing.geometry.Triangle;
 import raytracing.geometry.TriangularPyramid;
 import raytracing.math.Vector3;
 import raytracing.math.Vector3Factory;
+import raytracing.parsing.SceneParser;
+import raytracing.projection.Projection;
+import raytracing.util.ImageUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -24,6 +27,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Main class for ray tracing exercise.
@@ -33,8 +37,10 @@ import java.util.List;
 @AllArgsConstructor
 public class SceneParserCustomFormat implements SceneParser {
 
-	private Vector3Factory vector3Factory;
-	private StageManager stageManager;
+	private final Vector3Factory vector3Factory;
+	private final StageManager stageManager;
+	private final ImageUtils imageUtils;
+	private final Map<String, Projection> projectionMap;
 
 	/**
 	 * Parses the scene file and creates the scene. Change this function so it
@@ -44,7 +50,7 @@ public class SceneParserCustomFormat implements SceneParser {
 	public Scene parseScene(final File sceneFile, final int imageWidth, final int imageHeight) throws IOException {
 
 		final String sceneId = sceneFile.getName().substring(0, sceneFile.getName().indexOf("."));
-		final Scene scene = new Scene(sceneId, imageWidth, imageHeight, stageManager, vector3Factory);
+		final Scene scene = new Scene(sceneId, imageWidth, imageHeight, stageManager, imageUtils, vector3Factory);
 
 		log.info("Started parsing scene file: {}", sceneFile.getAbsolutePath());
 
@@ -83,6 +89,8 @@ public class SceneParserCustomFormat implements SceneParser {
 					scene.getSettings().setNumOfShadowRays(Integer.parseInt(params[3]));
 					scene.getSettings().setMaxRecursionLevel(Integer.parseInt(params[4]));
 					scene.getSettings().setSuperSamplingLevel(Integer.parseInt(params[5]));
+					scene.getSettings().setNumberOfFrames(Integer.parseInt(params[6]));
+					scene.getSettings().setFramesPerSecond(Integer.parseInt(params[7]));
 					System.out.printf("Parsed general settings (line %d)%n", lineNum);
 					break;
 				case "mtl":
@@ -102,8 +110,14 @@ public class SceneParserCustomFormat implements SceneParser {
 							Double.parseDouble(params[2]));
 					double radius = Double.parseDouble(params[3]);
 					int mat_idx = Integer.parseInt(params[4]) - 1;
+					String imagePath = null;
+					String projectionName = null;
+					if (params.length == 7) {
+						imagePath = params[5];
+						projectionName = params[6];
+					}
 					max_mat = Math.max(max_mat, mat_idx);
-					scene.addShape(new Sphere(center, radius, mat_idx));
+					scene.addShape(new Sphere(center, radius, mat_idx, imagePath, projectionMap.get(projectionName)));
 					System.out.printf("Parsed sphere (line %d)%n", lineNum);
 					break;
 				}

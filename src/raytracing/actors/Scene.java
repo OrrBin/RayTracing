@@ -8,11 +8,14 @@ import raytracing.actors.graph.SceneNode;
 import raytracing.actors.graph.ShapeNode;
 import raytracing.actors.graph.SuperShapeNode;
 import raytracing.animation.StageManager;
+import raytracing.geo.LatLon;
 import raytracing.geometry.Shape;
+import raytracing.geometry.Sphere;
 import raytracing.geometry.SuperShape;
 import raytracing.math.Vector3;
 import raytracing.math.Vector3Factory;
 import raytracing.math.util.IntersectionUtils;
+import raytracing.util.ImageUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,9 +43,11 @@ public class Scene {
 
     private StageManager stageManager;
     private Vector3Factory vector3Factory;
+    private ImageUtils imageUtils;
 
-    public Scene(final String sceneId, final int width,final int height,
+    public Scene(final String sceneId, final int width, final int height,
                  final StageManager stageManager,
+                 final ImageUtils imageUtils,
                  final Vector3Factory vector3Factory) {
         this.sceneId = sceneId;
         this.imageHeight = height;
@@ -56,6 +61,7 @@ public class Scene {
         this.settings = new Settings();
 
         this.stageManager = stageManager;
+        this.imageUtils = imageUtils;
         this.vector3Factory = vector3Factory;
     }
 
@@ -155,8 +161,30 @@ public class Scene {
 
         }
 
-        diffLight = diffLight.multiply(mat.getDiffuseColor());
-        specLight = specLight.multiply(mat.getSpecularColor());
+        Vector3 shapeDiffuseColor = mat.getDiffuseColor();
+        Vector3 shapeSpecColor = mat.getSpecularColor();
+
+        //TODO : hardcoding testing world map on sphere
+        if (inter.getShape() instanceof Sphere) {
+
+            final Sphere sphere = (Sphere) inter.getShape();
+
+            if (sphere.getImage() != null) {
+                final LatLon latlon = sphere.getLatLon(inter.getIntersectionPointCpy());
+                final int x = sphere.getProjection().lon2x(latlon.lon, sphere.getImage().getWidth());
+                final int y = sphere.getProjection().lat2y(latlon.lat, sphere.getImage().getHeight());
+                final Vector3 imagePixelColor = imageUtils.getPixelColor(sphere.getImage(), x ,y);
+
+                if (imagePixelColor != null) {
+                    shapeDiffuseColor = imagePixelColor;
+                    shapeSpecColor = imagePixelColor;
+                }
+            }
+
+        }
+
+        diffLight = diffLight.multiply(shapeDiffuseColor);
+        specLight = specLight.multiply(shapeSpecColor);
 
         return diffLight.addInPlace(specLight);
     }
@@ -218,11 +246,8 @@ public class Scene {
     private void calcIntersection(final Ray ray, final SuperShapeNode superShapeNode, final List<Shape> shapesToCheck) {
         final SuperShape superShape = superShapeNode.getValue();
         final double[][] bounds = superShape.getBounds();
-//        log.info("Bounds of superShape: {}", Arrays.toString(bounds));
 
         if(IntersectionUtils.intersectionWithBoundingBox(ray, bounds)) {
-//            log.info("superShape intersectionWithBoundingBox is true");
-//            log.info("superShapeNode.children size: {}", superShapeNode.getChildren().size());
             for(GraphNode<?> childNode : superShapeNode.getChildren()) {
                 if(childNode instanceof ShapeNode) {
                     shapesToCheck.add(((ShapeNode) childNode).getValue());

@@ -36,11 +36,7 @@ public class SuperShapeDeserializer implements JsonDeserializer<SuperShape> {
                 List<Vector3> vertices = new ArrayList<>();
                 final JsonArray verticesJsonArray = jsonObject.get("vertices").getAsJsonArray();
                 for (final JsonElement vertexJsonElement : verticesJsonArray) {
-                    final JsonArray vertexCoordinatesArray = vertexJsonElement.getAsJsonArray();
-                    vertices.add(vector3Factory.getVector3(
-                            vertexCoordinatesArray.get(0).getAsDouble(),
-                            vertexCoordinatesArray.get(1).getAsDouble(),
-                            vertexCoordinatesArray.get(2).getAsDouble()));
+                    vertices.add(CustomVector3Deserializers.getVector3(vertexJsonElement.getAsJsonArray(), vector3Factory));
                 }
 
                 return new Polygon3D(vertices, material, vector3Factory);

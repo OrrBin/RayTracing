@@ -963,7 +963,7 @@
     <tags>categoryTag:Debug</tags>
   </descriptors>
   <descriptors xmi:id="_sXid4Ho4EemLI5TmIZh8QA" elementId="org.eclipse.debug.ui.ModuleView" label="Modules" iconURI="platform:/plugin/org.eclipse.debug.ui/icons/full/eview16/module_view.png" tooltip="" allowMultiple="true" category="Debug" closeable="true" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView">
-    <persistedState key="originalCompatibilityViewClass" value="org.eclipse.debug.internal.ui.views.modules.ModulesView"/>
+    <persistedState key="originalCompatibilityViewClass" value="org.eclipse.debug.internal.ui.views.raytracing.modules.ModulesView"/>
     <persistedState key="originalCompatibilityViewBundle" value="org.eclipse.debug.ui"/>
     <tags>View</tags>
     <tags>categoryTag:Debug</tags>
@@ -1459,7 +1459,7 @@
   <commands xmi:id="_sTMJdXo4EemLI5TmIZh8QA" elementId="org.eclipse.egit.ui.RepositoriesViewCreateRepository" commandName="Create a Repository" category="_sTIfCHo4EemLI5TmIZh8QA"/>
   <commands xmi:id="_sTMJdno4EemLI5TmIZh8QA" elementId="org.eclipse.jdt.ui.edit.text.java.search.write.access.in.hierarchy" commandName="Write Access in Hierarchy" description="Search for write references of the selected element in its hierarchy" category="_sTIfBHo4EemLI5TmIZh8QA"/>
   <commands xmi:id="_sTMJd3o4EemLI5TmIZh8QA" elementId="org.eclipse.recommenders.snipmatch.rcp.commands.createSnippet" commandName="Create Snippet..." description="Creates a new Snipmatch code snippet from the current editor&#x2019;s text selection" category="_sTH38no4EemLI5TmIZh8QA"/>
-  <commands xmi:id="_sTMJeHo4EemLI5TmIZh8QA" elementId="org.eclipse.ui.editors.revisions.rendering.cycle" commandName="Cycle Revision Coloring Mode" description="Cycles through the available coloring modes for revisions" category="_sTH3-Xo4EemLI5TmIZh8QA"/>
+  <commands xmi:id="_sTMJeHo4EemLI5TmIZh8QA" elementId="org.eclipse.ui.editors.revisions.raytracing.rendering.cycle" commandName="Cycle Revision Coloring Mode" description="Cycles through the available coloring modes for revisions" category="_sTH3-Xo4EemLI5TmIZh8QA"/>
   <commands xmi:id="_sTMJeXo4EemLI5TmIZh8QA" elementId="org.eclipse.ant.ui.renameInFile" commandName="Rename In File" description="Renames all references within the same buildfile" category="_sTIfDHo4EemLI5TmIZh8QA"/>
   <commands xmi:id="_sTMJeno4EemLI5TmIZh8QA" elementId="org.eclipse.egit.ui.team.PushTags" commandName="Push Tags..." category="_sTIfCHo4EemLI5TmIZh8QA"/>
   <commands xmi:id="_sTMJe3o4EemLI5TmIZh8QA" elementId="org.eclipse.jdt.ui.edit.text.java.open.type.hierarchy" commandName="Open Type Hierarchy" description="Open a type hierarchy on the selected element" category="_sTH3_Ho4EemLI5TmIZh8QA"/>
@@ -1492,7 +1492,7 @@
   <commands xmi:id="_sTMJlXo4EemLI5TmIZh8QA" elementId="org.eclipse.equinox.p2.ui.discovery.commands.ShowRepositoryCatalog" commandName="Show Repository Catalog" category="_sTIfD3o4EemLI5TmIZh8QA">
     <parameters xmi:id="_sTMwcHo4EemLI5TmIZh8QA" elementId="org.eclipse.equinox.p2.ui.discovery.commands.RepositoryParameter" name="P2 Repository URI"/>
   </commands>
-  <commands xmi:id="_sTMwcXo4EemLI5TmIZh8QA" elementId="org.eclipse.debug.ui.commands.closeRendering" commandName="Close Rendering" description="Close the selected rendering." category="_sTIfBXo4EemLI5TmIZh8QA"/>
+  <commands xmi:id="_sTMwcXo4EemLI5TmIZh8QA" elementId="org.eclipse.debug.ui.commands.closeRendering" commandName="Close Rendering" description="Close the selected raytracing.rendering." category="_sTIfBXo4EemLI5TmIZh8QA"/>
   <commands xmi:id="_sTMwcno4EemLI5TmIZh8QA" elementId="org.eclipse.egit.ui.RepositoriesViewOpenInEditor" commandName="Open in Editor" category="_sTIfCHo4EemLI5TmIZh8QA"/>
   <commands xmi:id="_sTMwc3o4EemLI5TmIZh8QA" elementId="org.eclipse.mylyn.tasks.ui.command.showToolTip" commandName="Show Tooltip Description" category="_sTH3-3o4EemLI5TmIZh8QA"/>
   <commands xmi:id="_sTMwdHo4EemLI5TmIZh8QA" elementId="org.eclipse.eclemma.ui.junitShortcut.coverage" commandName="Coverage JUnit Test" description="Coverage JUnit Test" category="_sTIfBXo4EemLI5TmIZh8QA"/>
@@ -1566,7 +1566,7 @@
   <commands xmi:id="_sTN-m3o4EemLI5TmIZh8QA" elementId="org.eclipse.jdt.ui.edit.text.java.convert.anonymous.to.nested" commandName="Convert Anonymous Class to Nested" description="Convert an anonymous class to a nested class" category="_sTIfAXo4EemLI5TmIZh8QA"/>
   <commands xmi:id="_sTN-nHo4EemLI5TmIZh8QA" elementId="org.eclipse.jdt.ui.correction.changeToStatic" commandName="Quick Fix - Change to static access" description="Invokes quick assist and selects 'Change to static access'" category="_sTIfDHo4EemLI5TmIZh8QA"/>
   <commands xmi:id="_sTN-nXo4EemLI5TmIZh8QA" elementId="org.eclipse.ui.window.fullscreenmode" commandName="Toggle Full Screen" description="Toggles the window between full screen and normal" category="_sTIfAHo4EemLI5TmIZh8QA"/>
-  <commands xmi:id="_sTN-nno4EemLI5TmIZh8QA" elementId="org.eclipse.debug.ui.commands.newRendering" commandName="New Rendering" description="Add a new rendering." category="_sTIfBXo4EemLI5TmIZh8QA"/>
+  <commands xmi:id="_sTN-nno4EemLI5TmIZh8QA" elementId="org.eclipse.debug.ui.commands.newRendering" commandName="New Rendering" description="Add a new raytracing.rendering." category="_sTIfBXo4EemLI5TmIZh8QA"/>
   <commands xmi:id="_sTN-n3o4EemLI5TmIZh8QA" elementId="org.eclipse.equinox.p2.ui.sdk.installationDetails" commandName="Installation Details" category="_sTIfD3o4EemLI5TmIZh8QA"/>
   <commands xmi:id="_sTN-oHo4EemLI5TmIZh8QA" elementId="org.eclipse.team.ui.synchronizeAll" commandName="Synchronize..." description="Synchronize resources in the workspace with another location" category="_sTH38Ho4EemLI5TmIZh8QA"/>
   <commands xmi:id="_sTN-oXo4EemLI5TmIZh8QA" elementId="org.eclipse.m2e.profiles.ui.commands.selectMavenProfileCommand" commandName="Select Maven Profiles" category="_sTIfAHo4EemLI5TmIZh8QA"/>
@@ -2318,7 +2318,7 @@
   <addons xmi:id="_sSZfPXo4EemLI5TmIZh8QA" elementId="org.eclipse.e4.ui.bindings.service" contributorURI="platform:/plugin/org.eclipse.platform" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>
   <addons xmi:id="_sSZfPno4EemLI5TmIZh8QA" elementId="org.eclipse.e4.ui.workbench.commands.model" contributorURI="platform:/plugin/org.eclipse.platform" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.CommandProcessingAddon"/>
   <addons xmi:id="_sSZfP3o4EemLI5TmIZh8QA" elementId="org.eclipse.e4.ui.workbench.contexts.model" contributorURI="platform:/plugin/org.eclipse.platform" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.ContextProcessingAddon"/>
-  <addons xmi:id="_sSZfQHo4EemLI5TmIZh8QA" elementId="org.eclipse.e4.ui.workbench.bindings.model" contributorURI="platform:/plugin/org.eclipse.platform" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.swt/org.eclipse.e4.ui.workbench.swt.util.BindingProcessingAddon"/>
+  <addons xmi:id="_sSZfQHo4EemLI5TmIZh8QA" elementId="org.eclipse.e4.ui.workbench.bindings.model" contributorURI="platform:/plugin/org.eclipse.platform" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.swt/org.eclipse.e4.ui.workbench.swt.raytracing.util.BindingProcessingAddon"/>
   <addons xmi:id="_sSZfQXo4EemLI5TmIZh8QA" elementId="Cleanup Addon" contributorURI="platform:/plugin/org.eclipse.platform" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.cleanupaddon.CleanupAddon"/>
   <addons xmi:id="_sSZfQno4EemLI5TmIZh8QA" elementId="DnD Addon" contributorURI="platform:/plugin/org.eclipse.platform" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.dndaddon.DnDAddon"/>
   <addons xmi:id="_sSZfQ3o4EemLI5TmIZh8QA" elementId="MinMax Addon" contributorURI="platform:/plugin/org.eclipse.platform" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.minmax.MinMaxAddon"/>

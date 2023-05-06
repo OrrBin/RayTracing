@@ -28,8 +28,7 @@ public class ShapeDeserializer implements JsonDeserializer<Shape> {
         switch (shapeType) {
             case PLANE: {
                 final int material = getMaterial(jsonObject);
-                final JsonObject normalJsonObject = jsonObject.getAsJsonObject("normal");
-                final Vector3 normal = getVector3(normalJsonObject);
+                final Vector3 normal = CustomVector3Deserializers.getVector3(jsonObject.getAsJsonArray("normal"), vector3Factory);
                 final double offset = jsonObject.get("offset").getAsDouble();
                 return new Plane(normal, offset, material);
             }

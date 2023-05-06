@@ -26,7 +26,7 @@ targetCompatibility = 1.15
 
 dependencies {
     // https://mvnrepository.com/artifact/com.google.inject/guice
-    implementation group: 'com.google.inject', name: 'guice', version: '4.0'
+    implementation group: 'com.google.inject', name: 'guice', version: '5.1.0'
 
     implementation 'com.google.code.gson:gson:2.9.1'
 
@@ -57,8 +57,3 @@ dependencies {
 run {
     systemProperty 'log4j.configurationFile', "log4j2.xml"
 }
-
-// end::dependencies[]
-
-// tag::wrapper[]
-// end::wrapper[]

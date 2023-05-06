@@ -1,5 +1,6 @@
 package raytracing.modules;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
@@ -11,18 +12,23 @@ import raytracing.geometry.SuperShape;
 import raytracing.math.SimpleVector3Factory;
 import raytracing.math.Vector3;
 import raytracing.math.Vector3Factory;
-import raytracing.parsing.SceneJsonParser;
 import raytracing.parsing.SceneParser;
 import raytracing.parsing.serialization.json.CustomVector3Deserializers;
+import raytracing.parsing.serialization.json.SceneParserCustomFormat;
 import raytracing.parsing.serialization.json.ShapeDeserializer;
 import raytracing.parsing.serialization.json.SuperShapeDeserializer;
+import raytracing.projection.EquirectangularProjection;
+import raytracing.projection.Projection;
+import raytracing.projection.SphericalMercatorProjection;
 import raytracing.rendering.SceneRenderer;
 import raytracing.rendering.SceneRendererImpl;
+import raytracing.util.ImageUtils;
 import raytracing.video.ImagesToVideoConverter;
 import raytracing.video.SimpleImagesToVideoConverter;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.Map;
 
 public class RayTracingModule extends AbstractModule {
 
@@ -42,9 +48,12 @@ public class RayTracingModule extends AbstractModule {
 
     @Provides
     @Inject
-    public SceneParser getSceneParser(final StageManager stageManager, final Gson gson, final Vector3Factory vector3Factory) {
-//        return new SceneParserCustomFormat(vector3Factory);
-        return new SceneJsonParser(stageManager, vector3Factory, gson);
+    public SceneParser getSceneParser(final StageManager stageManager, final Gson gson,
+                                      final ImageUtils imageUtils,
+                                      final Vector3Factory vector3Factory,
+                                      final Map<String, Projection> projectionMap) {
+        return new SceneParserCustomFormat(vector3Factory, stageManager, imageUtils, projectionMap);
+//        return new SceneJsonParser(stageManager, vector3Factory, gson);
     }
 
     @Provides
@@ -71,6 +80,24 @@ public class RayTracingModule extends AbstractModule {
         gsonBuilder.registerTypeAdapter(SuperShape.class, superShapeJsonDeserializer);
 
         return gsonBuilder.create();
+
+    }
+
+    @Provides
+    @Inject
+    public ImageUtils getImageUtils(final Vector3Factory vector3Factory) {
+        return new ImageUtils(vector3Factory);
+    }
+
+    @Provides
+    @Inject
+    public Map<String, Projection> getProjectionsByName(
+            final SphericalMercatorProjection sphericalMercatorProjection,
+            final EquirectangularProjection equirectangularProjection
+    ) {
+        return ImmutableMap.of(
+                sphericalMercatorProjection.getName(), sphericalMercatorProjection,
+                equirectangularProjection.getName(), equirectangularProjection);
 
     }
 }

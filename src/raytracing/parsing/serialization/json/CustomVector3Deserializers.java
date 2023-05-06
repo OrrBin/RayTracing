@@ -1,9 +1,9 @@
 package raytracing.parsing.serialization.json;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import lombok.AllArgsConstructor;
 import raytracing.math.Vector3;
@@ -17,11 +17,15 @@ public class CustomVector3Deserializers implements JsonDeserializer<Vector3> {
 
         @Override
         public Vector3 deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context) throws JsonParseException {
-            final JsonObject jsonObject = json.getAsJsonObject();
+            return getVector3(json, vector3Factory);
+        }
 
-            return vector3Factory.getVector3(
-                    jsonObject.get("x").getAsDouble(),
-                    jsonObject.get("y").getAsDouble(),
-                    jsonObject.get("z").getAsDouble());
+    public static Vector3 getVector3(final JsonElement json, final Vector3Factory vector3Factory) {
+        final JsonArray jsonArray = json.getAsJsonArray();
+
+        return vector3Factory.getVector3(
+                jsonArray.get(0).getAsDouble(),
+                jsonArray.get(1).getAsDouble(),
+                jsonArray.get(2).getAsDouble());
     }
 }
