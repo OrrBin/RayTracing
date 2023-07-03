@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="RayTracer - triangle 2" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="raytracing.RayTracer" />
+    <module name="RayTracing" />
+    <option name="PROGRAM_PARAMETERS" value="$PROJECT_DIR$/scenes/triangle2.txt $PROJECT_DIR$/output/triangle2.png 1000 1000" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="raytracing.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

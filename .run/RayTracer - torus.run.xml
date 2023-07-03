@@ -1,0 +1,17 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="RayTracer - torus" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="raytracing.orchestration.Orchestrator" />
+    <module name="RayTracing.main" />
+    <option name="PROGRAM_PARAMETERS" value="$PROJECT_DIR$/scenes/torus.txt $PROJECT_DIR$/output/torus.png" />
+    <option name="VM_PARAMETERS" value="--add-modules jdk.incubator.vector" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="raytracing.rendering.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

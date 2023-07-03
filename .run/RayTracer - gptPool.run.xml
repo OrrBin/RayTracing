@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="RayTracer - gptPool" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="raytracing.orchestration.Orchestrator" />
+    <module name="RayTracing.main" />
+    <option name="PROGRAM_PARAMETERS" value="$PROJECT_DIR$/scenes/gptPool.txt $PROJECT_DIR$/output/gptPool 500 500" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="raytracing.rendering.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
