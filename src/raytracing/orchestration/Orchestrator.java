@@ -5,6 +5,7 @@ import com.google.inject.Injector;
 import lombok.extern.slf4j.Slf4j;
 import raytracing.actors.Scene;
 import raytracing.animation.LinearCameraTransition;
+import raytracing.animation.easings.BezierBlendEase;
 import raytracing.animation.easings.EaseOutQuad;
 import raytracing.math.Vector3Factory;
 import raytracing.modules.RayTracingModule;
@@ -67,25 +68,25 @@ public class Orchestrator {
                 new LinearCameraTransition(
                         scene.getStageManager().getFramesNumber(),
                         0,
-                        scene.getStageManager().getFramesNumber() / 2,
+                        scene.getStageManager().getFramesNumber() - 1,
                         scene.getCamera(),
 //                        vector3Factory.getVector3(10, -10, 4),
-                        vector3Factory.getVector3(-10, -50, 10),
-                        new EaseOutQuad(),
+                        vector3Factory.getVector3(50, 100, 0),
+                        new BezierBlendEase(),
                         vector3Factory)
         );
 
-        scene.getStageManager().addTransition(
-                new LinearCameraTransition(
-                        scene.getStageManager().getFramesNumber(),
-                        scene.getStageManager().getFramesNumber() / 2 + 1,
-                        scene.getStageManager().getFramesNumber() - 1,
-                        scene.getCamera(),
-//                        vector3Factory.getVector3(0, -20, 1),
-                        vector3Factory.getVector3(30, -50, -20),
-                        new EaseOutQuad(),
-                        vector3Factory)
-        );
+//        scene.getStageManager().addTransition(
+//                new LinearCameraTransition(
+//                        scene.getStageManager().getFramesNumber(),
+//                        scene.getStageManager().getFramesNumber() / 2 + 1,
+//                        scene.getStageManager().getFramesNumber() - 1,
+//                        scene.getCamera(),
+////                        vector3Factory.getVector3(0, -20, 1),
+//                        vector3Factory.getVector3(30, -50, -20),
+//                        new EaseOutQuad(),
+//                        vector3Factory)
+//        );
 
 
         long sumTime = 0;

@@ -58,7 +58,7 @@ public class Scene {
         this.shapes = new ArrayList<>();
         this.sceneNode = new SceneNode(this);
         this.lights = new ArrayList<>();
-        this.settings = new Settings();
+        this.settings = new Settings(imageUtils);
 
         this.stageManager = stageManager;
         this.imageUtils = imageUtils;
@@ -192,12 +192,12 @@ public class Scene {
     /**
      * calculates transparent colors
      */
-    Vector3 transparencyColor(IntersectionData inter, Ray ray, Material mat, int nextRecDepth) {
+    Vector3 transparencyColor(IntersectionData inter, Ray ray, Material mat, int nextRecDepth, int row, int col) {
         Vector3 transColor = vector3Factory.getVector3(0, 0, 0);
         if (mat.getTransparency() > 0) {
             Vector3 delta = ray.direction.multiply(0.0001);
             Ray trasRay = new Ray(inter.intersectionPoint.cpy().addInPlace(delta), ray.direction.cpy());
-            transColor = calculateColor(trasRay, nextRecDepth, inter.getShape());
+            transColor = calculateColor(trasRay, nextRecDepth, inter.getShape(), row, col);
         }
 
         return transColor;
@@ -206,14 +206,14 @@ public class Scene {
     /**
      * calculates reflection colors
      */
-    Vector3 reflectionColor(IntersectionData inter, final Vector3 normal, Ray ray, Material mat, int nextRecDepth) {
+    Vector3 reflectionColor(IntersectionData inter, final Vector3 normal, Ray ray, Material mat, int nextRecDepth, int row, int col) {
         Vector3 dir = ray.direction.normalize();
         double dot = dir.dotProduct(normal);
 
         Vector3 reflectionVector = dir.cpy().addInPlace(normal.multiply(-2 * dot)).normalize();
         Ray reflectionRay = new Ray(inter.getIntersectionPointCpy(), reflectionVector);
 
-        return calculateColor(reflectionRay, nextRecDepth, inter.getShape()).multiply(mat.getReflectionColor());
+        return calculateColor(reflectionRay, nextRecDepth, inter.getShape(), row, col).multiply(mat.getReflectionColor());
     }
 
     /**
@@ -308,11 +308,11 @@ public class Scene {
         return shapesToCheck;
     }
 
-    public Vector3 calculateColor(Ray ray) {
-        return calculateColor(ray, 1, null);
+    public Vector3 calculateColor(Ray ray, int row, int col) {
+        return calculateColor(ray, 1, null, row, col);
     }
 
-    public Vector3 calculateColor(Ray ray, int recursionDepth, Shape excludeShape) {
+    public Vector3 calculateColor(Ray ray, int recursionDepth, Shape excludeShape, int row, int col) {
         // We limit recursion depth
         if (recursionDepth > this.settings.getMaxRecursionLevel()) {
             return vector3Factory.getVector3(0, 0, 0);
@@ -324,7 +324,7 @@ public class Scene {
 
         // If Ray does not intersect any body, return the background color
         if (inter == null)
-            return this.settings.getBackgroundColor();
+            return this.settings.getBackgroundColor(col ,row);
 
         Material mat = this.materials.get(inter.getShape().getMaterial());
 
@@ -336,11 +336,11 @@ public class Scene {
 
         //////////////////////////////////////////////////////////////////
         // Transparency Color calculation
-        Vector3 transColor = transparencyColor(inter, ray, mat, recursionDepth);
+        Vector3 transColor = transparencyColor(inter, ray, mat, recursionDepth, row, col);
 
         //////////////////////////////////////////////////////////////////
         // Reflection Color calculation
-        Vector3 reflectionColor = reflectionColor(inter, normal, ray, mat, recursionDepth);
+        Vector3 reflectionColor = reflectionColor(inter, normal, ray, mat, recursionDepth, row, col);
 
         Vector3 result = vector3Factory.getVector3(0, 0, 0);
         result.addInPlace(transColor.multiply(mat.getTransparency()));

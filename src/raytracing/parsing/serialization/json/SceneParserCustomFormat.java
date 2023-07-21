@@ -91,6 +91,9 @@ public class SceneParserCustomFormat implements SceneParser {
 					scene.getSettings().setSuperSamplingLevel(Integer.parseInt(params[5]));
 					scene.getSettings().setNumberOfFrames(Integer.parseInt(params[6]));
 					scene.getSettings().setFramesPerSecond(Integer.parseInt(params[7]));
+					if(params.length >= 9) {
+						scene.getSettings().setBackgroundImage(params[8]);
+					}
 					System.out.printf("Parsed general settings (line %d)%n", lineNum);
 					break;
 				case "mtl":

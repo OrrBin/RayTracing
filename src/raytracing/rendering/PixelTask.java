@@ -29,7 +29,7 @@ public class PixelTask implements Callable<Boolean> {
 
 			Vector3 sum = new SimpleVector3(0,0,0);
 			for(int i = 0; i < size; i++)
-				sum.addInPlace(scene.calculateColor(rays[i]));
+				sum.addInPlace(scene.calculateColor(rays[i], row, col));
 
 			
 			Vector3 color = sum.multiply(1/((double)(size)));
